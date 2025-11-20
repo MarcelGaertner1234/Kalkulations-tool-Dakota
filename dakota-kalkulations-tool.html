@@ -5780,6 +5780,15 @@
             renderRezepteTable(filtered);
         }
 
+        // ===== MENÜKARTEN LADEN =====
+
+        async function loadMenuekarten() {
+            menuekartenData = await getAllMenuekarten();
+            updateStats();
+        }
+
+        // ===== REZEPT-MODAL =====
+
         function openRezeptModal(id = null) {
             currentEditId = id;
             const modal = document.getElementById('rezeptModal');
