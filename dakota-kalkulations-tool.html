@@ -1778,6 +1778,25 @@
             return count;
         }
 
+        // Manuelle Migration nur für Menükarten (für Console)
+        // Aufruf: window.manualMigrateMenuekarten()
+        window.manualMigrateMenuekarten = async function() {
+            if (!firestoreSyncEnabled) {
+                console.error('❌ Firestore ist nicht aktiviert!');
+                return;
+            }
+
+            console.log('🚀 Starte manuelle Menükarten-Migration...');
+
+            // Menükarten neu laden
+            await loadMenuekarten();
+
+            const mkCount = await migrateCollectionToFirestore('menuekarten', menuekartenData);
+            console.log(`✅ ${mkCount} Menükarten zu Firestore migriert!`);
+
+            alert(`🎉 Migration abgeschlossen!\n\n${mkCount} Menükarten sind jetzt in Firestore.\n\nÖffne Firebase Console um sie zu sehen.`);
+        };
+
         // ===== EMBEDDED GASTRO-DATENBANK (180 Produkte) =====
         // Diese Datenbank wird automatisch beim ersten Start geladen
         const GASTRO_DATENBANK = {
@@ -6970,6 +6989,7 @@
                 await initDB();
                 await loadLebensmittel();
                 await loadRezepte();
+                await loadMenuekarten(); // FIX: Menükarten VOR Firebase-Migration laden!
                 updateStats();
 
                 // Auto-Import beim ersten Start (wenn Datenbanken leer)
@@ -6989,9 +7009,8 @@
 
                 // 🔥 FIREBASE/FIRESTORE SYNC INITIALISIEREN
                 // Startet Echtzeit-Synchronisation mit Cloud-Datenbank
+                // Migriert alle 3 Collections: lebensmittel, rezepte, menuekarten
                 await initFirestoreSync();
-
-                // Menükarten-Daten werden beim Tab-Klick geladen (siehe switchTab() Zeile 4886)
             } catch (error) {
                 console.error('Error initializing app:', error);
                 alert('Fehler beim Laden der Datenbank: ' + error.message);
