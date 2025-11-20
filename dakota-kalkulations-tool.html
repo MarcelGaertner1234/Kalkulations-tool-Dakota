@@ -1602,13 +1602,17 @@
                 collection(window.firestoreDB, 'lebensmittel'),
                 (snapshot) => {
                     snapshot.docChanges().forEach(async (change) => {
-                        const data = { ...change.doc.data(), id: change.doc.id };
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
 
                         if (change.type === 'added' || change.type === 'modified') {
                             // Update IndexedDB lokal
                             await syncFromFirestoreToIndexedDB('lebensmittel', data);
                         } else if (change.type === 'removed') {
-                            await deleteFromIndexedDB('lebensmittel', change.doc.id);
+                            await deleteFromIndexedDB('lebensmittel', parseInt(change.doc.id, 10));
                         }
                     });
 
@@ -1625,12 +1629,16 @@
                 collection(window.firestoreDB, 'rezepte'),
                 (snapshot) => {
                     snapshot.docChanges().forEach(async (change) => {
-                        const data = { ...change.doc.data(), id: change.doc.id };
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
 
                         if (change.type === 'added' || change.type === 'modified') {
                             await syncFromFirestoreToIndexedDB('rezepte', data);
                         } else if (change.type === 'removed') {
-                            await deleteFromIndexedDB('rezepte', change.doc.id);
+                            await deleteFromIndexedDB('rezepte', parseInt(change.doc.id, 10));
                         }
                     });
 
@@ -1646,12 +1654,16 @@
                 collection(window.firestoreDB, 'menuekarten'),
                 (snapshot) => {
                     snapshot.docChanges().forEach(async (change) => {
-                        const data = { ...change.doc.data(), id: change.doc.id };
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
 
                         if (change.type === 'added' || change.type === 'modified') {
                             await syncFromFirestoreToIndexedDB('menuekarten', data);
                         } else if (change.type === 'removed') {
-                            await deleteFromIndexedDB('menuekarten', change.doc.id);
+                            await deleteFromIndexedDB('menuekarten', parseInt(change.doc.id, 10));
                         }
                     });
 
@@ -1671,6 +1683,11 @@
             return new Promise((resolve, reject) => {
                 const tx = db.transaction(storeName, 'readwrite');
                 const store = tx.objectStore(storeName);
+
+                // FIX: Sicherstellen dass ID ein Number ist (Firestore liefert Strings)
+                if (typeof data.id === 'string') {
+                    data.id = parseInt(data.id, 10);
+                }
 
                 // Prüfe ob existiert
                 const getRequest = store.get(data.id);
