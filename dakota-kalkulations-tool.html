@@ -894,6 +894,11 @@
                                 <input type="file" id="importLebensmittelFile" accept=".json" style="display: none;" onchange="importLebensmittelJSON(event)">
                             </label>
                         </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportLebensmittelJSON()">
+                                📤 Lebensmittel exportieren (.json)
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -958,6 +963,11 @@
                                 📥 Rezepte importieren (.json)
                                 <input type="file" id="importRezepteFile" accept=".json" style="display: none;" onchange="importRezepteJSON(event)">
                             </label>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportRezepteJSON()">
+                                📤 Rezepte exportieren (.json)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1086,6 +1096,11 @@
                                 📥 Menükarten importieren (.json)
                                 <input type="file" id="importMenuekartenFile" accept=".json" style="display: none;" onchange="importMenuekartenJSON(event)">
                             </label>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportMenuekartenJSON()">
+                                📤 Menükarten exportieren (.json)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -5365,6 +5380,116 @@
             } catch (error) {
                 alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
                 console.error('Import-Fehler:', error);
+            }
+        }
+
+        // ===== EXPORT-FUNKTIONEN =====
+
+        // Export Lebensmittel zu JSON-Datei
+        async function exportLebensmittelJSON() {
+            try {
+                console.log('📤 Exportiere Lebensmittel...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllLebensmittel();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Lebensmittel zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-lebensmittel-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Lebensmittel exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Lebensmittel wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
+            }
+        }
+
+        // Export Rezepte zu JSON-Datei
+        async function exportRezepteJSON() {
+            try {
+                console.log('📤 Exportiere Rezepte...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllRezepte();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Rezepte zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-rezepte-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Rezepte exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Rezepte wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
+            }
+        }
+
+        // Export Menükarten zu JSON-Datei
+        async function exportMenuekartenJSON() {
+            try {
+                console.log('📤 Exportiere Menükarten...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllMenuekarten();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Menükarten zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-menuekarten-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Menükarten exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Menükarten wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
             }
         }
 
