@@ -11,6 +11,41 @@
     <!-- jsPDF for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <!-- Firebase SDK v9 (Modular) -->
+    <script type="module">
+        // Firebase v9 Modular SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcJIxRaSEgZ81zgbS0ABPrshHnWi7WeII",
+            authDomain: "dakota-485ec.firebaseapp.com",
+            projectId: "dakota-485ec",
+            storageBucket: "dakota-485ec.firebasestorage.app",
+            messagingSenderId: "167881815096",
+            appId: "1:167881815096:web:4f21dc27bcf1ad7dcc62cd",
+            measurementId: "G-C40N5JEB9E"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const firestoreDB = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Export to global scope for use in main script
+        window.firebaseApp = app;
+        window.firestoreDB = firestoreDB;
+        window.firebaseAuth = auth;
+        window.firebaseModules = {
+            collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy,
+            signInAnonymously, onAuthStateChanged
+        };
+
+        console.log('✅ Firebase initialized successfully');
+    </script>
+
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -1485,6 +1520,262 @@
                 const textarea = div.querySelector('textarea');
                 if (textarea) textarea.placeholder = `Zubereitungsschritt ${index + 1}...`;
             });
+        }
+
+        // ===== FIRESTORE HELPER-FUNKTIONEN =====
+        // Hybrid-Architektur: IndexedDB (lokal/schnell) + Firestore (Cloud/Sync)
+
+        let firestoreSyncEnabled = false;
+        let firestoreListeners = [];
+
+        // Wait for Firebase to be initialized
+        async function waitForFirebase() {
+            let attempts = 0;
+            while (!window.firestoreDB && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+            if (!window.firestoreDB) {
+                console.error('❌ Firebase konnte nicht geladen werden');
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize Firestore Sync
+        async function initFirestoreSync() {
+            console.log('🔄 Initialisiere Firestore-Synchronisation...');
+
+            const ready = await waitForFirebase();
+            if (!ready) {
+                console.warn('⚠️ Firestore nicht verfügbar, arbeite nur lokal');
+                return;
+            }
+
+            try {
+                // Anonymous Authentication
+                const { signInAnonymously, onAuthStateChanged } = window.firebaseModules;
+
+                onAuthStateChanged(window.firebaseAuth, async (user) => {
+                    if (user) {
+                        console.log('✅ Firebase Auth: Angemeldet als', user.uid);
+                        firestoreSyncEnabled = true;
+
+                        // Setup Echtzeit-Listeners
+                        setupRealtimeListeners();
+
+                        // Migriere lokale Daten zu Firestore (nur beim ersten Mal)
+                        await checkAndMigrateToFirestore();
+                    } else {
+                        console.log('🔐 Melde an bei Firebase...');
+                        await signInAnonymously(window.firebaseAuth);
+                    }
+                });
+
+            } catch (error) {
+                console.error('❌ Firestore Init Fehler:', error);
+                firestoreSyncEnabled = false;
+            }
+        }
+
+        // Setup Realtime Listeners für alle 3 Collections
+        function setupRealtimeListeners() {
+            const { collection, onSnapshot } = window.firebaseModules;
+
+            // Listener: Lebensmittel
+            const lmUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'lebensmittel'),
+                (snapshot) => {
+                    snapshot.docChanges().forEach(async (change) => {
+                        const data = { ...change.doc.data(), id: change.doc.id };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            // Update IndexedDB lokal
+                            await syncFromFirestoreToIndexedDB('lebensmittel', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('lebensmittel', change.doc.id);
+                        }
+                    });
+
+                    // UI refresh
+                    if (document.querySelector('#tab-lebensmittel.active')) {
+                        loadLebensmittel();
+                    }
+                },
+                (error) => console.error('Lebensmittel Listener Error:', error)
+            );
+
+            // Listener: Rezepte
+            const rzUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'rezepte'),
+                (snapshot) => {
+                    snapshot.docChanges().forEach(async (change) => {
+                        const data = { ...change.doc.data(), id: change.doc.id };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            await syncFromFirestoreToIndexedDB('rezepte', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('rezepte', change.doc.id);
+                        }
+                    });
+
+                    if (document.querySelector('#tab-rezepte.active')) {
+                        loadRezepte();
+                    }
+                },
+                (error) => console.error('Rezepte Listener Error:', error)
+            );
+
+            // Listener: Menükarten
+            const mkUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'menuekarten'),
+                (snapshot) => {
+                    snapshot.docChanges().forEach(async (change) => {
+                        const data = { ...change.doc.data(), id: change.doc.id };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            await syncFromFirestoreToIndexedDB('menuekarten', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('menuekarten', change.doc.id);
+                        }
+                    });
+
+                    if (document.querySelector('#tab-menuekarten.active')) {
+                        loadMenuekartenTab();
+                    }
+                },
+                (error) => console.error('Menükarten Listener Error:', error)
+            );
+
+            firestoreListeners.push(lmUnsubscribe, rzUnsubscribe, mkUnsubscribe);
+            console.log('✅ Echtzeit-Listeners aktiviert');
+        }
+
+        // Sync: Firestore → IndexedDB
+        async function syncFromFirestoreToIndexedDB(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+
+                // Prüfe ob existiert
+                const getRequest = store.get(data.id);
+
+                getRequest.onsuccess = () => {
+                    const existing = getRequest.result;
+
+                    // Update nur wenn Firestore-Version neuer ist
+                    if (!existing || !existing._firestoreTimestamp ||
+                        data._firestoreTimestamp > existing._firestoreTimestamp) {
+                        store.put(data);
+                    }
+                };
+
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // Delete from IndexedDB
+        async function deleteFromIndexedDB(storeName, docId) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.delete(docId);
+
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // Sync: IndexedDB → Firestore
+        async function syncToFirestore(storeName, data) {
+            if (!firestoreSyncEnabled) return;
+
+            try {
+                const { doc, setDoc } = window.firebaseModules;
+                const docRef = doc(window.firestoreDB, storeName, String(data.id));
+
+                // Timestamp hinzufügen
+                const dataWithTimestamp = {
+                    ...data,
+                    _firestoreTimestamp: Date.now(),
+                    _lastModified: new Date().toISOString()
+                };
+
+                await setDoc(docRef, dataWithTimestamp, { merge: true });
+                console.log(`✅ Sync zu Firestore: ${storeName}/${data.id}`);
+
+            } catch (error) {
+                console.error(`❌ Firestore Sync Error (${storeName}):`, error);
+            }
+        }
+
+        // Delete from Firestore
+        async function deleteFromFirestore(storeName, docId) {
+            if (!firestoreSyncEnabled) return;
+
+            try {
+                const { doc, deleteDoc } = window.firebaseModules;
+                const docRef = doc(window.firestoreDB, storeName, String(docId));
+                await deleteDoc(docRef);
+                console.log(`🗑️ Gelöscht aus Firestore: ${storeName}/${docId}`);
+
+            } catch (error) {
+                console.error(`❌ Firestore Delete Error (${storeName}):`, error);
+            }
+        }
+
+        // Migriere alle lokalen Daten zu Firestore (einmalig)
+        async function checkAndMigrateToFirestore() {
+            // Prüfe ob bereits migriert
+            const migrated = localStorage.getItem('firestore_migrated');
+            if (migrated === 'true') {
+                console.log('✓ Daten bereits in Firestore vorhanden');
+                return;
+            }
+
+            console.log('🚀 Starte Migration: IndexedDB → Firestore...');
+
+            try {
+                // Migriere Lebensmittel
+                const lmCount = await migrateCollectionToFirestore('lebensmittel', lebensmittelData);
+                console.log(`✅ ${lmCount} Lebensmittel migriert`);
+
+                // Migriere Rezepte
+                const rzCount = await migrateCollectionToFirestore('rezepte', rezepteData);
+                console.log(`✅ ${rzCount} Rezepte migriert`);
+
+                // Migriere Menükarten
+                const mkCount = await migrateCollectionToFirestore('menuekarten', menuekartenData);
+                console.log(`✅ ${mkCount} Menükarten migriert`);
+
+                // Markiere als migriert
+                localStorage.setItem('firestore_migrated', 'true');
+
+                alert(`🎉 Migration abgeschlossen!\n\n${lmCount} Lebensmittel\n${rzCount} Rezepte\n${mkCount} Menükarten\n\nSind jetzt in der Cloud synchronisiert.`);
+
+            } catch (error) {
+                console.error('❌ Migration fehlgeschlagen:', error);
+                alert(`❌ Migration fehlgeschlagen:\n\n${error.message}\n\nBitte Console prüfen.`);
+            }
+        }
+
+        // Migriere eine Collection zu Firestore
+        async function migrateCollectionToFirestore(storeName, dataArray) {
+            if (!dataArray || dataArray.length === 0) return 0;
+
+            let count = 0;
+            for (const item of dataArray) {
+                await syncToFirestore(storeName, item);
+                count++;
+
+                // Progress alle 10 Einträge
+                if (count % 10 === 0) {
+                    console.log(`  ${storeName}: ${count}/${dataArray.length}...`);
+                }
+            }
+
+            return count;
         }
 
         // ===== EMBEDDED GASTRO-DATENBANK (180 Produkte) =====
@@ -4583,32 +4874,46 @@
         }
 
         async function addLebensmittel(data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readwrite');
                 const store = transaction.objectStore('lebensmittel');
                 const request = store.add(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('lebensmittel', data);
+                    resolve(newId);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function updateLebensmittel(id, data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readwrite');
                 const store = transaction.objectStore('lebensmittel');
                 data.id = id;
                 const request = store.put(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('lebensmittel', data);
+                    resolve(request.result);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function deleteLebensmittel(id) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readwrite');
                 const store = transaction.objectStore('lebensmittel');
                 const request = store.delete(id);
-                request.onsuccess = () => resolve();
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('lebensmittel', id);
+                    resolve();
+                };
                 request.onerror = () => reject(request.error);
             });
         }
@@ -5079,32 +5384,46 @@
         }
 
         async function addRezept(data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readwrite');
                 const store = transaction.objectStore('rezepte');
                 const request = store.add(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('rezepte', data);
+                    resolve(newId);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function updateRezept(id, data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readwrite');
                 const store = transaction.objectStore('rezepte');
                 data.id = id;
                 const request = store.put(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('rezepte', data);
+                    resolve(request.result);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function deleteRezept(id) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readwrite');
                 const store = transaction.objectStore('rezepte');
                 const request = store.delete(id);
-                request.onsuccess = () => resolve();
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('rezepte', id);
+                    resolve();
+                };
                 request.onerror = () => reject(request.error);
             });
         }
@@ -5121,32 +5440,46 @@
         }
 
         async function addMenuekarte(data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readwrite');
                 const store = transaction.objectStore('menuekarten');
                 const request = store.add(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('menuekarten', data);
+                    resolve(newId);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function updateMenuekarte(id, data) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readwrite');
                 const store = transaction.objectStore('menuekarten');
                 data.id = id;
                 const request = store.put(data);
-                request.onsuccess = () => resolve(request.result);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('menuekarten', data);
+                    resolve(request.result);
+                };
                 request.onerror = () => reject(request.error);
             });
         }
 
         async function deleteMenuekarte(id) {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readwrite');
                 const store = transaction.objectStore('menuekarten');
                 const request = store.delete(id);
-                request.onsuccess = () => resolve();
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('menuekarten', id);
+                    resolve();
+                };
                 request.onerror = () => reject(request.error);
             });
         }
@@ -6644,6 +6977,10 @@
                 // FIX 3: Migration - Repariere Lebensmittel ohne gastro_id
                 // Läuft nach jedem Start, aber nur wenn nötig
                 await migrateLebensmittelGastroIds();
+
+                // 🔥 FIREBASE/FIRESTORE SYNC INITIALISIEREN
+                // Startet Echtzeit-Synchronisation mit Cloud-Datenbank
+                await initFirestoreSync();
 
                 // Menükarten-Daten werden beim Tab-Klick geladen (siehe switchTab() Zeile 4886)
             } catch (error) {
