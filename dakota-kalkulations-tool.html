@@ -1542,6 +1542,7 @@
 
         let firestoreSyncEnabled = false;
         let firestoreListeners = [];
+        let isSyncing = false; // FIX 3: Flag um Listener während Import/Migration zu ignorieren
 
         // Wait for Firebase to be initialized
         async function waitForFirebase() {
@@ -1576,11 +1577,12 @@
                         console.log('✅ Firebase Auth: Angemeldet als', user.uid);
                         firestoreSyncEnabled = true;
 
-                        // Setup Echtzeit-Listeners
-                        setupRealtimeListeners();
-
+                        // FIX 2: Migration ZUERST, dann Listener (verhindert Race Condition)
                         // Migriere lokale Daten zu Firestore (nur beim ersten Mal)
                         await checkAndMigrateToFirestore();
+
+                        // Setup Echtzeit-Listeners NACH der Migration
+                        setupRealtimeListeners();
                     } else {
                         console.log('🔐 Melde an bei Firebase...');
                         await signInAnonymously(window.firebaseAuth);
@@ -1601,6 +1603,12 @@
             const lmUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'lebensmittel'),
                 (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Lebensmittel-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
                         const data = {
@@ -1628,6 +1636,12 @@
             const rzUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'rezepte'),
                 (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Rezepte-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
                         const data = {
@@ -1653,6 +1667,12 @@
             const mkUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'menuekarten'),
                 (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Menükarten-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
                         const data = {
@@ -1803,6 +1823,9 @@
 
             console.log('🚀 Starte Migration: IndexedDB → Firestore...');
 
+            // FIX 3: Flag setzen um Firestore-Listener zu ignorieren während Migration
+            isSyncing = true;
+
             try {
                 // Migriere Lebensmittel
                 const lmCount = await migrateCollectionToFirestore('lebensmittel', lebensmittelData);
@@ -1824,6 +1847,9 @@
             } catch (error) {
                 console.error('❌ Migration fehlgeschlagen:', error);
                 alert(`❌ Migration fehlgeschlagen:\n\n${error.message}\n\nBitte Console prüfen.`);
+            } finally {
+                // FIX 3: Flag zurücksetzen (wird IMMER ausgeführt, auch bei Fehler)
+                isSyncing = false;
             }
         }
 
@@ -5128,6 +5154,9 @@
         async function performImport(isAutoImport = false) {
             const existingCount = lebensmittelData.length;
 
+            // FIX 3: Flag setzen um Firestore-Listener zu ignorieren während Import
+            isSyncing = true;
+
             try {
                 // Progress-Anzeige (angepasster Text für Auto-Import)
                 const progressDiv = document.createElement('div');
@@ -5255,6 +5284,9 @@
                     alert(errorMsg);
                 }
                 console.error('Import-Fehler:', error);
+            } finally {
+                // FIX 3: Flag zurücksetzen (wird IMMER ausgeführt, auch bei Fehler)
+                isSyncing = false;
             }
         }
 
@@ -5549,6 +5581,9 @@
         async function performRezeptImport(isAutoImport = false) {
             const existingCount = rezepteData.length;
 
+            // FIX 3: Flag setzen um Firestore-Listener zu ignorieren während Import
+            isSyncing = true;
+
             try {
                 // Progress-Anzeige
                 const progressDiv = document.createElement('div');
@@ -5646,6 +5681,9 @@
                 document.getElementById('import-progress')?.remove();
                 alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
                 console.error('Rezept-Import-Fehler:', error);
+            } finally {
+                // FIX 3: Flag zurücksetzen (wird IMMER ausgeführt, auch bei Fehler)
+                isSyncing = false;
             }
         }
 
@@ -7269,15 +7307,30 @@
                 await loadMenuekarten(); // FIX: Menükarten VOR Firebase-Migration laden!
                 updateStats();
 
-                // Auto-Import beim ersten Start (wenn Datenbanken leer)
-                if (lebensmittelData.length === 0) {
-                    console.log('🔍 Lebensmittel-Datenbank ist leer - starte Auto-Import...');
-                    await autoImportGastroDatenbank();
-                }
+                // Auto-Import NUR beim allerersten Start (EINMALIG!)
+                const autoImportDone = localStorage.getItem('dakota_auto_import_done');
+                const firestoreMigrated = localStorage.getItem('firestore_migrated');
 
-                if (rezepteData.length === 0) {
-                    console.log('🔍 Rezept-Datenbank ist leer - starte Auto-Import...');
+                // Nur importieren wenn ALLE Bedingungen erfüllt:
+                // 1. Noch nie importiert (!autoImportDone)
+                // 2. IndexedDB ist leer (lebensmittelData.length === 0)
+                // 3. Firestore hat noch keine Daten (!firestoreMigrated)
+                if (!autoImportDone && lebensmittelData.length === 0 && !firestoreMigrated) {
+                    console.log('🎉 Erste Installation erkannt - starte einmaligen Auto-Import...');
+                    await autoImportGastroDatenbank();
                     await autoImportRezeptDatenbank();
+                    localStorage.setItem('dakota_auto_import_done', 'true');
+                    console.log('✅ Auto-Import abgeschlossen und als durchgeführt markiert');
+                } else {
+                    if (autoImportDone) {
+                        console.log('✓ Auto-Import bereits durchgeführt (dakota_auto_import_done = true)');
+                    }
+                    if (firestoreMigrated) {
+                        console.log('✓ Firestore-Daten vorhanden, kein Auto-Import nötig');
+                    }
+                    if (lebensmittelData.length > 0) {
+                        console.log(`✓ ${lebensmittelData.length} Lebensmittel in IndexedDB vorhanden`);
+                    }
                 }
 
                 // FIX 3: Migration - Repariere Lebensmittel ohne gastro_id
