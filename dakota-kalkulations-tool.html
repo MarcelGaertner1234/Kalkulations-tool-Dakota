@@ -845,6 +845,23 @@
                     </div>
                 </div>
 
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Lebensmittel importieren (.json)
+                                <input type="file" id="importLebensmittelFile" accept=".json" style="display: none;" onchange="importLebensmittelJSON(event)">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchLebensmittel"
@@ -890,6 +907,23 @@
                         <button class="btn btn-primary" onclick="openRezeptModal()">
                             ➕ Neues Rezept
                         </button>
+                    </div>
+                </div>
+
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Rezepte importieren (.json)
+                                <input type="file" id="importRezepteFile" accept=".json" style="display: none;" onchange="importRezepteJSON(event)">
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -1002,6 +1036,23 @@
                     <button class="btn btn-primary" onclick="openMenuekartenModal()">
                         ➕ Neue Menükarte erstellen
                     </button>
+                </div>
+
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Menükarten importieren (.json)
+                                <input type="file" id="importMenuekartenFile" accept=".json" style="display: none;" onchange="importMenuekartenJSON(event)">
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -4732,6 +4783,158 @@
                 if (!isAutoImport) {
                     alert(errorMsg);
                 }
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // ===== JSON-IMPORT FUNKTIONEN =====
+
+        // Import Lebensmittel aus JSON-Datei
+        async function importLebensmittelJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Lebensmittel Import\n\n${data.length} Lebensmittel gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand gastro_id oder name)
+                        const exists = lebensmittelData.find(lm =>
+                            (item.gastro_id && lm.gastro_id === item.gastro_id) ||
+                            lm.name === item.name
+                        );
+
+                        if (!exists) {
+                            await addLebensmittel(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadLebensmittel();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // Import Rezepte aus JSON-Datei
+        async function importRezepteJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Rezepte Import\n\n${data.length} Rezepte gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand name)
+                        const exists = rezepteData.find(rz => rz.name === item.name);
+
+                        if (!exists) {
+                            await addRezept(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadRezepte();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // Import Menükarten aus JSON-Datei
+        async function importMenuekartenJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Menükarten Import\n\n${data.length} Menükarten gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand name + typ)
+                        const exists = menuekartenData.find(mk =>
+                            mk.name === item.name && mk.typ === item.typ
+                        );
+
+                        if (!exists) {
+                            await addMenuekarte(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadMenuekarten();
+                await loadMenuekartenTab();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
                 console.error('Import-Fehler:', error);
             }
         }
