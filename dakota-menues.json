@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "titel": "Dakota Menüs",
+    "version": "1.0",
+    "datum": "2025-11-18"
+  },
+  "menues": [
+    {
+      "name": "WEIHNACHTSMENÜ",
+      "verkaufspreis": 90.0,
+      "wareneinsatz_total": 25.71,
+      "food_cost_prozent": "28.57",
+      "gerichte": []
+    },
+    {
+      "name": "SILVESTERMENÜ",
+      "verkaufspreis": 110.0,
+      "wareneinsatz_total": 47.6,
+      "food_cost_prozent": "43.27",
+      "gerichte": []
+    }
+  ]
+}

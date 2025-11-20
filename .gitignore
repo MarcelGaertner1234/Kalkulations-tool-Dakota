@@ -1,0 +1,30 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Backup Files
+*.backup
+*.backup-*
+*BACKUP*
+*.sed_backup
+*_BACKUP_*
+
+# Temporary Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# IDE Files
+.vscode/
+.idea/
+*.sublime-*
+
+# Node modules (falls später verwendet)
+node_modules/
+
+# Log Files
+*.log
+npm-debug.log*
