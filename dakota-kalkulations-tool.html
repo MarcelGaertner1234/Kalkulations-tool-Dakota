@@ -1666,6 +1666,24 @@
                     // Update nur wenn Firestore-Version neuer ist
                     if (!existing || !existing._firestoreTimestamp ||
                         data._firestoreTimestamp > existing._firestoreTimestamp) {
+
+                        // FIX: Menükarten - Daten validieren beim Laden aus Firestore
+                        if (storeName === 'menuekarten' && data.gerichte) {
+                            // Sicherstellen dass gerichte ein Array ist (nicht Object/Map)
+                            if (!Array.isArray(data.gerichte)) {
+                                console.warn(`⚠️ Repariere ${data.name}: gerichte war Object, konvertiere zu Array`);
+                                data.gerichte = Object.values(data.gerichte);
+                            }
+
+                            // Datentypen forcieren: rezept_id und reihenfolge als Numbers
+                            data.gerichte = data.gerichte.map(g => ({
+                                ...g,
+                                rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                                reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                                kategorie: g.kategorie || ''
+                            }));
+                        }
+
                         store.put(data);
                     }
                 };
@@ -1701,6 +1719,23 @@
                     _firestoreTimestamp: Date.now(),
                     _lastModified: new Date().toISOString()
                 };
+
+                // FIX: Menükarten - Arrays explizit schützen, Datentypen forcieren
+                if (storeName === 'menuekarten' && dataWithTimestamp.gerichte) {
+                    // Sicherstellen dass gerichte ein Array ist (nicht Object/Map)
+                    if (!Array.isArray(dataWithTimestamp.gerichte)) {
+                        console.warn('⚠️ gerichte war kein Array, konvertiere zu Array');
+                        dataWithTimestamp.gerichte = Object.values(dataWithTimestamp.gerichte);
+                    }
+
+                    // Datentypen forcieren: rezept_id und reihenfolge als Numbers
+                    dataWithTimestamp.gerichte = dataWithTimestamp.gerichte.map(g => ({
+                        ...g,
+                        rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                        reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                        kategorie: g.kategorie || ''
+                    }));
+                }
 
                 await setDoc(docRef, dataWithTimestamp, { merge: true });
                 console.log(`✅ Sync zu Firestore: ${storeName}/${data.id}`);
@@ -1795,6 +1830,76 @@
             console.log(`✅ ${mkCount} Menükarten zu Firestore migriert!`);
 
             alert(`🎉 Migration abgeschlossen!\n\n${mkCount} Menükarten sind jetzt in Firestore.\n\nÖffne Firebase Console um sie zu sehen.`);
+        };
+
+        // Repariere korrupte Menükarten in Firestore (für Console)
+        // Aufruf: window.repairMenuekartenInFirestore()
+        window.repairMenuekartenInFirestore = async function() {
+            if (!firestoreSyncEnabled) {
+                console.error('❌ Firestore ist nicht aktiviert!');
+                return;
+            }
+
+            console.log('🔧 Starte Reparatur von Menükarten in Firestore...');
+
+            try {
+                const { collection, getDocs, doc, setDoc } = window.firebaseModules;
+                const querySnapshot = await getDocs(collection(window.firestoreDB, 'menuekarten'));
+
+                let repaired = 0;
+                let total = 0;
+
+                for (const docSnapshot of querySnapshot.docs) {
+                    total++;
+                    const data = docSnapshot.data();
+                    let needsRepair = false;
+
+                    console.log(`\n📋 Prüfe: ${data.name} (ID: ${docSnapshot.id})`);
+
+                    // Check 1: gerichte ist Array?
+                    if (data.gerichte && !Array.isArray(data.gerichte)) {
+                        console.log(`  ⚠️ gerichte ist Object/Map → konvertiere zu Array`);
+                        data.gerichte = Object.values(data.gerichte);
+                        needsRepair = true;
+                    }
+
+                    // Check 2: rezept_id und reihenfolge als Numbers?
+                    if (data.gerichte && Array.isArray(data.gerichte)) {
+                        const before = JSON.stringify(data.gerichte);
+                        data.gerichte = data.gerichte.map(g => ({
+                            ...g,
+                            rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                            reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                            kategorie: g.kategorie || ''
+                        }));
+                        const after = JSON.stringify(data.gerichte);
+
+                        if (before !== after) {
+                            console.log(`  ⚠️ Datentypen korrigiert (rezept_id, reihenfolge)`);
+                            needsRepair = true;
+                        }
+                    }
+
+                    // Reparatur durchführen
+                    if (needsRepair) {
+                        await setDoc(doc(window.firestoreDB, 'menuekarten', docSnapshot.id), data);
+                        console.log(`  ✅ Repariert und gespeichert`);
+                        repaired++;
+                    } else {
+                        console.log(`  ✓ OK, keine Reparatur nötig`);
+                    }
+                }
+
+                console.log(`\n✅ Reparatur abgeschlossen!`);
+                console.log(`   Geprüft: ${total}`);
+                console.log(`   Repariert: ${repaired}`);
+
+                alert(`🎉 Reparatur abgeschlossen!\n\n• ${total} Menükarten geprüft\n• ${repaired} Menükarten repariert\n\nDie Daten in Firestore sind jetzt korrekt!`);
+
+            } catch (error) {
+                console.error('❌ Reparatur fehlgeschlagen:', error);
+                alert(`❌ Reparatur fehlgeschlagen:\n\n${error.message}\n\nBitte Console prüfen.`);
+            }
         };
 
         // ===== EMBEDDED GASTRO-DATENBANK (180 Produkte) =====
