@@ -5016,6 +5016,11 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readwrite');
                 const store = transaction.objectStore('lebensmittel');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.add(data);
                 request.onsuccess = async () => {
                     const newId = request.result;
@@ -5032,7 +5037,12 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readwrite');
                 const store = transaction.objectStore('lebensmittel');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
                 data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.put(data);
                 request.onsuccess = async () => {
                     // Sync zu Firestore
@@ -5636,6 +5646,11 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readwrite');
                 const store = transaction.objectStore('rezepte');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.add(data);
                 request.onsuccess = async () => {
                     const newId = request.result;
@@ -5652,7 +5667,12 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readwrite');
                 const store = transaction.objectStore('rezepte');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
                 data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.put(data);
                 request.onsuccess = async () => {
                     // Sync zu Firestore
@@ -5692,6 +5712,11 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readwrite');
                 const store = transaction.objectStore('menuekarten');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.add(data);
                 request.onsuccess = async () => {
                     const newId = request.result;
@@ -5708,7 +5733,12 @@
             return new Promise(async (resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readwrite');
                 const store = transaction.objectStore('menuekarten');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
                 data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
                 const request = store.put(data);
                 request.onsuccess = async () => {
                     // Sync zu Firestore
