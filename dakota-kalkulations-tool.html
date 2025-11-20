@@ -456,6 +456,88 @@
             color: #999;
         }
 
+        /* ===== AUTOCOMPLETE COMPONENT ===== */
+        .autocomplete-container {
+            position: relative;
+            flex: 2;
+        }
+
+        .autocomplete-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .autocomplete-input:focus {
+            outline: none;
+            border-color: var(--dakota-gold);
+            box-shadow: 0 0 0 3px rgba(219, 167, 101, 0.1);
+        }
+
+        .autocomplete-input.has-selection {
+            background-color: #f0f8f0;
+            border-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid var(--dakota-gold);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background-color: rgba(219, 167, 101, 0.1);
+        }
+
+        .autocomplete-item-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .autocomplete-item-category {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-left: 0.5rem;
+        }
+
+        .autocomplete-no-results {
+            padding: 1rem;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
         /* ===== FOOD COST INDICATOR ===== */
         .food-cost-indicator {
             display: inline-flex;
@@ -2902,6 +2984,203 @@
             currentEditId = null;
         }
 
+        // ===== AUTOCOMPLETE COMPONENT =====
+
+        /**
+         * Erstellt ein Autocomplete-Textfeld für Lebensmittel-Auswahl
+         * @param {string} containerId - ID des Containers
+         * @param {number|null} selectedGastroId - Bereits ausgewählte gastro_id (für Edit-Modus)
+         * @returns {HTMLElement} Container mit Autocomplete-Feld
+         */
+        function createAutocompleteField(containerId, selectedGastroId = null) {
+            const container = document.createElement('div');
+            container.className = 'autocomplete-container';
+            container.id = containerId;
+
+            // Hidden Input für gastro_id (wird an Backend/Speicherung übergeben)
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.className = 'zutat-select';
+            hiddenInput.value = selectedGastroId || '';
+
+            // Visible Input für User-Interaktion
+            const visibleInput = document.createElement('input');
+            visibleInput.type = 'text';
+            visibleInput.className = 'autocomplete-input';
+            visibleInput.placeholder = 'Zutat suchen... (z.B. Kalbshaxe, Zwiebeln)';
+            visibleInput.autocomplete = 'off';
+
+            // Dropdown für Ergebnisse
+            const dropdown = document.createElement('div');
+            dropdown.className = 'autocomplete-dropdown';
+
+            // Wenn bereits ausgewählt, zeige Lebensmittel-Name an
+            if (selectedGastroId) {
+                const selectedItem = lebensmittelData.find(lm => lm.gastro_id === selectedGastroId);
+                if (selectedItem) {
+                    visibleInput.value = selectedItem.name;
+                    visibleInput.classList.add('has-selection');
+                }
+            }
+
+            // State Management
+            let currentFocus = -1;
+            let filteredResults = [];
+
+            // FUNKTION: Filtern und Sortieren
+            function filterLebensmittel(query) {
+                if (!query || query.length < 1) return [];
+
+                const lowerQuery = query.toLowerCase();
+                const results = lebensmittelData.filter(lm => {
+                    const nameMatch = lm.name.toLowerCase().includes(lowerQuery);
+                    const kategorieMatch = lm.kategorie.toLowerCase().includes(lowerQuery);
+                    return nameMatch || kategorieMatch;
+                });
+
+                // Sortieren nach Relevanz (Exakte Treffer zuerst, dann Starts-With, dann Contains)
+                results.sort((a, b) => {
+                    const aName = a.name.toLowerCase();
+                    const bName = b.name.toLowerCase();
+
+                    // Exakter Match
+                    if (aName === lowerQuery) return -1;
+                    if (bName === lowerQuery) return 1;
+
+                    // Starts with
+                    const aStarts = aName.startsWith(lowerQuery);
+                    const bStarts = bName.startsWith(lowerQuery);
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+
+                    // Alphabetisch
+                    return aName.localeCompare(bName);
+                });
+
+                // Max 15 Ergebnisse (Performance)
+                return results.slice(0, 15);
+            }
+
+            // FUNKTION: Dropdown rendern
+            function renderDropdown(results) {
+                dropdown.innerHTML = '';
+
+                if (results.length === 0) {
+                    dropdown.innerHTML = '<div class="autocomplete-no-results">Keine Lebensmittel gefunden</div>';
+                    dropdown.classList.add('active');
+                    return;
+                }
+
+                results.forEach((lm, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    item.dataset.index = index;
+                    item.dataset.gastroId = lm.gastro_id;
+
+                    item.innerHTML = `
+                        <span class="autocomplete-item-name">${lm.name}</span>
+                        <span class="autocomplete-item-category">(${lm.kategorie})</span>
+                    `;
+
+                    // Click Event
+                    item.addEventListener('click', () => selectItem(lm));
+
+                    dropdown.appendChild(item);
+                });
+
+                dropdown.classList.add('active');
+                currentFocus = -1;
+            }
+
+            // FUNKTION: Item auswählen
+            function selectItem(lebensmittel) {
+                hiddenInput.value = lebensmittel.gastro_id;
+                visibleInput.value = lebensmittel.name;
+                visibleInput.classList.add('has-selection');
+                dropdown.classList.remove('active');
+                dropdown.innerHTML = '';
+            }
+
+            // FUNKTION: Dropdown schließen
+            function closeDropdown() {
+                dropdown.classList.remove('active');
+                dropdown.innerHTML = '';
+                currentFocus = -1;
+            }
+
+            // FUNKTION: Keyboard-Navigation (Pfeiltasten)
+            function setActiveFocus(index) {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+                items.forEach(item => item.classList.remove('selected'));
+
+                if (index >= 0 && index < items.length) {
+                    items[index].classList.add('selected');
+                    items[index].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            // EVENT: Input-Änderung
+            visibleInput.addEventListener('input', (e) => {
+                const query = e.target.value;
+
+                // Wenn User löscht, reset Selection
+                if (query === '') {
+                    hiddenInput.value = '';
+                    visibleInput.classList.remove('has-selection');
+                    closeDropdown();
+                    return;
+                }
+
+                // Bei Änderung nach Selection, remove green background
+                if (hiddenInput.value) {
+                    hiddenInput.value = '';
+                    visibleInput.classList.remove('has-selection');
+                }
+
+                // Filtern und Rendern
+                filteredResults = filterLebensmittel(query);
+                renderDropdown(filteredResults);
+            });
+
+            // EVENT: Keyboard-Navigation (Pfeiltasten, Enter, Escape)
+            visibleInput.addEventListener('keydown', (e) => {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentFocus++;
+                    if (currentFocus >= items.length) currentFocus = 0;
+                    setActiveFocus(currentFocus);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentFocus--;
+                    if (currentFocus < 0) currentFocus = items.length - 1;
+                    setActiveFocus(currentFocus);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentFocus >= 0 && currentFocus < filteredResults.length) {
+                        selectItem(filteredResults[currentFocus]);
+                    }
+                } else if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+
+            // EVENT: Click outside schließt Dropdown
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // Assembly
+            container.appendChild(hiddenInput);
+            container.appendChild(visibleInput);
+            container.appendChild(dropdown);
+
+            return container;
+        }
+
         function addRezeptZutat(zutat = null) {
             const container = document.getElementById('rzZutatenContainer');
             const index = container.children.length;
@@ -2911,33 +3190,64 @@
             row.style.marginBottom = '1rem';
             row.style.position = 'relative';
 
-            let optionsHtml = '<option value="">-- Lebensmittel wählen --</option>';
-            lebensmittelData.forEach(lm => {
-                // KORREKTUR: Verwende gastro_id statt id für konsistentes Mapping
-                const selected = zutat && zutat.produkt_id === lm.gastro_id ? 'selected' : '';
-                optionsHtml += `<option value="${lm.gastro_id}" ${selected}>${lm.name} (${lm.kategorie})</option>`;
-            });
+            // === AUTOCOMPLETE STATT DROPDOWN ===
+            // Create form-group for autocomplete
+            const autocompleteFormGroup = document.createElement('div');
+            autocompleteFormGroup.className = 'form-group';
+            autocompleteFormGroup.style.flex = '2';
 
-            row.innerHTML = `
-                <div class="form-group" style="flex: 2;">
-                    <select class="form-select zutat-select" required>
-                        ${optionsHtml}
-                    </select>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <input type="number" class="form-input zutat-menge" placeholder="Menge"
-                           value="${zutat ? zutat.menge : ''}" step="0.1" required>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <select class="form-select zutat-einheit" required>
-                        <option value="g" ${zutat && zutat.einheit === 'g' ? 'selected' : ''}>g</option>
-                        <option value="ml" ${zutat && zutat.einheit === 'ml' ? 'selected' : ''}>ml</option>
-                        <option value="Stk" ${zutat && zutat.einheit === 'Stk' ? 'selected' : ''}>Stk</option>
-                    </select>
-                </div>
-                <button type="button" class="btn-icon delete" onclick="this.parentElement.remove()"
-                        style="position: absolute; right: -40px; top: 50%; transform: translateY(-50%);">🗑️</button>
+            // Create autocomplete field (selectedGastroId = zutat.produkt_id im Edit-Modus)
+            const autocomplete = createAutocompleteField(
+                `autocomplete-${index}`,
+                zutat ? zutat.produkt_id : null
+            );
+            autocompleteFormGroup.appendChild(autocomplete);
+
+            // Create form-group for Menge
+            const mengeFormGroup = document.createElement('div');
+            mengeFormGroup.className = 'form-group';
+            mengeFormGroup.style.flex = '1';
+            const mengeInput = document.createElement('input');
+            mengeInput.type = 'number';
+            mengeInput.className = 'form-input zutat-menge';
+            mengeInput.placeholder = 'Menge';
+            mengeInput.value = zutat ? zutat.menge : '';
+            mengeInput.step = '0.1';
+            mengeInput.required = true;
+            mengeFormGroup.appendChild(mengeInput);
+
+            // Create form-group for Einheit
+            const einheitFormGroup = document.createElement('div');
+            einheitFormGroup.className = 'form-group';
+            einheitFormGroup.style.flex = '1';
+            const einheitSelect = document.createElement('select');
+            einheitSelect.className = 'form-select zutat-einheit';
+            einheitSelect.required = true;
+            einheitSelect.innerHTML = `
+                <option value="g" ${zutat && zutat.einheit === 'g' ? 'selected' : ''}>g</option>
+                <option value="ml" ${zutat && zutat.einheit === 'ml' ? 'selected' : ''}>ml</option>
+                <option value="Stk" ${zutat && zutat.einheit === 'Stk' ? 'selected' : ''}>Stk</option>
             `;
+            einheitFormGroup.appendChild(einheitSelect);
+
+            // Create delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'btn-icon delete';
+            deleteBtn.textContent = '🗑️';
+            deleteBtn.style.position = 'absolute';
+            deleteBtn.style.right = '-40px';
+            deleteBtn.style.top = '50%';
+            deleteBtn.style.transform = 'translateY(-50%)';
+            deleteBtn.onclick = function() {
+                this.parentElement.remove();
+            };
+
+            // Assembly
+            row.appendChild(autocompleteFormGroup);
+            row.appendChild(mengeFormGroup);
+            row.appendChild(einheitFormGroup);
+            row.appendChild(deleteBtn);
 
             container.appendChild(row);
         }
