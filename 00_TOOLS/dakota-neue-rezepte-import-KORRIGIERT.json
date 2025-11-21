@@ -1,0 +1,169 @@
+[
+    {
+        "name": "Poulet-Curry mit Reis",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 25,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 323,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 156,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 436,
+                "menge": 10,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 209,
+                "menge": 8,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Pouletbrust in Würfel schneiden",
+            "Reis kochen (parallel)",
+            "Gemüse würfeln",
+            "Poulet anbraten, herausnehmen",
+            "Zwiebeln und Gemüse anschwitzen",
+            "Curry-Pulver zugeben, kurz rösten",
+            "Kokosmilch zugeben, Poulet zurück",
+            "15 Min köcheln, mit Reis servieren"
+        ],
+        "bemerkung": "Schnell, gesund, beliebt"
+    },
+    {
+        "name": "Hackfleisch-Bolognese mit Spaghetti",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 24.00,
+        "zubereitungszeit": 30,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 183,
+                "menge": 120,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 48,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 65,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 145,
+                "menge": 10,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 76,
+                "menge": 120,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Gemüse fein würfeln (Soffritto)",
+            "In Olivenöl anschwitzen",
+            "Hackfleisch zugeben, krumelig braten",
+            "Tomatenmark zugeben, rösten",
+            "Mit Rotwein ablöschen",
+            "Tomaten zugeben, 20 Min köcheln",
+            "Spaghetti al dente kochen",
+            "Mit Sauce und Parmesan servieren"
+        ],
+        "bemerkung": "Italienischer Klassiker"
+    },
+    {
+        "name": "Lachsfilet mit Dill-Sauce und Reis",
+        "kategorie": "Hauptgericht Fisch",
+        "portionen": 1,
+        "verkaufspreis": 34.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 21,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 105,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 80,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 71,
+                "menge": 0.5,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 35,
+                "menge": 15,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Reis kochen",
+            "Lachsfilet würzen",
+            "In Butter rosa braten (3 Min/Seite)",
+            "Lachs herausnehmen, warm stellen",
+            "Dill hacken, mit Rahm und Zitrone zu Sauce",
+            "Kurz aufkochen",
+            "Lachs mit Sauce und Reis servieren"
+        ],
+        "bemerkung": "Leicht, elegant, schnell"
+    }
+]
