@@ -1,0 +1,572 @@
+Menü-Typ,Gericht,Gang,Verkaufspreis CHF,Wareneinsatz Total CHF,Food Cost %,Zutat,Menge,Einheit,Preis pro Einheit CHF,Wareneinsatz CHF,Lieferant,Bemerkungen
+WEIHNACHTSMENÜ,Komplett,Gesamt,90.00,25.71,28.57%,,,,,,Faktor 3.5,
+
+WEIHNACHTSMENÜ,Alpkäse-Kroketten,Amuse-Bouche,,,,,,,,,Amuse-Bouche,
+,,,,,,,Alpkäse,30,g,28.00,0.84,Alpkäserei Engstlenalp,
+,,,,,,,Mehl,20,g,2.50,0.05,Mühle Haslital,
+,,,,,,,Eier,10,g,8.00,0.08,Bio-Hof Hasliberg,
+,,,,,,,Paniermehl,15,g,3.00,0.05,,,
+,,,,,,,Belper Knolle geräuchert,10,g,45.00,0.45,Käserei Meiringen,
+,,,,,,,Zitrone,5,g,8.00,0.04,,,
+,,,,,,,Mayonnaise,20,ml,12.00,0.24,,,
+,,,,,,,Frittieröl,30,ml,5.00,0.15,,,
+,,,,,,,Gewürze & Kräuter,5,g,20.00,0.10,,,Diverse
+,,,,,,Subtotal Amuse-Bouche:,,,,2.00,,
+
+WEIHNACHTSMENÜ,Geräucherte Forelle,Gang 1 - Vorspeise,,,,,,,,,Vorspeise,
+,,,,,,,Forelle geräuchert,80,g,60.00,4.80,Forellenzucht Reichenbach,kalt geräuchert
+,,,,,,,Randen,40,g,4.50,0.18,Bio-Hof Hasliberg,roh + geröstet
+,,,,,,,Meerrettich,15,g,35.00,0.53,,,frisch
+,,,,,,,Rahm,30,ml,8.00,0.24,Käserei Meiringen,
+,,,,,,,Dill frisch,3,g,80.00,0.24,,,
+,,,,,,,Zitrone,5,g,8.00,0.04,,,
+,,,,,,,Olivenöl,10,ml,25.00,0.25,,,
+,,,,,,,Salz & Pfeffer,2,g,5.00,0.01,,,
+,,,,,,Subtotal Gang 1:,,,,6.29,,
+
+WEIHNACHTSMENÜ,Burrata,Gang 1 - Vorspeise Vegi,,,,,,,,,Vegetarische Alternative,
+,,,,,,,Burrata,125,g,24.00,3.00,,,
+,,,,,,,Feigen frisch,60,g,18.00,1.08,,,pochiert
+,,,,,,,Balsamico Aceto,15,ml,35.00,0.53,,,für Reduktion
+,,,,,,,Zucker,10,g,2.50,0.03,,,für Reduktion
+,,,,,,,Walnüsse,20,g,45.00,0.90,,,geröstet
+,,,,,,,Rucola,15,g,12.00,0.18,Bio-Hof Hasliberg,
+,,,,,,,Olivenöl,10,ml,25.00,0.25,,,
+,,,,,,,Honig,5,g,18.00,0.09,,,
+,,,,,,,Fleur de Sel,0.5,g,60.00,0.03,,,
+,,,,,,Subtotal Gang 1 Vegi:,,,,6.09,,
+
+WEIHNACHTSMENÜ,Steinpilz-Cappuccino,Gang 2 - Suppe,,,,,,,,,Suppe,
+,,,,,,,Steinpilze getrocknet,15,g,120.00,1.80,,,
+,,,,,,,Kartoffeln,50,g,3.00,0.15,Bio-Hof Hasliberg,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Gemüsebouillon,150,ml,3.00,0.45,,,hausgemacht
+,,,,,,,Rahm,40,ml,8.00,0.32,Käserei Meiringen,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Trüffelöl,2,ml,400.00,0.80,,,
+,,,,,,,Gewürze,3,g,15.00,0.05,,,
+,,,,,,Subtotal Gang 2:,,,,3.87,,
+
+WEIHNACHTSMENÜ,Filet Wellington,Gang 3 - Hauptgang,,,,,,,,,Hauptgang Standard,
+,,,,,,,Rindsfilet,180,g,65.00,11.70,Metzgerei Trachsel,Berner Rind
+,,,,,,,Blätterteig,150,g,12.00,1.80,,,
+,,,,,,,Champignons,60,g,15.00,0.90,,,für Duxelles
+,,,,,,,Schalotten,20,g,8.00,0.16,,,
+,,,,,,,Foie Gras,30,g,180.00,5.40,,,
+,,,,,,,Ei,20,g,8.00,0.16,,,zum Bestreichen
+,,,,,,,Portwein,30,ml,35.00,1.05,,,
+,,,,,,,Kalbsfond,80,ml,12.00,0.96,,,für Jus
+,,,,,,,Kartoffeln,120,g,3.00,0.36,Bio-Hof Hasliberg,für Pommes Anna
+,,,,,,,Butter,20,g,16.00,0.32,Käserei Meiringen,
+,,,,,,,Thymian,2,g,80.00,0.16,,,
+,,,,,,,Salz & Pfeffer,3,g,5.00,0.02,,,
+,,,,,,Subtotal Gang 3 Standard:,,,,22.99,,
+
+WEIHNACHTSMENÜ,Gnocchi hausgemacht,Gang 3 - Hauptgang Vegi,,,,,,,,,Hauptgang Vegetarisch,
+,,,,,,,Kartoffeln,180,g,3.00,0.54,Bio-Hof Hasliberg,für Gnocchi
+,,,,,,,Mehl,40,g,2.50,0.10,,,für Gnocchi
+,,,,,,,Eigelb,15,g,12.00,0.18,Bio-Hof Hasliberg,für Gnocchi
+,,,,,,,Parmesan,10,g,38.00,0.38,,,für Gnocchi-Teig
+,,,,,,,Fontina-Käse,60,g,32.00,1.92,,,für Sauce
+,,,,,,,Parmesan,30,g,38.00,1.14,,,für Sauce
+,,,,,,,Rahm,100,ml,8.00,0.80,Käserei Meiringen,für Sauce
+,,,,,,,Trüffelöl,2,ml,400.00,0.80,,,
+,,,,,,,Walnüsse,25,g,45.00,1.13,,,geröstet
+,,,,,,,Rucola,20,g,12.00,0.24,Bio-Hof Hasliberg,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Muskatnuss,1,g,50.00,0.05,,,
+,,,,,,Subtotal Gang 3 Vegi:,,,,7.44,,Alternative zu Wellington
+
+WEIHNACHTSMENÜ,Tonkabohnen Crème Brûlée,Gang 4 - Dessert,,,,,,,,,Dessert,
+,,,,,,,Rahm,100,ml,8.00,0.80,Käserei Meiringen,
+,,,,,,,Eigelb,40,g,12.00,0.48,Bio-Hof Hasliberg,ca. 2 Eigelb
+,,,,,,,Zucker,30,g,2.50,0.08,,,
+,,,,,,,Tonkabohne,0.5,g,200.00,0.10,,,
+,,,,,,,Vanille,0.3,g,150.00,0.05,,,
+,,,,,,,Shortbread,25,g,18.00,0.45,,,hausgemacht
+,,,,,,,Zucker für Kruste,15,g,2.50,0.04,,,karamellisiert
+,,,,,,Subtotal Gang 4:,,,,2.00,,
+,,,,,,TOTAL WEIHNACHTSMENÜ:,90.00,25.71,28.57%,,,Berechnung korrekt
+
+SILVESTERMENÜ,Komplett,Gesamt,110.00,47.60,43.27%,,,,,,Faktor 2.31 (Premium-Gala),Degustation-Portionen
+
+SILVESTERMENÜ,Jakobsmuschel-Carpaccio,Amuse-Bouche,,,,,,,,,Amuse-Bouche,
+,,,,,,,Jakobsmuschel,20,g,85.00,1.70,,,frisch (Degustation)
+,,,,,,,Yuzu-Saft,5,ml,120.00,0.60,,,
+,,,,,,,Olivenöl extra virgin,5,ml,35.00,0.18,,,
+,,,,,,,Fleur de Sel,0.5,g,60.00,0.03,,,
+,,,,,,,Microgreens,2,g,150.00,0.30,,,Dekoration
+,,,,,,Subtotal Amuse-Bouche:,,,,2.81,,Reduziert
+
+SILVESTERMENÜ,Gänseleber-Terrine,Gang 1 - Vorspeise,,,,,,,,,Vorspeise,
+,,,,,,,Gänseleber,50,g,120.00,6.00,,,Degustation
+,,,,,,,Brioche,25,g,22.00,0.55,,,reduziert
+,,,,,,,Quitten,30,g,8.00,0.24,Obstgarten Brienz,für Chutney
+,,,,,,,Zucker,8,g,2.50,0.02,,,
+,,,,,,,Gewürze,2,g,25.00,0.05,,,Zimt etc.
+,,,,,,,Fleur de Sel,0.5,g,60.00,0.03,,,
+,,,,,,,Butter,5,g,16.00,0.08,Käserei Meiringen,
+,,,,,,Subtotal Gang 1:,,,,6.97,,Reduziert
+
+SILVESTERMENÜ,Hummer-Bisque,Gang 2 - Zwischengang,,,,,,,,,Zwischengang,
+,,,,,,,Hummerschalen,100,g,18.00,1.80,,,für Fond
+,,,,,,,Tomatenmark,15,g,12.00,0.18,,,
+,,,,,,,Cognac,20,ml,65.00,1.30,,,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Karotten,15,g,3.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Sellerie,10,g,4.00,0.04,Bio-Hof Hasliberg,
+,,,,,,,Rahm,40,ml,8.00,0.32,Käserei Meiringen,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Gewürze,3,g,20.00,0.06,,,
+,,,,,,Subtotal Gang 2:,,,,3.96,,
+
+SILVESTERMENÜ,Seeteufel im Speckmantel,Gang 3 - Fischgang,,,,,,,,,Fischgang,
+,,,,,,,Seeteufel,100,g,48.00,4.80,,,Degustation
+,,,,,,,Speck,20,g,28.00,0.56,Metzgerei Trachsel,reduziert
+,,,,,,,Carnaroli Reis,50,g,12.00,0.60,,,für Risotto
+,,,,,,,Safran,0.1,g,800.00,0.80,,,
+,,,,,,,Zwiebeln,15,g,2.50,0.04,Bio-Hof Hasliberg,
+,,,,,,,Weißwein,35,ml,18.00,0.63,,,
+,,,,,,,Gemüsebouillon,120,ml,3.00,0.36,,,
+,,,,,,,Butter,12,g,16.00,0.19,Käserei Meiringen,
+,,,,,,,Zitrone,8,g,8.00,0.06,,,
+,,,,,,,Parmesan,12,g,38.00,0.46,,,
+,,,,,,,Olivenöl,8,ml,25.00,0.20,,,
+,,,,,,Subtotal Gang 3:,,,,8.70,,Reduziert
+
+SILVESTERMENÜ,Dry-Aged Entrecôte,Gang 4 - Hauptgang,,,,,,,,,Hauptgang Standard,
+,,,,,,,Dry-Aged Entrecôte,180,g,85.00,15.30,Metzgerei Trachsel,28 Tage gereift (Degustation)
+,,,,,,,Kartoffeln,100,g,3.00,0.30,Bio-Hof Hasliberg,für Pommes Anna
+,,,,,,,Butter,30,g,16.00,0.48,Käserei Meiringen,für Pommes Anna
+,,,,,,,Eigelb,30,g,12.00,0.36,Bio-Hof Hasliberg,für Béarnaise
+,,,,,,,Estragon frisch,2,g,90.00,0.18,,,für Béarnaise
+,,,,,,,Schalotten,15,g,8.00,0.12,,,für Béarnaise
+,,,,,,,Weißwein,20,ml,18.00,0.36,,,für Béarnaise
+,,,,,,,Butter Béarnaise,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Zitrone,3,g,8.00,0.02,,,
+,,,,,,,Haricots Verts,80,g,14.00,1.12,,,feine grüne Bohnen
+,,,,,,,Butter für Bohnen,8,g,16.00,0.13,Käserei Meiringen,
+,,,,,,,Schalotten,10,g,8.00,0.08,,,für Bohnen
+,,,,,,,Salz & Pfeffer,2,g,5.00,0.01,,,
+,,,,,,Subtotal Gang 4 Standard:,,,,18.70,,Béarnaise + Pommes Anna + Haricots Verts
+
+SILVESTERMENÜ,Trüffel-Arancini,Amuse-Bouche Vegi,,,,,,,,,Vegetarische Alternative,
+,,,,,,,Carnaroli Reis,30,g,12.00,0.36,,,für Risotto
+,,,,,,,Schwarzer Trüffel,2,g,600.00,1.20,,,
+,,,,,,,Parmesan,15,g,38.00,0.57,,,
+,,,,,,,Mehl,10,g,2.50,0.03,,,zum Panieren
+,,,,,,,Eier,10,g,8.00,0.08,Bio-Hof Hasliberg,
+,,,,,,,Paniermehl,15,g,3.00,0.05,,,
+,,,,,,,Frittieröl,30,ml,5.00,0.15,,,
+,,,,,,,Rahm,15,ml,8.00,0.12,Käserei Meiringen,für Schaum
+,,,,,,,Microgreens,2,g,150.00,0.30,,,
+,,,,,,Subtotal Amuse Vegi:,,,,2.86,,
+
+SILVESTERMENÜ,Geräucherter Ziegenkäse,Gang 1 - Vorspeise Vegi,,,,,,,,,Vegetarische Alternative,
+,,,,,,,Ziegenkäse geräuchert,80,g,38.00,3.04,,,Degustation
+,,,,,,,Randen,60,g,4.50,0.27,Bio-Hof Hasliberg,für Tartar
+,,,,,,,Schalotten,15,g,8.00,0.12,,,für Tartar
+,,,,,,,Olivenöl,10,ml,25.00,0.25,,,
+,,,,,,,Zitrone,5,g,8.00,0.04,,,
+,,,,,,,Walnüsse,20,g,45.00,0.90,,,geröstet
+,,,,,,,Balsamico Aceto,15,ml,35.00,0.53,,,für Reduktion
+,,,,,,,Zucker,8,g,2.50,0.02,,,für Reduktion
+,,,,,,,Rucola,15,g,12.00,0.18,Bio-Hof Hasliberg,
+,,,,,,,Honig,5,g,18.00,0.09,,,
+,,,,,,Subtotal Gang 1 Vegi:,,,,5.44,,
+
+SILVESTERMENÜ,Butternut-Kürbis-Velouté,Gang 2 - Zwischengang Vegi,,,,,,,,,Vegetarische Alternative,
+,,,,,,,Butternut-Kürbis,100,g,3.50,0.35,Bio-Hof Hasliberg,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Kartoffeln,30,g,3.00,0.09,Bio-Hof Hasliberg,
+,,,,,,,Gemüsebouillon,120,ml,3.00,0.36,,,
+,,,,,,,Rahm,40,ml,8.00,0.32,Käserei Meiringen,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Trüffelöl,1.5,ml,400.00,0.60,,,
+,,,,,,,Amaretto,10,ml,35.00,0.35,,,
+,,,,,,,Gewürze,2,g,15.00,0.03,,,
+,,,,,,Subtotal Gang 2 Vegi:,,,,2.31,,
+
+SILVESTERMENÜ,Linguine mit Morchelsauce,Gang 3 - Fischgang Vegi,,,,,,,,,Vegetarische Alternative,
+,,,,,,,Linguine,70,g,8.00,0.56,,,frische Pasta (Degustation)
+,,,,,,,Morcheln getrocknet,8,g,180.00,1.44,,,
+,,,,,,,Schalotten,20,g,8.00,0.16,,,
+,,,,,,,Knoblauch,3,g,18.00,0.05,,,
+,,,,,,,Weißwein,30,ml,18.00,0.54,,,
+,,,,,,,Rahm,60,ml,8.00,0.48,Käserei Meiringen,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Parmesan,15,g,38.00,0.57,,,für Schaum
+,,,,,,,Trüffelöl,2,ml,400.00,0.80,,,
+,,,,,,,Petersilie,3,g,60.00,0.18,,,
+,,,,,,Subtotal Gang 3 Vegi:,,,,4.94,,
+
+SILVESTERMENÜ,Ravioli Ricotta-Spinat,Gang 4 - Hauptgang Vegi,,,,,,,,,Hauptgang Vegetarisch,
+,,,,,,,Nudelteig,80,g,8.00,0.64,,,Mehl + Ei (Degustation)
+,,,,,,,Ricotta,50,g,18.00,0.90,,,reduziert
+,,,,,,,Spinat,40,g,12.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Butter,20,g,16.00,0.32,Käserei Meiringen,
+,,,,,,,Salbei,4,g,90.00,0.36,,,frisch
+,,,,,,,Parmesan,20,g,38.00,0.76,,,
+,,,,,,,Knoblauch,4,g,18.00,0.07,,,
+,,,,,,,Olivenöl,8,ml,25.00,0.20,,,
+,,,,,,,Pinienkerne,8,g,65.00,0.52,,,
+,,,,,,Subtotal Gang 4 Vegi:,,,,4.25,,Alternative zu Entrecôte (Degustation)
+
+SILVESTERMENÜ,Schokoladen-Fondant,Gang 5 - Dessert,,,,,,,,,Dessert,
+,,,,,,,Schokolade 70%,50,g,45.00,2.25,,,Schweizer
+,,,,,,,Butter,30,g,16.00,0.48,Käserei Meiringen,
+,,,,,,,Eier,40,g,8.00,0.32,Bio-Hof Hasliberg,
+,,,,,,,Zucker,25,g,2.50,0.06,,,
+,,,,,,,Mehl,15,g,2.50,0.04,,,
+,,,,,,,Himbeeren,40,g,35.00,1.40,,,für Sorbet
+,,,,,,,Zucker Sorbet,15,g,2.50,0.04,,,
+,,,,,,,Schokoladensauce,20,ml,18.00,0.36,,,
+,,,,,,Subtotal Gang 5:,,,,4.95,,Ohne Goldblatt
+,,,,,,TOTAL SILVESTERMENÜ:,110.00,47.60,43.27%,,,IM BUDGET für Gala-Menü!
+
+BEMERKUNG SILVESTER,,,,,,,,,,,"Silvester-Kalkulation OPTIMIERT: 43.27% FC durch Degustation-Portionen (kleinere Mengen) und Preis CHF 110. Premium-Zutaten bleiben erhalten! Béarnaise-Sauce + Geräucherter Ziegenkäse vegi. Akzeptabel für Gala-Event."
+
+MITTAGSMENÜ WOCHE 1,Mittwoch - Älplermagronen,Vegetarisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Macaroni,80,g,4.50,0.36,,,
+,,,,,,,Kartoffeln,100,g,3.00,0.30,Bio-Hof Hasliberg,
+,,,,,,,Alpkäse,60,g,28.00,1.68,Alpkäserei Engstlenalp,
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Zwiebeln,50,g,2.50,0.13,Bio-Hof Hasliberg,für Röstzwiebeln
+,,,,,,,Butter,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Apfelmus,80,g,6.00,0.48,Obstgarten Brienz,
+,,,,,,,Gewürze,3,g,10.00,0.03,,,
+,,,,,,Subtotal:,,,,3.86,,
+
+MITTAGSMENÜ WOCHE 1,Mittwoch Alternative - Bratwurst,Fleisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Bratwurst,180,g,22.00,3.96,Metzgerei Trachsel,
+,,,,,,,Kartoffeln,200,g,3.00,0.60,Bio-Hof Hasliberg,für Salat
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Essig,20,ml,8.00,0.16,,,
+,,,,,,,Öl,20,ml,15.00,0.30,,,
+,,,,,,,Senf,25,g,12.00,0.30,,,
+,,,,,,,Bouillon,50,ml,3.00,0.15,,,
+,,,,,,Subtotal:,,,,5.55,,
+
+MITTAGSMENÜ WOCHE 1,Donnerstag - Felchen Müllerin,Fisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Felchen,180,g,28.00,5.04,Fischerei Brienzersee,
+,,,,,,,Kartoffeln,150,g,3.00,0.45,Bio-Hof Hasliberg,
+,,,,,,,Butter,25,g,16.00,0.40,Käserei Meiringen,für Nussbutter
+,,,,,,,Mehl,15,g,2.50,0.04,,,zum Mehlieren
+,,,,,,,Zitrone,15,g,8.00,0.12,,,
+,,,,,,,Petersilie,5,g,60.00,0.30,,,
+,,,,,,,Eier,30,g,8.00,0.24,Bio-Hof Hasliberg,für Tartare
+,,,,,,,Mayonnaise,20,ml,12.00,0.24,,,für Tartare
+,,,,,,,Gurken,15,g,6.00,0.09,,,für Tartare
+,,,,,,,Kapern,5,g,35.00,0.18,,,für Tartare
+,,,,,,Subtotal:,,,,7.10,,
+
+MITTAGSMENÜ WOCHE 1,Donnerstag Alternative - Capuns,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Mangold,120,g,8.00,0.96,Bio-Hof Hasliberg,
+,,,,,,,Mehl,60,g,2.50,0.15,,,für Teig
+,,,,,,,Eier,30,g,8.00,0.24,Bio-Hof Hasliberg,
+,,,,,,,Milch,40,ml,1.80,0.07,Käserei Meiringen,
+,,,,,,,Speck,30,g,28.00,0.84,Metzgerei Trachsel,optional vegi
+,,,,,,,Rahm,100,ml,8.00,0.80,Käserei Meiringen,für Sauce
+,,,,,,,Karotten,30,g,3.50,0.11,Bio-Hof Hasliberg,Brunoise
+,,,,,,,Sellerie,20,g,4.00,0.08,Bio-Hof Hasliberg,Brunoise
+,,,,,,,Lauch,20,g,5.00,0.10,Bio-Hof Hasliberg,Brunoise
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,Subtotal:,,,,3.51,,
+
+MITTAGSMENÜ WOCHE 1,Freitag - Kalbsgeschnetzeltes,Fleisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Kalbfleisch,150,g,48.00,7.20,Metzgerei Trachsel,
+,,,,,,,Champignons,60,g,15.00,0.90,,,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Weißwein,30,ml,18.00,0.54,,,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Kartoffeln,200,g,3.00,0.60,Bio-Hof Hasliberg,für Rösti
+,,,,,,,Zitrone,5,g,8.00,0.04,,,
+,,,,,,Subtotal:,,,,10.13,,Über Budget
+
+MITTAGSMENÜ WOCHE 1,Freitag Alternative - Pizzoccheri,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Buchweizennudeln,100,g,14.00,1.40,,,
+,,,,,,,Wirsing,80,g,6.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Kartoffeln,80,g,3.00,0.24,Bio-Hof Hasliberg,
+,,,,,,,Alpkäse,50,g,28.00,1.40,Alpkäserei Engstlenalp,
+,,,,,,,Knoblauch,8,g,18.00,0.14,,,
+,,,,,,,Butter,25,g,16.00,0.40,Käserei Meiringen,
+,,,,,,,Salbei,3,g,90.00,0.27,,,
+,,,,,,Subtotal:,,,,4.33,,
+
+MITTAGSMENÜ WOCHE 1,Samstag - Cordon Bleu,Fleisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Kalbsschnitzel,150,g,48.00,7.20,Metzgerei Trachsel,
+,,,,,,,Schinken,30,g,32.00,0.96,Metzgerei Trachsel,
+,,,,,,,Käse,30,g,22.00,0.66,Käserei Meiringen,
+,,,,,,,Mehl,20,g,2.50,0.05,,,
+,,,,,,,Eier,30,g,8.00,0.24,Bio-Hof Hasliberg,
+,,,,,,,Paniermehl,25,g,3.00,0.08,,,
+,,,,,,,Kartoffeln,180,g,3.00,0.54,Bio-Hof Hasliberg,für Pommes
+,,,,,,,Frittieröl,40,ml,5.00,0.20,,,
+,,,,,,,Salat,60,g,8.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Dressing,30,ml,6.00,0.18,,,
+,,,,,,Subtotal:,,,,10.59,,Über Budget
+
+MITTAGSMENÜ WOCHE 1,Samstag Alternative - Steinpilz-Risotto,Vegetarisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Carnaroli Reis,80,g,12.00,0.96,,,
+,,,,,,,Steinpilze,80,g,45.00,3.60,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Weißwein,50,ml,18.00,0.90,,,
+,,,,,,,Gemüsebouillon,200,ml,3.00,0.60,,,
+,,,,,,,Butter,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Parmesan,25,g,38.00,0.95,,,
+,,,,,,,Trüffelöl,2,ml,400.00,0.80,,,
+,,,,,,Subtotal:,,,,8.13,,
+
+MITTAGSMENÜ WOCHE 1,Sonntag - Schweinsbraten,Fleisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Schweinefleisch,180,g,18.00,3.24,Metzgerei Trachsel,
+,,,,,,,Kartoffeln,150,g,3.00,0.45,Bio-Hof Hasliberg,für Gratin
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Käse,30,g,22.00,0.66,Käserei Meiringen,
+,,,,,,,Rotkohl,120,g,4.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Äpfel,30,g,4.00,0.12,Obstgarten Brienz,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Kalbsfond,60,ml,12.00,0.72,,,für Jus
+,,,,,,,Gewürze,5,g,15.00,0.08,,,
+,,,,,,Subtotal:,,,,6.44,,
+
+MITTAGSMENÜ WOCHE 1,Sonntag Alternative - Cannelloni,Vegetarisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Cannelloni-Teig,100,g,8.00,0.80,,,
+,,,,,,,Spinat,80,g,12.00,0.96,Bio-Hof Hasliberg,
+,,,,,,,Ricotta,80,g,18.00,1.44,,,
+,,,,,,,Tomatensauce,120,ml,8.00,0.96,,,
+,,,,,,,Parmesan,30,g,38.00,1.14,,,
+,,,,,,,Mozzarella,40,g,16.00,0.64,,,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Basilikum,3,g,100.00,0.30,,,
+,,,,,,Subtotal:,,,,6.33,,
+
+MITTAGSMENÜ WOCHE 2,Mittwoch - Käsewähe,Vegetarisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Mürbeteig,120,g,6.00,0.72,,,Mehl+Butter
+,,,,,,,Käse gemischt,80,g,22.00,1.76,Käserei Meiringen,
+,,,,,,,Eier,50,g,8.00,0.40,Bio-Hof Hasliberg,
+,,,,,,,Rahm,60,ml,8.00,0.48,Käserei Meiringen,
+,,,,,,,Zwiebeln,20,g,2.50,0.05,Bio-Hof Hasliberg,
+,,,,,,,Salat,60,g,8.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Dressing,30,ml,6.00,0.18,,,
+,,,,,,Subtotal:,,,,4.07,,
+
+MITTAGSMENÜ WOCHE 2,Mittwoch Alternative - Hauswurst,Fleisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Hauswurst,180,g,38.00,6.84,Berner Alpwurst,geräuchert
+,,,,,,,Kartoffeln,200,g,3.00,0.60,Bio-Hof Hasliberg,für Salat
+,,,,,,,Senf,25,g,12.00,0.30,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Essig,20,ml,8.00,0.16,,,
+,,,,,,,Öl,20,ml,15.00,0.30,,,
+,,,,,,Subtotal:,,,,8.28,,
+
+MITTAGSMENÜ WOCHE 2,Donnerstag - Forelle gebraten,Fisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Forelle,180,g,22.00,3.96,Forellenzucht Reichenbach,
+,,,,,,,Kartoffeln,150,g,3.00,0.45,Bio-Hof Hasliberg,Salzkartoffeln
+,,,,,,,Butter,30,g,16.00,0.48,Käserei Meiringen,für Nussbutter
+,,,,,,,Zitrone,15,g,8.00,0.12,,,
+,,,,,,,Mehl,10,g,2.50,0.03,,,
+,,,,,,,Petersilie,5,g,60.00,0.30,,,
+,,,,,,Subtotal:,,,,5.34,,
+
+MITTAGSMENÜ WOCHE 2,Donnerstag Alternative - Gemüse-Quiche,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Mürbeteig,120,g,6.00,0.72,,,
+,,,,,,,Gemüse gemischt,120,g,6.00,0.72,Bio-Hof Hasliberg,saisonal
+,,,,,,,Eier,60,g,8.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Käse,40,g,22.00,0.88,Käserei Meiringen,
+,,,,,,,Salat,60,g,8.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Dressing,30,ml,6.00,0.18,,,
+,,,,,,Subtotal:,,,,4.10,,
+
+MITTAGSMENÜ WOCHE 2,Freitag - Hackbraten,Fleisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Hackfleisch gemischt,150,g,16.00,2.40,Metzgerei Trachsel,Rind+Schwein
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Eier,20,g,8.00,0.16,Bio-Hof Hasliberg,
+,,,,,,,Paniermehl,15,g,3.00,0.05,,,
+,,,,,,,Kartoffeln,180,g,3.00,0.54,Bio-Hof Hasliberg,für Stock
+,,,,,,,Milch,40,ml,1.80,0.07,Käserei Meiringen,
+,,,,,,,Butter,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Rahm,60,ml,8.00,0.48,Käserei Meiringen,für Sauce
+,,,,,,,Senf,10,g,12.00,0.12,,,
+,,,,,,Subtotal:,,,,4.14,,
+
+MITTAGSMENÜ WOCHE 2,Freitag Alternative - Polenta Steinpilz,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Maisgrieß Polenta,80,g,6.00,0.48,,,
+,,,,,,,Steinpilze,100,g,45.00,4.50,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Rotwein,30,ml,18.00,0.54,,,
+,,,,,,,Gemüsebouillon,50,ml,3.00,0.15,,,
+,,,,,,,Butter,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Parmesan,30,g,38.00,1.14,,,
+,,,,,,,Petersilie,5,g,60.00,0.30,,,
+,,,,,,Subtotal:,,,,7.52,,
+
+MITTAGSMENÜ WOCHE 2,Samstag - Kalbsschnitzel Wiener Art,Fleisch,34.00,9.71,28.57%,,,,,,,
+,,,,,,,Kalbsschnitzel,180,g,48.00,8.64,Metzgerei Trachsel,
+,,,,,,,Mehl,25,g,2.50,0.06,,,
+,,,,,,,Eier,40,g,8.00,0.32,Bio-Hof Hasliberg,
+,,,,,,,Paniermehl,30,g,3.00,0.09,,,
+,,,,,,,Kartoffeln,180,g,3.00,0.54,Bio-Hof Hasliberg,für Pommes
+,,,,,,,Frittieröl,40,ml,5.00,0.20,,,
+,,,,,,,Preiselbeeren,30,g,18.00,0.54,,,
+,,,,,,,Zitrone,15,g,8.00,0.12,,,
+,,,,,,Subtotal:,,,,10.51,,Über Budget
+
+MITTAGSMENÜ WOCHE 2,Samstag Alternative - Kürbis-Risotto,Vegetarisch,34.00,9.71,28.57%,,,,,,,
+,,,,,,,Carnaroli Reis,80,g,12.00,0.96,,,
+,,,,,,,Kürbis Hokkaido,120,g,3.50,0.42,Bio-Hof Hasliberg,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Weißwein,50,ml,18.00,0.90,,,
+,,,,,,,Gemüsebouillon,200,ml,3.00,0.60,,,
+,,,,,,,Butter,20,g,16.00,0.32,Käserei Meiringen,
+,,,,,,,Parmesan,30,g,38.00,1.14,,,
+,,,,,,,Salbei,5,g,90.00,0.45,,,frisch
+,,,,,,Subtotal:,,,,4.87,,
+
+MITTAGSMENÜ WOCHE 2,Sonntag - Rindsbraten,Fleisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Rindfleisch,180,g,32.00,5.76,Metzgerei Trachsel,
+,,,,,,,Mehl,40,g,2.50,0.10,,,für Spätzli
+,,,,,,,Eier,20,g,8.00,0.16,Bio-Hof Hasliberg,für Spätzli
+,,,,,,,Milch,30,ml,1.80,0.05,Käserei Meiringen,
+,,,,,,,Rüebli,80,g,3.50,0.28,Bio-Hof Hasliberg,glasiert
+,,,,,,,Honig,10,g,18.00,0.18,,,
+,,,,,,,Kalbsfond,80,ml,12.00,0.96,,,für Jus
+,,,,,,,Rotwein,30,ml,18.00,0.54,,,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,Subtotal:,,,,8.19,,
+
+MITTAGSMENÜ WOCHE 2,Sonntag Alternative - Käse-Fondue,Vegetarisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Alpkäse gemischt,100,g,26.00,2.60,Alpkäserei Engstlenalp,
+,,,,,,,Emmentaler,50,g,18.00,0.90,Käserei Meiringen,
+,,,,,,,Weißwein,80,ml,18.00,1.44,,,
+,,,,,,,Kirsch,15,ml,45.00,0.68,,,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Maisstärke,8,g,6.00,0.05,,,
+,,,,,,,Brot,120,g,8.00,0.96,,,würfelig
+,,,,,,,Cornichons,30,g,12.00,0.36,,,
+,,,,,,Subtotal:,,,,7.08,,
+
+MITTAGSMENÜ WOCHE 3,Mittwoch - Käse-Spätzli,Vegetarisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Mehl,70,g,2.50,0.18,,,für Spätzli
+,,,,,,,Eier,35,g,8.00,0.28,Bio-Hof Hasliberg,
+,,,,,,,Milch,40,ml,1.80,0.07,Käserei Meiringen,
+,,,,,,,Alpkäse,70,g,28.00,1.96,Alpkäserei Engstlenalp,
+,,,,,,,Zwiebeln,60,g,2.50,0.15,Bio-Hof Hasliberg,für Röstzwiebeln
+,,,,,,,Butter,15,g,16.00,0.24,Käserei Meiringen,
+,,,,,,,Apfelmus,80,g,6.00,0.48,Obstgarten Brienz,
+,,,,,,Subtotal:,,,,3.36,,
+
+MITTAGSMENÜ WOCHE 3,Mittwoch Alternative - Schüblig,Fleisch,28.00,8.00,28.57%,,,,,,,
+,,,,,,,Schüblig,180,g,24.00,4.32,Metzgerei Trachsel,St. Galler
+,,,,,,,Kartoffeln,200,g,3.00,0.60,Bio-Hof Hasliberg,für Salat
+,,,,,,,Senf,25,g,12.00,0.30,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Essig,20,ml,8.00,0.16,,,
+,,,,,,,Öl,20,ml,15.00,0.30,,,
+,,,,,,Subtotal:,,,,5.76,,
+
+MITTAGSMENÜ WOCHE 3,Donnerstag - Egli-Filet,Fisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Egli-Filet,160,g,35.00,5.60,Fischerei Brienzersee,
+,,,,,,,Mehl,20,g,2.50,0.05,,,zum Mehlieren
+,,,,,,,Kartoffeln,180,g,3.00,0.54,Bio-Hof Hasliberg,für Pommes
+,,,,,,,Frittieröl,40,ml,5.00,0.20,,,
+,,,,,,,Eier,30,g,8.00,0.24,Bio-Hof Hasliberg,für Tartare
+,,,,,,,Mayonnaise,25,ml,12.00,0.30,,,
+,,,,,,,Gurken,15,g,6.00,0.09,,,
+,,,,,,,Kapern,5,g,35.00,0.18,,,
+,,,,,,,Zitrone,10,g,8.00,0.08,,,
+,,,,,,Subtotal:,,,,7.28,,
+
+MITTAGSMENÜ WOCHE 3,Donnerstag Alternative - Spaghetti Aglio Olio,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Spaghetti,100,g,4.50,0.45,,,
+,,,,,,,Knoblauch,15,g,18.00,0.27,,,
+,,,,,,,Olivenöl,30,ml,25.00,0.75,,,
+,,,,,,,Peperoncini,5,g,45.00,0.23,,,
+,,,,,,,Parmesan,30,g,38.00,1.14,,,
+,,,,,,,Petersilie,5,g,60.00,0.30,,,
+,,,,,,,Pinienkerne,15,g,65.00,0.98,,,optional
+,,,,,,Subtotal:,,,,4.12,,
+
+MITTAGSMENÜ WOCHE 3,Freitag - Siedfleisch,Fleisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Rindfleisch,180,g,24.00,4.32,Metzgerei Trachsel,zum Sieden
+,,,,,,,Kartoffeln,150,g,3.00,0.45,Bio-Hof Hasliberg,Salzkartoffeln
+,,,,,,,Gemüse gemischt,100,g,5.00,0.50,Bio-Hof Hasliberg,
+,,,,,,,Meerrettich,25,g,35.00,0.88,,,frisch
+,,,,,,,Rahm,30,ml,8.00,0.24,Käserei Meiringen,für Sauce
+,,,,,,,Gemüsebouillon,300,ml,3.00,0.90,,,
+,,,,,,,Lorbeer,1,Stk,0.50,0.01,,,
+,,,,,,Subtotal:,,,,7.30,,
+
+MITTAGSMENÜ WOCHE 3,Freitag Alternative - Tagliatelle Champignon,Vegetarisch,30.00,8.57,28.57%,,,,,,,
+,,,,,,,Tagliatelle,100,g,8.00,0.80,,,frische Pasta
+,,,,,,,Champignons,100,g,15.00,1.50,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Rahm,100,ml,8.00,0.80,Käserei Meiringen,
+,,,,,,,Weißwein,30,ml,18.00,0.54,,,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Parmesan,25,g,38.00,0.95,,,
+,,,,,,,Petersilie,5,g,60.00,0.30,,,
+,,,,,,Subtotal:,,,,5.22,,
+
+MITTAGSMENÜ WOCHE 3,Samstag - Rinds-Stroganoff,Fleisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Rindfleisch,160,g,32.00,5.12,Metzgerei Trachsel,
+,,,,,,,Zwiebeln,40,g,2.50,0.10,Bio-Hof Hasliberg,
+,,,,,,,Champignons,60,g,15.00,0.90,,,
+,,,,,,,Paprika,40,g,12.00,0.48,,,
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Senf,10,g,12.00,0.12,,,
+,,,,,,,Tomatenmark,10,g,8.00,0.08,,,
+,,,,,,,Nudeln,80,g,6.00,0.48,,,Butternüdeli
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Gurken,60,g,6.00,0.36,,,für Salat
+,,,,,,,Dressing,20,ml,6.00,0.12,,,
+,,,,,,Subtotal:,,,,8.56,,
+
+MITTAGSMENÜ WOCHE 3,Samstag Alternative - Gnocchi Gorgonzola,Vegetarisch,32.00,9.14,28.57%,,,,,,,
+,,,,,,,Gnocchi,150,g,12.00,1.80,,,
+,,,,,,,Gorgonzola,60,g,28.00,1.68,,,
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,,Walnüsse,20,g,45.00,0.90,,,geröstet
+,,,,,,,Parmesan,15,g,38.00,0.57,,,
+,,,,,,,Spinat,40,g,12.00,0.48,Bio-Hof Hasliberg,optional
+,,,,,,Subtotal:,,,,6.23,,
+
+MITTAGSMENÜ WOCHE 3,Sonntag - Kalbsbraten,Fleisch,34.00,9.71,28.57%,,,,,,,
+,,,,,,,Kalbfleisch,180,g,42.00,7.56,Metzgerei Trachsel,
+,,,,,,,Champignons,60,g,15.00,0.90,,,für Sauce
+,,,,,,,Rahm,80,ml,8.00,0.64,Käserei Meiringen,
+,,,,,,,Kalbsfond,60,ml,12.00,0.72,,,
+,,,,,,,Kartoffeln,150,g,3.00,0.45,Bio-Hof Hasliberg,für Gratin
+,,,,,,,Rahm Gratin,60,ml,8.00,0.48,Käserei Meiringen,
+,,,,,,,Käse,30,g,22.00,0.66,Käserei Meiringen,
+,,,,,,,Gemüse gemischt,80,g,6.00,0.48,Bio-Hof Hasliberg,Marktgemüse
+,,,,,,,Butter,10,g,16.00,0.16,Käserei Meiringen,
+,,,,,,Subtotal:,,,,12.05,,Über Budget
+
+MITTAGSMENÜ WOCHE 3,Sonntag Alternative - Gemüse-Lasagne,Vegetarisch,34.00,9.71,28.57%,,,,,,,
+,,,,,,,Lasagne-Platten,100,g,8.00,0.80,,,
+,,,,,,,Gemüse gemischt,150,g,6.00,0.90,Bio-Hof Hasliberg,saisonal
+,,,,,,,Tomatensauce,120,ml,8.00,0.96,,,
+,,,,,,,Béchamel,100,ml,6.00,0.60,,,
+,,,,,,,Mozzarella,60,g,16.00,0.96,,,
+,,,,,,,Parmesan,30,g,38.00,1.14,,,
+,,,,,,,Zwiebeln,30,g,2.50,0.08,Bio-Hof Hasliberg,
+,,,,,,,Knoblauch,5,g,18.00,0.09,,,
+,,,,,,,Olivenöl,15,ml,25.00,0.38,,,
+,,,,,,,Salat,60,g,8.00,0.48,Bio-Hof Hasliberg,
+,,,,,,,Dressing,30,ml,6.00,0.18,,,
+,,,,,,Subtotal:,,,,6.57,,
+
+ZUSAMMENFASSUNG,,,,,,,,,,,Gesamtübersicht,
+,,,,,,,,,,,,"Weihnachtsmenü: CHF 90 / Wareneinsatz CHF 25.71 / 28.57% FC ✓ IM BUDGET (Gnocchi mit Trüffel-Käse-Sauce vegi)",
+,,,,,,,,,,,,"Silvestermenü: CHF 110 / Wareneinsatz CHF 47.60 / 43.27% FC ✓ OPTIMIERT (Degustation mit Béarnaise + Geräucherter Ziegenkäse vegi)!",
+,,,,,,,,,,,,"Mittagsmenüs: CHF 28-34 / Wareneinsatz CHF 8.00-9.71 / 28.57% FC ✓ MEHRHEIT IM BUDGET",
+,,,,,,,,,,,,Einige Premium-Gerichte (Kalbsgeschnetzeltes, Cordon Bleu, Kalbsschnitzel, Kalbsbraten) liegen leicht über Budget aufgrund hoher Kalbspreise,
+,,,,,,,,,,,,Empfehlung: Portionsgröße anpassen oder Verkaufspreis minimal erhöhen,
+,,,,,,,,,,,,Silvester-Lösung: Kleinere Degustation-Portionen + Preis CHF 110 = Premium bleibt, FC akzeptabel!
+,,,,,,,,,,,,"KEINE Dopplungen mehr: Weihnachten keine 2x Steinpilz, Silvester keine 2x Risotto!"

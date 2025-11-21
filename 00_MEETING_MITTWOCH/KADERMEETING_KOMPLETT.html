@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadermeeting Mittwoch - Komplette Vorbereitung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+            --light-text: #7f8c8d;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h1 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .sidebar .subtitle {
+            font-size: 0.875rem;
+            color: #bdc3c7;
+            margin-bottom: 2rem;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+
+        .progress-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .document {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .document h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .document h2 {
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .document h3 {
+            color: var(--secondary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .document h4 {
+            color: var(--dark-text);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .document p {
+            margin-bottom: 1rem;
+        }
+
+        .document ul, .document ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .document li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Status Badges */
+        .status-critical {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .status-warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .status-success {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+
+        /* Checkboxes */
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 0.75rem 0;
+            padding: 0.75rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background-color: #dfe6e9;
+        }
+
+        .checkbox-item.checked {
+            background-color: #d5f4e6;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.75rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            flex: 1;
+            user-select: none;
+        }
+
+        .checkbox-item.checked label {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Code blocks */
+        code {
+            background-color: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        pre {
+            background-color: #2d3436;
+            color: #dfe6e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Blockquotes */
+        blockquote {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--light-text);
+        }
+
+        /* Horizontal rule */
+        hr {
+            border: none;
+            border-top: 2px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar {
+            background-color: #dfe6e9;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .document {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-item {
+                break-inside: avoid;
+            }
+        }
+
+        /* Emoji support */
+        .emoji {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h1>📋 Kadermeeting</h1>
+            <p class="subtitle">Mittwoch, 6. November 2025</p>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#overview" class="nav-link" data-section="overview">
+                        <span>Übersicht</span>
+                        <span class="progress-badge" id="progress-overview">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#ist-analyse" class="nav-link" data-section="ist-analyse">
+                        <span>01 Ist-Analyse</span>
+                        <span class="progress-badge" id="progress-ist-analyse">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#optionen" class="nav-link" data-section="optionen">
+                        <span>02 3 Optionen</span>
+                        <span class="progress-badge" id="progress-optionen">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#equipment" class="nav-link" data-section="equipment">
+                        <span>03 Equipment</span>
+                        <span class="progress-badge" id="progress-equipment">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#sofortmassnahmen" class="nav-link" data-section="sofortmassnahmen">
+                        <span>04 Sofortmaßnahmen</span>
+                        <span class="progress-badge" id="progress-sofortmassnahmen">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#presentation" class="nav-link" data-section="presentation">
+                        <span>05 Präsentation</span>
+                        <span class="progress-badge" id="progress-presentation">0%</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#faq" class="nav-link" data-section="faq">
+                        <span>06 FAQ</span>
+                        <span class="progress-badge" id="progress-faq">0%</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- OVERVIEW/README -->
+            <section id="overview" class="document">
+                <h1>📋 KADERMEETING MITTWOCH - KOMPLETTE VORBEREITUNG</h1>
+
+                <p><strong>Erstellt:</strong> 2. November 2025<br>
+                <strong>Meeting-Datum:</strong> Mittwoch, 6. November 2025<br>
+                <strong>Dauer:</strong> 30-45 Minuten<br>
+                <strong>Ziel:</strong> GO/NO-GO Entscheidung für Restaurant-Turnaround</p>
+
+                <hr>
+
+                <h2>📊 CHEAT SHEET: DIE WICHTIGSTEN ZAHLEN</h2>
+
+                <h3>Ist-Situation:</h3>
+                <ul>
+                    <li><strong>1.6 Essen/Tag</strong> (8 in 5 Tagen)</li>
+                    <li><strong>CHF 2,400 Umsatz/Monat</strong> (aktuell)</li>
+                    <li><strong>94% unter Ziel</strong></li>
+                </ul>
+
+                <h3>Option 1: Soft-Relaunch</h3>
+                <ul>
+                    <li><strong>CHF 15,000</strong> Investment</li>
+                    <li><strong>2 Wochen</strong> Timeline</li>
+                    <li><strong>10-15 Essen/Tag</strong> nach 3 Monaten</li>
+                    <li><strong>60% Erfolgswahrscheinlichkeit</strong></li>
+                </ul>
+
+                <h3>Option 2: Hard-Reset (EMPFOHLEN)</h3>
+                <ul>
+                    <li><strong>CHF 45,000</strong> Investment</li>
+                    <li><strong>6 Wochen</strong> Timeline</li>
+                    <li><strong>20-25 Essen/Tag</strong> nach 3 Monaten</li>
+                    <li><strong>75% Erfolgswahrscheinlichkeit</strong></li>
+                    <li><strong>ROI 200-320%</strong> nach 18 Monaten</li>
+                </ul>
+
+                <h3>Option 3: Aufgeben</h3>
+                <ul>
+                    <li><strong>CHF 0-5,000</strong> Investment</li>
+                    <li><strong>2 Wochen</strong> Timeline</li>
+                    <li><strong>5-8 Essen/Tag</strong> (nur Hotelgäste)</li>
+                    <li><strong>90% Erfolgswahrscheinlichkeit</strong> (aber kein Upside)</li>
+                </ul>
+
+                <hr>
+
+                <h2>🎯 VORBEREITUNG: 3-SCHRITTE-PLAN</h2>
+
+                <div class="progress-container">
+                    <h3>HEUTE (Samstag/Sonntag):</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-heute-fill" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
+                <h4>1. LESEN (2-3 Stunden):</h4>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-1">
+                    <label for="check-overview-1">01_IST_ANALYSE_TURNAROUND.md durchlesen</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-2">
+                    <label for="check-overview-2">02_3_OPTIONEN_PLAN.md durchlesen</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-3">
+                    <label for="check-overview-3">06_FAQ_KRITISCHE_FRAGEN.md durchlesen</label>
+                </div>
+
+                <h4>2. ÜBEN (1-2 Stunden):</h4>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-4">
+                    <label for="check-overview-4">05_MEETING_PRESENTATION.md 2-3x LAUT durchsprechen</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-5">
+                    <label for="check-overview-5">Mit Stoppuhr (Ziel: 35 Min)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-6">
+                    <label for="check-overview-6">Vor Spiegel oder Kamera (optional)</label>
+                </div>
+
+                <h4>3. VORBEREITEN:</h4>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-7">
+                    <label for="check-overview-7">3 Gerichte planen (welche zeigst du?)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-8">
+                    <label for="check-overview-8">Alle 6 Dokumente ausdrucken (je 2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-9">
+                    <label for="check-overview-9">Notizblock + Stift bereitlegen</label>
+                </div>
+
+                <hr>
+
+                <h2>💡 DEINE KERNBOTSCHAFTEN</h2>
+
+                <h3>Botschaft 1: PROBLEM</h3>
+                <blockquote>
+                    "Das Restaurant ist auf Intensivstation - 1.6 Essen/Tag ist nicht tragbar."
+                </blockquote>
+
+                <h3>Botschaft 2: LÖSUNG</h3>
+                <blockquote>
+                    "Ich habe 3 Optionen entwickelt. Meine Empfehlung: Option 2 (Hard-Reset) - richtig machen, nicht halbherzig."
+                </blockquote>
+
+                <h3>Botschaft 3: BEWEIS</h3>
+                <blockquote>
+                    "Ich habe in Woche 2 bereits Verbesserungen umgesetzt - ohne Budget. Hier sind 3 neue Gerichte zum Probieren."
+                </blockquote>
+
+                <h3>Botschaft 4: ENTSCHEIDUNG</h3>
+                <blockquote>
+                    "Ich brauche heute eine Entscheidung: GO/NO-GO? Wenn GO, starte ich Montag."
+                </blockquote>
+
+                <h3>Botschaft 5: COMMITMENT</h3>
+                <blockquote>
+                    "Ich bin hier um das Restaurant zu retten - nicht um den Status Quo zu verwalten."
+                </blockquote>
+
+                <hr>
+
+                <h2>✅ CHECKLISTE: BIST DU BEREIT?</h2>
+
+                <h3>Inhaltlich:</h3>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-10">
+                    <label for="check-overview-10">Alle 6 Dokumente gelesen</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-11">
+                    <label for="check-overview-11">Zahlen auswendig (1.6 Essen/Tag, CHF 45k, 6 Wochen, etc.)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-12">
+                    <label for="check-overview-12">3 Optionen klar im Kopf</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-13">
+                    <label for="check-overview-13">Meine Empfehlung (Option 2) kann ich begründen</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-14">
+                    <label for="check-overview-14">FAQ durchgegangen (top 10 Fragen)</label>
+                </div>
+
+                <h3>Praktisch:</h3>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-15">
+                    <label for="check-overview-15">Präsentation 2-3x geübt</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-16">
+                    <label for="check-overview-16">3 Gerichte geplant</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-17">
+                    <label for="check-overview-17">Alle Dokumente ausgedruckt (je 2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-18">
+                    <label for="check-overview-18">Material-Checkliste abgearbeitet</label>
+                </div>
+
+                <h3>Mental:</h3>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-19">
+                    <label for="check-overview-19">Selbstbewusst (ich KANN es!)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-20">
+                    <label for="check-overview-20">Ruhig (auch bei kritischen Fragen!)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-21">
+                    <label for="check-overview-21">Fokussiert (Ziel: GO/NO-GO Entscheidung!)</label>
+                </div>
+                <div class="checkbox-item" data-section="overview">
+                    <input type="checkbox" id="check-overview-22">
+                    <label for="check-overview-22">Authentisch (ich BIN Gastro-Profi!)</label>
+                </div>
+
+                <hr>
+
+                <h2>💪 FINAL PEP TALK</h2>
+
+                <p><strong>Marcel,</strong></p>
+
+                <p>Du hast 1 Woche lang analysiert. Du hast 6 umfassende Dokumente erstellt. Du hast bereits Sofortmaßnahmen umgesetzt. Du WEISST was zu tun ist.</p>
+
+                <p><strong>Jetzt geht es nur noch um EINES: ÜBERZEUGUNG.</strong></p>
+
+                <p><strong>5 Prinzipien für das Meeting:</strong></p>
+
+                <ol>
+                    <li><strong>RUHIG BLEIBEN:</strong> Tief durchatmen, nie defensiv werden</li>
+                    <li><strong>FAKTEN NENNEN:</strong> Nicht emotional, sondern Zahlen + Beweise</li>
+                    <li><strong>RESPEKT ZEIGEN:</strong> Es ist SEIN Restaurant, SEIN Geld</li>
+                    <li><strong>EHRLICH SEIN:</strong> Risiken nicht verstecken, realistisch sein</li>
+                    <li><strong>LÖSUNGSORIENTIERT:</strong> Nicht nur Probleme, sondern Lösungen</li>
+                </ol>
+
+                <blockquote>
+                    <strong>Dein Motto:</strong><br>
+                    "Ich bin hier um das Restaurant zu retten - nicht um den Status Quo zu verwalten."
+                </blockquote>
+
+                <p><strong>Der Inhaber entscheidet - aber DU gibst ihm die Basis für eine gute Entscheidung.</strong></p>
+
+                <p><strong>Du bist bereit. Du schaffst das. JETZT zeig es! 💪🔥</strong></p>
+            </section>
+
+            <!-- IST-ANALYSE -->
+            <section id="ist-analyse" class="document">
+                <h1>IST-ANALYSE: HOTEL DAKOTA RESTAURANT - TURNAROUND ERFORDERLICH</h1>
+
+                <p><strong>Datum:</strong> 2. November 2025<br>
+                <strong>Erstellt von:</strong> Marcel Gaertner, Küchenchef (seit 1 Woche im Haus)<br>
+                <strong>Für:</strong> Kadermeeting Mittwoch mit Geschäftsführung/Inhaber</p>
+
+                <hr>
+
+                <h2>EXECUTIVE SUMMARY</h2>
+
+                <p class="status-critical"><strong>STATUS: 🔴 KRITISCH - Sofortiger Handlungsbedarf</strong></p>
+
+                <p>Das Restaurant befindet sich in einer existenzbedrohenden Situation. Nach 1 Woche Analyse als neuer Küchenchef ist klar: <strong>Ohne radikale Veränderungen wird das Restaurant nicht überleben.</strong></p>
+
+                <h3>Die harten Fakten:</h3>
+                <ul>
+                    <li><strong>8 Essen in 5 Tagen verkauft</strong> (1.6 Essen/Tag)</li>
+                    <li><strong>Convenience-lastiges Mise en Place</strong> (Qualität nicht wettbewerbsfähig)</li>
+                    <li><strong>Equipment-Mängel verhindern professionelle Küche</strong></li>
+                    <li><strong>Unmotiviertes Team</strong> mit toxischer Kultur</li>
+                    <li><strong>2 Wochen Schließung geplant</strong> (Ende Nov - Anfang Dez) für "Umschwung"</li>
+                </ul>
+
+                <h3>Meine Einschätzung:</h3>
+                <ul>
+                    <li class="status-success">✅ <strong>Grundstruktur der Küche ist gut</strong> (baulich solide Basis)</li>
+                    <li class="status-success">✅ <strong>Konzept existiert</strong> (Alpine Berner Küche - siehe Projektordner)</li>
+                    <li class="status-critical">❌ <strong>Umsetzung ist komplett gescheitert</strong></li>
+                    <li class="status-critical">❌ <strong>2 Wochen sind NICHT ausreichend</strong> für echten Turnaround</li>
+                </ul>
+
+                <hr>
+
+                <h2>1. UMSATZ & AUSLASTUNG</h2>
+
+                <h3>Ist-Situation (Woche 1):</h3>
+                <pre><code>Tage geöffnet:      5 Tage
+Essen verkauft:     8 Essen
+Durchschnitt/Tag:   1.6 Essen
+Geschätzt/Monat:    48 Essen (bei 30 Tagen)</code></pre>
+
+                <h3>Hochrechnung (konservativ):</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kennzahl</th>
+                            <th>Ist</th>
+                            <th>Soll (nach Konzept)</th>
+                            <th>Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Essen/Tag (Mittag+Abend)</td>
+                            <td>1.6</td>
+                            <td>25-30</td>
+                            <td class="status-critical"><strong>-94%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Umsatz/Monat</td>
+                            <td>CHF 2,400</td>
+                            <td>CHF 87,000</td>
+                            <td class="status-critical"><strong>-97%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Auslastung</td>
+                            <td>~3%</td>
+                            <td>60-70%</td>
+                            <td class="status-critical"><strong>-95%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ursachen-Analyse:</h3>
+
+                <p><strong>1. Qualität nicht konkurrenzfähig:</strong></p>
+                <ul>
+                    <li>Convenience-Produkte dominieren (geschätzt 70-80% des Angebots)</li>
+                    <li>Alles vorgekocht, vakuumiert, eingefroren</li>
+                    <li>Gäste schmecken das → keine Wiederkehr, keine Weiterempfehlung</li>
+                </ul>
+
+                <p><strong>2. Reputation vermutlich beschädigt:</strong></p>
+                <ul>
+                    <li>Bei 1.6 Essen/Tag kennen lokale Gäste das Restaurant bereits</li>
+                    <li>Negative Mundpropaganda vermutet</li>
+                    <li>Online-Bewertungen prüfen! (nicht Teil dieser Analyse, aber dringend empfohlen)</li>
+                </ul>
+
+                <p><strong>3. Marketing vermutlich nicht vorhanden:</strong></p>
+                <ul>
+                    <li>Keine Sichtbarkeit in der Region?</li>
+                    <li>Packages/Angebote nicht aktiv vermarktet?</li>
+                    <li>Social Media/Website aktuell?</li>
+                </ul>
+
+                <hr>
+
+                <h2>9. MEINE EINSCHÄTZUNG & EMPFEHLUNG</h2>
+
+                <h3>Die harte Wahrheit:</h3>
+
+                <p><strong>Das Restaurant ist auf Intensivstation. Wir haben 3 Optionen:</strong></p>
+
+                <ol>
+                    <li><strong>OPTION 1: Soft-Relaunch</strong> (2 Wochen, CHF 15-20k)
+                        <ul>
+                            <li>Machbar aber mit niedrigen Erwartungen</li>
+                            <li>5-8 Essen/Tag nach Wiedereröffnung (nicht 25!)</li>
+                            <li>Schrittweiser Aufbau über 6 Monate</li>
+                        </ul>
+                    </li>
+                    <li><strong>OPTION 2: Hard-Reset</strong> (4-6 Wochen, CHF 40-50k)
+                        <ul>
+                            <li>Richtiger Neustart mit neuer Basis</li>
+                            <li>Neues Team, volles Equipment, echte Chance</li>
+                            <li>15-20 Essen/Tag nach Wiedereröffnung</li>
+                        </ul>
+                    </li>
+                    <li><strong>OPTION 3: Aufgeben</strong>
+                        <ul>
+                            <li>Restaurant für externe Gäste schließen</li>
+                            <li>Nur noch Hotelgäste (Frühstück, simple Küche)</li>
+                            <li>Verluste stoppen</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Meine Empfehlung:</h3>
+
+                <p class="status-warning"><strong>OPTION 2 (Hard-Reset) - ABER mit realistischen Erwartungen</strong></p>
+
+                <p><strong>Warum?</strong></p>
+                <ul>
+                    <li>Option 1 (2 Wochen) ist ein Pflaster auf eine große Wunde</li>
+                    <li>Halbherzige Lösungen werden wieder scheitern</li>
+                    <li>Wenn wir es machen, dann RICHTIG</li>
+                </ul>
+
+                <p><strong>Was ich vom Inhaber brauche:</strong></p>
+                <ol>
+                    <li><strong>Commitment:</strong> Budget CHF 40-50k freigeben</li>
+                    <li><strong>Rückendeckung:</strong> Für schwierige Team-Entscheidungen</li>
+                    <li><strong>Zeit:</strong> 4-6 Wochen statt 2 Wochen</li>
+                    <li><strong>Vertrauen:</strong> Mich machen lassen (mit regelmäßigem Update)</li>
+                </ol>
+
+                <p><strong>Was ich versprechen kann:</strong></p>
+                <ul>
+                    <li>Schonungslose Ehrlichkeit (wie jetzt)</li>
+                    <li>Professionelle Umsetzung</li>
+                    <li>Regelmäßiges Reporting</li>
+                    <li>Realistische Ziele (nicht 30 Essen/Tag nach 2 Wochen!)</li>
+                </ul>
+
+                <p><strong>Was ich NICHT versprechen kann:</strong></p>
+                <ul>
+                    <li>Sofortigen Erfolg (braucht 3-6 Monate)</li>
+                    <li>Dass alle Team-Mitglieder mitziehen</li>
+                    <li>Dass Gäste sofort in Massen kommen</li>
+                </ul>
+
+                <hr>
+
+                <h2>FAZIT</h2>
+
+                <p><strong>Wir haben eine Krise - aber auch eine Chance.</strong></p>
+
+                <p>Die Situation ist kritisch, aber nicht hoffnungslos. Mit dem richtigen Investment, dem richtigen Team und der richtigen Zeit können wir das Restaurant retten.</p>
+
+                <p><strong>Aber:</strong> Wir brauchen eine klare Entscheidung am Mittwoch. Halbherzige Lösungen werden scheitern.</p>
+
+                <blockquote>
+                    <strong>"Ich bin hier, um das Restaurant zu retten - nicht um den Status Quo zu verwalten."</strong>
+                </blockquote>
+
+                <p class="status-critical"><strong>🔴 KRITISCH - SOFORTIGE ENTSCHEIDUNG ERFORDERLICH 🔴</strong></p>
+            </section>
+
+            <!-- 3 OPTIONEN -->
+            <section id="optionen" class="document">
+                <h1>3-OPTIONEN-PLAN: HOTEL DAKOTA RESTAURANT TURNAROUND</h1>
+
+                <p><strong>Für:</strong> Kadermeeting Mittwoch - Entscheidungsvorlage<br>
+                <strong>Datum:</strong> 2. November 2025<br>
+                <strong>Entscheider:</strong> Geschäftsführung/Inhaber</p>
+
+                <hr>
+
+                <h2>AUSGANGSLAGE</h2>
+
+                <p><strong>Ist-Situation:</strong> 1.6 Essen/Tag, Convenience-dominiert, unmotiviertes Team, Equipment-Mängel<br>
+                <strong>Geplant:</strong> 2 Wochen Schließung Ende Nov - Anfang Dez für "Umschwung"<br>
+                <strong>Entscheidung erforderlich:</strong> GO/NO-GO + Welche Option?</p>
+
+                <hr>
+
+                <h2>VERGLEICH DER 3 OPTIONEN</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kriterium</th>
+                            <th>Option 1: Soft-Relaunch</th>
+                            <th>Option 2: Hard-Reset</th>
+                            <th>Option 3: Aufgeben</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Investition</strong></td>
+                            <td>CHF 15,000</td>
+                            <td>CHF 45,000</td>
+                            <td>CHF 0-5,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Timeline</strong></td>
+                            <td>2 Wochen</td>
+                            <td>4-6 Wochen</td>
+                            <td>2 Wochen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Team</strong></td>
+                            <td>Bestehendes Team</td>
+                            <td>Neues Team (tlw.)</td>
+                            <td>Minimum (1-2)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Equipment</strong></td>
+                            <td>Basis</td>
+                            <td>Komplett</td>
+                            <td>Verkaufen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Menü</strong></td>
+                            <td>5-6 Gerichte</td>
+                            <td>10-12 Gerichte</td>
+                            <td>3-5 einfach</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marketing</strong></td>
+                            <td>Basis</td>
+                            <td>Professionell</td>
+                            <td>Keins</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Essen/Tag (nach 3 Mon.)</strong></td>
+                            <td>10-15</td>
+                            <td>20-25</td>
+                            <td>5-8 (nur Hotel)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Umsatz/Monat (nach 3 Mon.)</strong></td>
+                            <td>CHF 15-22k</td>
+                            <td>CHF 30-37k</td>
+                            <td>CHF 3-5k</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Break-Even</strong></td>
+                            <td>Monat 4-6</td>
+                            <td>Monat 3-4</td>
+                            <td>Sofort</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ROI (18 Monate)</strong></td>
+                            <td>50-100%</td>
+                            <td>200-320%</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Erfolgswahrscheinlichkeit</strong></td>
+                            <td>60%</td>
+                            <td>75%</td>
+                            <td>90%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <h2>MEINE EMPFEHLUNG: OPTION 2 (Hard-Reset)</h2>
+
+                <h3>Warum?</h3>
+
+                <ol>
+                    <li><strong>Halbherzige Lösungen haben schon versagt</strong>
+                        <ul>
+                            <li>Die aktuelle Situation (1.6 Essen/Tag) ist das Ergebnis von "es irgendwie machen"</li>
+                            <li>Option 1 ist wieder eine halbherzige Lösung</li>
+                            <li><strong>Wenn wir es machen, dann RICHTIG</strong></li>
+                        </ul>
+                    </li>
+                    <li><strong>Das Konzept ist exzellent</strong>
+                        <ul>
+                            <li>Alpine Berner Küche ist durchdacht und differenziert</li>
+                            <li>Wir haben schon 90% der Arbeit gemacht (Menü, Lieferanten, Kalkulation)</li>
+                            <li>Es wäre Verschwendung, das nicht umzusetzen</li>
+                        </ul>
+                    </li>
+                    <li><strong>Die Investition ist tragbar</strong>
+                        <ul>
+                            <li>CHF 45,000 ist Geld - aber für einen Restaurantbetrieb nicht unrealistisch</li>
+                            <li>ROI nach 18 Monaten von 200-320% ist exzellent</li>
+                            <li>Break-Even nach 3-4 Monaten ist schnell</li>
+                        </ul>
+                    </li>
+                    <li><strong>Neues Team = Neue Chance</strong>
+                        <ul>
+                            <li>Die toxische Kultur im alten Team ist schwer zu ändern</li>
+                            <li>Ein neuer Sous-Chef + 1-2 motivierte Commis können alles ändern</li>
+                            <li>Team-Kultur ist oft wichtiger als Technik</li>
+                        </ul>
+                    </li>
+                    <li><strong>Marketing ist essentiell</strong>
+                        <ul>
+                            <li>CHF 10,000 für Marketing sind KEIN Luxus, sondern Pflicht</li>
+                            <li>Gäste kommen nicht automatisch zurück nach Jahren schlechter Qualität</li>
+                            <li>Professionelles Marketing gibt uns die Chance auf neue Gäste</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Aber: REALISTISCHE ERWARTUNGEN!</h3>
+
+                <p><strong>Ich verspreche NICHT:</strong></p>
+                <ul>
+                    <li>30 Essen/Tag nach 1 Monat (unrealistisch!)</li>
+                    <li>Sofortige Profitabilität (braucht 3-4 Monate)</li>
+                    <li>Dass alles perfekt läuft (es wird Herausforderungen geben)</li>
+                </ul>
+
+                <p><strong>Ich verspreche:</strong></p>
+                <ul>
+                    <li>20-25 Essen/Tag nach 3-6 Monaten (realistisch!)</li>
+                    <li>Break-Even nach 3-4 Monaten (machbar)</li>
+                    <li>Professionelle Umsetzung mit regelmäßigem Reporting</li>
+                    <li>Ehrlichkeit: Wenn etwas nicht funktioniert, sage ich es sofort</li>
+                </ul>
+
+                <hr>
+
+                <h2>ENTSCHEIDUNGS-VORLAGE FÜR MITTWOCH</h2>
+
+                <h3>Der Inhaber muss am Mittwoch folgendes entscheiden:</h3>
+
+                <div class="checkbox-item" data-section="optionen">
+                    <input type="checkbox" id="check-optionen-1">
+                    <label for="check-optionen-1">Option 1: Soft-Relaunch (CHF 15k, 2 Wochen)</label>
+                </div>
+                <div class="checkbox-item" data-section="optionen">
+                    <input type="checkbox" id="check-optionen-2">
+                    <label for="check-optionen-2">Option 2: Hard-Reset (CHF 45k, 6 Wochen) - EMPFOHLEN</label>
+                </div>
+                <div class="checkbox-item" data-section="optionen">
+                    <input type="checkbox" id="check-optionen-3">
+                    <label for="check-optionen-3">Option 3: Aufgeben (CHF 0-5k, 2 Wochen)</label>
+                </div>
+
+                <hr>
+
+                <h2>SCHLUSSWORT</h2>
+
+                <p><strong>Marcel, du hast 3 klare Optionen:</strong></p>
+
+                <ul>
+                    <li><strong>Option 1:</strong> Schnell, günstig, aber riskant</li>
+                    <li><strong>Option 2:</strong> Teurer, länger, aber richtig</li>
+                    <li><strong>Option 3:</strong> Ehrlich aufgeben</li>
+                </ul>
+
+                <p class="status-success"><strong>Meine klare Empfehlung: Option 2</strong></p>
+
+                <p>Aber am Ende entscheidet der Inhaber. Deine Aufgabe ist, ihm die Fakten zu präsentieren - schonungslos ehrlich, aber lösungsorientiert.</p>
+
+                <blockquote>
+                    <strong>"Ich bin hier, um das Restaurant zu retten - nicht um den Status Quo zu verwalten."</strong>
+                </blockquote>
+
+                <p>Jetzt liegt der Ball beim Inhaber. Er muss entscheiden: Will er investieren oder nicht?</p>
+
+                <p><strong>Viel Erfolg am Mittwoch!</strong></p>
+            </section>
+
+            <!-- EQUIPMENT -->
+            <section id="equipment" class="document">
+                <h1>EQUIPMENT-MÄNGELLISTE: HOTEL DAKOTA RESTAURANT</h1>
+
+                <p><strong>Datum:</strong> 2. November 2025<br>
+                <strong>Erstellt von:</strong> Marcel Gaertner, Küchenchef<br>
+                <strong>Status:</strong> Analyse nach 1 Woche im Haus</p>
+
+                <hr>
+
+                <h2>EXECUTIVE SUMMARY</h2>
+
+                <p><strong>Ist-Situation:</strong> Die Grundstruktur der Küche ist gut, aber <strong>kritische Equipment-Lücken verhindern professionelle Küche.</strong></p>
+
+                <p><strong>Kern-Problem:</strong> "Man kann mit diesem Equipment KEINE gute Küche machen"</p>
+
+                <p class="status-critical"><strong>Priorität: 🔴 HOCH - Equipment muss VOR Wiedereröffnung beschafft werden</strong></p>
+
+                <hr>
+
+                <h2>KATEGORISIERUNG</h2>
+
+                <h3 class="status-critical">🔴 KRITISCH (Must-have für JEDE Option)</h3>
+                <p>Equipment ohne das wir nicht arbeiten können - auch nicht für Option 1 (Soft-Relaunch)</p>
+
+                <h3 class="status-warning">🟡 WICHTIG (Für professionelle Küche nötig - Option 2)</h3>
+                <p>Equipment für gehobene Küche und Alpine Berner Küche Konzept</p>
+
+                <h3 class="status-success">🟢 OPTIONAL (Nice-to-have - langfristig)</h3>
+                <p>Equipment das uns langfristig besser macht, aber nicht sofort nötig</p>
+
+                <hr>
+
+                <h2>ZUSAMMENFASSUNG KOSTEN</h2>
+
+                <h3>OPTION 1: SOFT-RELAUNCH (Basis-Equipment)</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategorie</th>
+                            <th>Kosten (CHF)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Töpfe & Pfannen (Basis)</td>
+                            <td>2,000-3,000</td>
+                        </tr>
+                        <tr>
+                            <td>GN-Behälter (Basis)</td>
+                            <td>1,500-2,200</td>
+                        </tr>
+                        <tr>
+                            <td>Küchenutensilien (Basis)</td>
+                            <td>1,500-2,500</td>
+                        </tr>
+                        <tr>
+                            <td>Kleine Geräte (Basis)</td>
+                            <td>3,000-4,500</td>
+                        </tr>
+                        <tr>
+                            <td>Reinigung/Lager</td>
+                            <td>1,800-2,500</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL Option 1</strong></td>
+                            <td><strong>9,800-14,700</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Konservativ: CHF 12,000</strong></p>
+
+                <hr>
+
+                <h3>OPTION 2: HARD-RESET (Komplettes Equipment)</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategorie</th>
+                            <th>Kosten (CHF)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Töpfe & Pfannen (Basis + Premium)</td>
+                            <td>3,000-4,400</td>
+                        </tr>
+                        <tr>
+                            <td>GN-Behälter (Basis + Erweitert)</td>
+                            <td>2,000-3,000</td>
+                        </tr>
+                        <tr>
+                            <td>Küchenutensilien (Basis + Profi)</td>
+                            <td>2,500-4,300</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sous-vide Equipment (MUSS!)</strong></td>
+                            <td><strong>3,500-5,000</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Räucher-Ausstattung</td>
+                            <td>0-600</td>
+                        </tr>
+                        <tr>
+                            <td>Kleine Geräte</td>
+                            <td>3,000-4,500</td>
+                        </tr>
+                        <tr>
+                            <td>Reinigung/Lager</td>
+                            <td>1,800-2,500</td>
+                        </tr>
+                        <tr>
+                            <td>Reifekammer (optional)</td>
+                            <td>0-7,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL Option 2 (ohne Reifekammer)</strong></td>
+                            <td><strong>15,800-24,300</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL Option 2 (mit Reifekammer)</strong></td>
+                            <td><strong>20,800-31,300</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Konservativ ohne Reifekammer: CHF 20,000</strong><br>
+                <strong>Konservativ mit Reifekammer: CHF 26,000</strong></p>
+
+                <hr>
+
+                <h2>BEZUGSQUELLEN (Schweiz)</h2>
+
+                <h3>Hauptlieferanten:</h3>
+
+                <p><strong>1. Rational AG (Profi-Gastroausstattung)</strong></p>
+                <ul>
+                    <li>Website: rational-online.com</li>
+                    <li>Standorte: Schweizweit (Basel, Zürich, Bern, etc.)</li>
+                    <li>Vorteil: Professionell, Beratung, schnelle Lieferung</li>
+                    <li>Nachteil: Teurer als Metro</li>
+                </ul>
+
+                <p><strong>2. Metro Cash & Carry</strong></p>
+                <ul>
+                    <li>Website: metro.ch</li>
+                    <li>Standorte: Schweizweit</li>
+                    <li>Vorteil: Günstiger, große Auswahl, sofort mitnehmen</li>
+                    <li>Nachteil: Weniger Beratung, nicht alles Profi-Qualität</li>
+                </ul>
+
+                <hr>
+
+                <h2>BESTELLPLAN</h2>
+
+                <h3>Wenn Option 1 beschlossen wird:</h3>
+
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-1">
+                    <label for="check-equipment-1">Montag: GN-Behälter bestellen (Rational/Metro)</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-2">
+                    <label for="check-equipment-2">Montag: Töpfe & Pfannen Basis bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-3">
+                    <label for="check-equipment-3">Montag: Küchenutensilien Basis bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-4">
+                    <label for="check-equipment-4">Dienstag: Kleine Geräte bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-5">
+                    <label for="check-equipment-5">Dienstag: Reinigung/Lager Equipment bestellen</label>
+                </div>
+
+                <h3>Wenn Option 2 beschlossen wird:</h3>
+
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-6">
+                    <label for="check-equipment-6">Woche 1: Alles aus Option 1 bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-7">
+                    <label for="check-equipment-7">Woche 1: Sous-vide Equipment bestellen (Lieferzeit 2-4 Wochen!)</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-8">
+                    <label for="check-equipment-8">Woche 2: Premium Töpfe/Pfannen bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-9">
+                    <label for="check-equipment-9">Woche 2: Anrichte-Tools bestellen</label>
+                </div>
+                <div class="checkbox-item" data-section="equipment">
+                    <input type="checkbox" id="check-equipment-10">
+                    <label for="check-equipment-10">Woche 2: Reifekammer bestellen (wenn gewünscht - Lieferzeit 4-6 Wochen!)</label>
+                </div>
+
+                <p class="status-warning"><strong>Wichtig:</strong> Sous-vide und Reifekammer haben LANGE Lieferzeiten - sofort bestellen!</p>
+
+                <hr>
+
+                <h2>MEINE EMPFEHLUNG</h2>
+
+                <h3>Für Option 1 (Soft-Relaunch):</h3>
+                <p><strong>CHF 12,000 Equipment Budget</strong></p>
+                <ul>
+                    <li>Basis-Ausstattung von Rational/Metro</li>
+                    <li>KEIN Sous-vide (noch nicht)</li>
+                    <li>KEINE Reifekammer (noch nicht)</li>
+                    <li>Fokus auf Basics: Töpfe, GN, Utensilien</li>
+                </ul>
+
+                <h3>Für Option 2 (Hard-Reset):</h3>
+                <p><strong>CHF 20,000 Equipment Budget (ohne Reifekammer)</strong></p>
+                <ul>
+                    <li>Vollständige Ausstattung</li>
+                    <li><strong>Sous-vide MUSS sein!</strong> (Schweinsbäckli ist Signature-Gericht)</li>
+                    <li>Reifekammer optional (extern lösen über Metzgerei)</li>
+                    <li>Räuchern extern (Forellenzucht)</li>
+                </ul>
+
+                <blockquote>
+                    <strong>"Man kann mit diesem Equipment KEINE gute Küche machen"</strong> ist die Realität.
+                    Equipment ist kein Luxus - es ist die Basis für JEDE professionelle Küche.
+                </blockquote>
+
+                <p class="status-critical"><strong>🔴 KRITISCH - Equipment muss VOR Wiedereröffnung beschafft werden 🔴</strong></p>
+            </section>
+
+            <!-- SOFORTMASSNAHMEN -->
+            <section id="sofortmassnahmen" class="document">
+                <h1>SOFORTMASSNAHMEN: WAS ICH NÄCHSTE WOCHE SCHON ÄNDERE</h1>
+
+                <p><strong>Für:</strong> Kadermeeting Mittwoch - Zeigen was möglich ist<br>
+                <strong>Datum:</strong> 2. November 2025<br>
+                <strong>Erstellt von:</strong> Marcel Gaertner, Küchenchef</p>
+
+                <hr>
+
+                <h2>PRINZIP</h2>
+
+                <blockquote>
+                    <strong>"Ich warte nicht auf das Meeting - ich fange JETZT an!"</strong>
+                </blockquote>
+
+                <p>Diese Maßnahmen kann ich <strong>SOFORT umsetzen</strong> - auch ohne Budget, ohne Freigabe, ohne Entscheidung vom Inhaber.</p>
+
+                <p><strong>Ziel:</strong> Dem Inhaber am Mittwoch zeigen, dass Veränderung MÖGLICH ist - und dass ich sie BEREITS begonnen habe.</p>
+
+                <hr>
+
+                <h2>WOCHE 2 (Montag 4. Nov - Freitag 8. Nov) - VOR DEM MEETING</h2>
+
+                <div class="progress-container">
+                    <h3>Fortschritt Woche 2:</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-woche2-fill" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
+                <h3>1. QUALITÄT: Convenience-Reduktion starten</h3>
+
+                <h4>Was ich ändere:</h4>
+
+                <p><strong>MONTAG:</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-1">
+                    <label for="check-sofort-1">TK-Sauce RAUS: Ab heute keine vorgekochten TK-Saucen mehr (stattdessen Basis-Saucen frisch)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-2">
+                    <label for="check-sofort-2">TK-Gemüse RAUS (wo möglich): Frisches Gemüse vom Markt/Lieferant statt TK</label>
+                </div>
+
+                <p><strong>DIENSTAG:</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-3">
+                    <label for="check-sofort-3">Vakuumierte Hauptkomponenten kritisch prüfen und Alternativen testen</label>
+                </div>
+
+                <p><strong>MITTWOCH (Tag des Meetings):</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-4">
+                    <label for="check-sofort-4">3 frische Gerichte dem Inhaber präsentieren (keine Convenience!)</label>
+                </div>
+
+                <h3>2. TEAM: Kultur-Shift beginnen</h3>
+
+                <p><strong>MONTAG MORGEN (8:00 Uhr):</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-5">
+                    <label for="check-sofort-5">5-Minuten-Stand-up einführen (täglich, jeden Morgen 8:00 Uhr)</label>
+                </div>
+
+                <p><strong>MITTWOCH:</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-6">
+                    <label for="check-sofort-6">Einzelgespräche mit jedem Team-Mitglied (1-on-1, 10 Min)</label>
+                </div>
+
+                <p><strong>FREITAG (17:00 Uhr):</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-7">
+                    <label for="check-sofort-7">Wöchentliches Review einführen (10 Minuten, alle Küchen-Team)</label>
+                </div>
+
+                <h3>3. MISE EN PLACE: Organisation verbessern</h3>
+
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-8">
+                    <label for="check-sofort-8">GN-Behälter neu organisieren (FIFO-System einführen)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-9">
+                    <label for="check-sofort-9">Etiketten schreiben (mit Datum + Inhalt)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-10">
+                    <label for="check-sofort-10">Kühlschrank/Regal aufräumen</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-11">
+                    <label for="check-sofort-11">Mise en Place Liste erstellen (für jedes Gericht)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-12">
+                    <label for="check-sofort-12">"Clean as you go" Training beginnen</label>
+                </div>
+
+                <h3>4. MENU: Erste Änderungen testen</h3>
+
+                <p><strong>1 neues Gericht pro Tag testen:</strong></p>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-13">
+                    <label for="check-sofort-13">Tag 1: Zürcher Geschnetzeltes (frisch statt Convenience)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-14">
+                    <label for="check-sofort-14">Tag 2: Berner Forelle (frisch vom Lieferant)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-15">
+                    <label for="check-sofort-15">Tag 3: Älplermagronen (modern interpretiert)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-16">
+                    <label for="check-sofort-16">Tag 4: Felchen-Ceviche oder Alternative</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-17">
+                    <label for="check-sofort-17">Tag 5: Schweinslendchen (schonend gebraten)</label>
+                </div>
+
+                <h3>5. LIEFERANTEN: Erste Kontakte knüpfen</h3>
+
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-18">
+                    <label for="check-sofort-18">MONTAG: Metzgerei Trachsel anrufen und erste Test-Bestellung</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-19">
+                    <label for="check-sofort-19">DIENSTAG: Forellenzucht Reichenbach kontaktieren und Test-Bestellung</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-20">
+                    <label for="check-sofort-20">MITTWOCH: Käserei Meiringen kontaktieren und Test-Bestellung</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-21">
+                    <label for="check-sofort-21">DONNERSTAG-FREITAG: Qualität der Test-Lieferungen prüfen</label>
+                </div>
+
+                <h3>6. DOKUMENTATION: Transparenz schaffen</h3>
+
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-22">
+                    <label for="check-sofort-22">Tägliches Log führen (Anzahl Essen, Was lief gut/nicht, Gäste-Reaktion)</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-23">
+                    <label for="check-sofort-23">1-Wochen-Report für Meeting erstellen</label>
+                </div>
+                <div class="checkbox-item" data-section="sofortmassnahmen">
+                    <input type="checkbox" id="check-sofort-24">
+                    <label for="check-sofort-24">Foto-Dokumentation von neuen Gerichten (vor/nach)</label>
+                </div>
+
+                <hr>
+
+                <h2>MEINE VERSPRECHEN</h2>
+
+                <p><strong>Bis Mittwoch (Meeting):</strong></p>
+                <ul>
+                    <li>✅ 3 neue Gerichte getestet und dem Inhaber präsentiert</li>
+                    <li>✅ 3 Lieferanten kontaktiert und Qualität geprüft</li>
+                    <li>✅ Team-Kultur: Tägliches Stand-up implementiert</li>
+                    <li>✅ Mise en Place: FIFO-System eingeführt</li>
+                    <li>✅ Dokumentation: 1-Wochen-Report mit Zahlen + Fotos</li>
+                </ul>
+
+                <p><strong>Bis Freitag (nach Meeting):</strong></p>
+                <ul>
+                    <li>✅ 5 neue Gerichte getestet</li>
+                    <li>✅ Team-Assessment abgeschlossen (wer bleibt? wer geht?)</li>
+                    <li>✅ Equipment bestellt (wenn Budget freigegeben)</li>
+                    <li>✅ Detaillierter Umsetzungsplan für Schließungs-Phase erstellt</li>
+                </ul>
+
+                <hr>
+
+                <h2>WARUM ICH DAS MACHE</h2>
+
+                <blockquote>
+                    <strong>"Ich zeige, dass Veränderung möglich ist - durch Taten, nicht durch Worte."</strong>
+                </blockquote>
+
+                <p>Viele Küchenchefs würden sagen: "Ich warte auf das Meeting, auf die Freigabe, auf das Budget."</p>
+
+                <p>Ich sage: <strong>"Ich fange JETZT an!"</strong></p>
+
+                <p><strong>Warum?</strong></p>
+                <ol>
+                    <li><strong>Glaubwürdigkeit:</strong> Taten statt Worte</li>
+                    <li><strong>Momentum:</strong> Team sieht, dass ich es ernst meine</li>
+                    <li><strong>Beweise:</strong> Dem Inhaber ZEIGEN statt nur REDEN</li>
+                    <li><strong>Schnelligkeit:</strong> Jede Woche zählt bei 1.6 Essen/Tag!</li>
+                </ol>
+
+                <p><strong>Selbst WENN der Inhaber am Mittwoch NEIN sagt</strong> (zu allem), habe ich:</p>
+                <ul>
+                    <li>5 neue Gerichte getestet</li>
+                    <li>3 Lieferanten kennengelernt</li>
+                    <li>Team-Kultur verbessert</li>
+                    <li>Meine Arbeitsweise gezeigt</li>
+                </ul>
+
+                <p><strong>Das ist nicht verschwendet - das ist mein Job.</strong></p>
+
+                <hr>
+
+                <blockquote>
+                    <strong>Motto:</strong> "Ich warte nicht auf Veränderung - ich BIN die Veränderung."
+                </blockquote>
+
+                <p><strong>💪 LET'S GO! 💪</strong></p>
+            </section>
+
+            <!-- PRESENTATION -->
+            <section id="presentation" class="document">
+                <h1>KADERMEETING PRÄSENTATION: RESTAURANT TURNAROUND</h1>
+
+                <p><strong>Datum:</strong> Mittwoch, 6. November 2025<br>
+                <strong>Dauer:</strong> 30-45 Minuten<br>
+                <strong>Teilnehmer:</strong> Geschäftsführung/Inhaber + Marcel Gaertner (Küchenchef)<br>
+                <strong>Ziel:</strong> GO/NO-GO Entscheidung für Restaurant-Turnaround</p>
+
+                <hr>
+
+                <h2>PRÄSENTATIONS-STRUKTUR (35 Min + 10 Min Q&A)</h2>
+
+                <ul>
+                    <li><strong>Teil 1:</strong> DIE SITUATION (10 Min)</li>
+                    <li><strong>Teil 2:</strong> DIE LÖSUNG (15 Min)</li>
+                    <li><strong>Teil 3:</strong> DIE ENTSCHEIDUNG (10 Min)</li>
+                    <li><strong>Teil 4:</strong> Q&A (10 Min)</li>
+                </ul>
+
+                <hr>
+
+                <h2>PRÄSENTATIONS-TIPPS FÜR MARCEL</h2>
+
+                <h3>Vor dem Meeting:</h3>
+
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-1">
+                    <label for="check-pres-1">Präsentation 2-3x laut durchsprechen (alleine!)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-2">
+                    <label for="check-pres-2">Timing mit Stoppuhr - nicht überziehen!</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-3">
+                    <label for="check-pres-3">Gerichte vorbereiten: 30 Min vor Meeting kochen, warmhalten</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-4">
+                    <label for="check-pres-4">Unterlagen ausdrucken: Alle 6 Dokumente in Mappe</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-5">
+                    <label for="check-pres-5">Mentale Vorbereitung: Tief durchatmen, selbstbewusst sein</label>
+                </div>
+
+                <h3>Während dem Meeting:</h3>
+
+                <ol>
+                    <li><strong>Körpersprache:</strong> Aufrecht sitzen, Blickkontakt, ruhige Hände</li>
+                    <li><strong>Stimme:</strong> Klar, deutlich, nicht zu schnell</li>
+                    <li><strong>Pausen:</strong> Nach wichtigen Punkten 3-5 Sekunden Pause (lasse es wirken!)</li>
+                    <li><strong>Emotionen:</strong> Ernst bei Problemen, hoffnungsvoll bei Lösungen</li>
+                    <li><strong>Nicht verteidigen:</strong> Wenn Kritik kommt, ruhig bleiben, zuhören, dann antworten</li>
+                </ol>
+
+                <h3>Bei kritischen Fragen:</h3>
+
+                <p><strong>"Warum wusste ich das nicht?"</strong></p>
+                <blockquote>
+                    "Ich weiß nicht was Ihnen bisher berichtet wurde. Aber jetzt wissen Sie es - und wir können handeln."
+                </blockquote>
+
+                <p><strong>"CHF 45k ist zu viel!"</strong></p>
+                <blockquote>
+                    "Ich verstehe. Dann schauen wir Option 1 an. Aber ich muss ehrlich sein: Die Erfolgswahrscheinlichkeit ist niedriger."
+                </blockquote>
+
+                <p><strong>"Kann nicht das Team einfach besser arbeiten?"</strong></p>
+                <blockquote>
+                    "Das Team ist demotiviert nach Jahren Misserfolg. Ein neuer Start mit neuem Team gibt uns die beste Chance."
+                </blockquote>
+
+                <p><strong>"Warum soll ich dir vertrauen?"</strong></p>
+                <blockquote>
+                    "Ich habe in 1 Woche mehr analysiert als andere in Monaten. Ich habe bereits Verbesserungen umgesetzt. Ich bin hier weil ich es kann - und will. Probieren Sie die Gerichte - das ist mein Beweis."
+                </blockquote>
+
+                <hr>
+
+                <h2>MATERIAL-CHECKLISTE</h2>
+
+                <p><strong>Für das Meeting mitbringen:</strong></p>
+
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-6">
+                    <label for="check-pres-6">Laptop (für Präsentation) ODER ausgedruckte Slides</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-7">
+                    <label for="check-pres-7">01_IST_ANALYSE_TURNAROUND.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-8">
+                    <label for="check-pres-8">02_3_OPTIONEN_PLAN.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-9">
+                    <label for="check-pres-9">03_EQUIPMENT_MANGELLISTE.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-10">
+                    <label for="check-pres-10">04_SOFORTMASSNAHMEN.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-11">
+                    <label for="check-pres-11">05_MEETING_PRESENTATION.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-12">
+                    <label for="check-pres-12">06_FAQ_KRITISCHE_FRAGEN.md ausgedruckt (2x)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-13">
+                    <label for="check-pres-13">Stift + Notizblock</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-14">
+                    <label for="check-pres-14">3 Gerichte zum Probieren (warm, schön angerichtet!)</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-15">
+                    <label for="check-pres-15">Teller, Besteck, Servietten</label>
+                </div>
+                <div class="checkbox-item" data-section="presentation">
+                    <input type="checkbox" id="check-pres-16">
+                    <label for="check-pres-16">Wasserflasche (für mich - präsentieren ist anstrengend!)</label>
+                </div>
+
+                <hr>
+
+                <h2>ERFOLGS-KRITERIEN</h2>
+
+                <p><strong>Das Meeting ist erfolgreich wenn:</strong></p>
+
+                <ul class="status-success">
+                    <li>✅ Der Inhaber versteht die Situation (1.6 Essen/Tag ist kritisch)</li>
+                    <li>✅ Der Inhaber versteht die 3 Optionen</li>
+                    <li>✅ Der Inhaber trifft EINE Entscheidung (nicht "wir schauen mal")</li>
+                    <li>✅ Bei GO: Budget und Timeline werden freigegeben</li>
+                    <li>✅ Bei GO: Ich bekomme Rückendeckung für Team-Entscheidungen</li>
+                </ul>
+
+                <p><strong>Das Meeting ist NICHT erfolgreich wenn:</strong></p>
+
+                <ul class="status-critical">
+                    <li>❌ Keine Entscheidung ("wir müssen nochmal darüber nachdenken")</li>
+                    <li>❌ Halbe Entscheidung ("CHF 20k statt 45k")</li>
+                    <li>❌ Entscheidung aber ohne Rückendeckung ("Du darfst niemanden kündigen")</li>
+                </ul>
+
+                <hr>
+
+                <h2>SCHLUSSWORT FÜR MARCEL</h2>
+
+                <p><strong>Du hast das vorbereitet. Du weißt was zu tun ist. Du hast die Lösung.</strong></p>
+
+                <p><strong>Jetzt geht es nur noch um Eines: ÜBERZEUGUNG.</strong></p>
+
+                <p><strong>Geh in dieses Meeting mit:</strong></p>
+                <ul>
+                    <li>✅ Selbstbewusstsein (Du KANNST es!)</li>
+                    <li>✅ Klarheit (Die Fakten sind auf deiner Seite!)</li>
+                    <li>✅ Entschlossenheit (Du WILLST es!)</li>
+                    <li>✅ Respekt (Es ist SEIN Restaurant, aber DEINE Expertise!)</li>
+                </ul>
+
+                <blockquote>
+                    <strong>Remember:</strong><br>
+                    "Ich bin hier um das Restaurant zu retten - nicht um den Status Quo zu verwalten."
+                </blockquote>
+
+                <p><strong>Du bist bereit. JETZT zeig es ihm!</strong></p>
+
+                <p><strong>💪 LET'S DO THIS! 💪</strong></p>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="document">
+                <h1>FAQ: KRITISCHE FRAGEN & ANTWORTEN</h1>
+
+                <p><strong>Für:</strong> Kadermeeting Mittwoch - Vorbereitung auf Einwände<br>
+                <strong>Datum:</strong> 2. November 2025<br>
+                <strong>Erstellt von:</strong> Marcel Gaertner, Küchenchef</p>
+
+                <hr>
+
+                <h2>PRINZIP</h2>
+
+                <blockquote>
+                    <strong>"Vorbereitet sein heißt souverän reagieren"</strong>
+                </blockquote>
+
+                <p>Der Inhaber wird kritische Fragen stellen - zu Recht! Diese FAQ bereitet dich auf die häufigsten Einwände vor.</p>
+
+                <p><strong>Regel:</strong> Nie defensiv werden. Ruhig bleiben. Fakten nennen. Lösung anbieten.</p>
+
+                <hr>
+
+                <h2>ZUSAMMENFASSUNG: 5 GRUND-PRINZIPIEN</h2>
+
+                <p>Bei ALLEN Fragen gelten diese Prinzipien:</p>
+
+                <h3>1. RUHIG BLEIBEN</h3>
+                <p>Nie defensiv, nie ärgerlich, nie laut werden. Tief durchatmen.</p>
+
+                <h3>2. FAKTEN NENNEN</h3>
+                <p>Nicht emotional argumentieren, sondern Fakten. Zahlen, Dokumente, Beweise.</p>
+
+                <h3>3. RESPEKT ZEIGEN</h3>
+                <p>Es ist SEIN Restaurant, SEIN Geld. Ich bin Berater/Küchenchef, nicht Eigentümer.</p>
+
+                <h3>4. EHRLICHKEIT</h3>
+                <p>Risiken nicht verstecken. Realistisch sein. Vertrauen entsteht durch Ehrlichkeit.</p>
+
+                <h3>5. LÖSUNGSORIENTIERT</h3>
+                <p>Nicht nur Probleme benennen, sondern Lösungen anbieten. Immer.</p>
+
+                <hr>
+
+                <h2>TOP 10 KRITISCHE FRAGEN</h2>
+
+                <h3>Frage 1: "Warum wusste ich das nicht?"</h3>
+
+                <p><strong>FALSCHE Antwort:</strong></p>
+                <p class="status-critical">❌ "Weil Ihnen niemand die Wahrheit gesagt hat!"</p>
+
+                <p><strong>RICHTIGE Antwort:</strong></p>
+                <p class="status-success">✅ "Das ist eine berechtigte Frage. Ich weiß nicht, was Ihnen bisher berichtet wurde. Was ich weiß: Jetzt kennen Sie die Fakten - und wir können handeln."</p>
+
+                <p><strong>Tonfall:</strong> Ruhig, sachlich, nicht anklagend</p>
+
+                <hr>
+
+                <h3>Frage 2: "CHF 45,000 ist zu viel! Geht es nicht günstiger?"</h3>
+
+                <p><strong>FALSCHE Antwort:</strong></p>
+                <p class="status-critical">❌ "Nein, das ist das Minimum!"</p>
+
+                <p><strong>RICHTIGE Antwort:</strong></p>
+                <p class="status-success">✅ "Ich verstehe Ihre Sorge. Ja, es geht günstiger - das ist Option 1 mit CHF 15,000. Aber die Erfolgswahrscheinlichkeit ist deutlich niedriger (60% statt 75%) und die Ergebnisse schlechter (10-15 Essen/Tag statt 20-25)."</p>
+
+                <p><strong>Dann Vergleich:</strong></p>
+                <p>✅ "CHF 45k klingt viel - aber das ist ein Investment für 5-10 Jahre Equipment plus Marketing. Der ROI ist nach 18 Monaten 200-320%. Das ist wirtschaftlich sehr solide."</p>
+
+                <p><strong>Tonfall:</strong> Verständnisvoll, aber bestimmt</p>
+
+                <hr>
+
+                <h3>Frage 3: "Warum müssen Leute gehen?"</h3>
+
+                <p><strong>FALSCHE Antwort:</strong></p>
+                <p class="status-critical">❌ "Die sind alle unfähig!"</p>
+
+                <p><strong>RICHTIGE Antwort:</strong></p>
+                <p class="status-success">✅ "Das ist eine schwierige Frage. Nicht alle müssen gehen. Ich führe diese Woche Einzelgespräche. Wer motiviert ist und die neuen Standards mitgehen kann, bleibt gerne."</p>
+
+                <p><strong>Dann ehrlich:</strong></p>
+                <p>✅ "Aber ich muss auch ehrlich sein: Ein Team das jahrelang 1.6 Essen/Tag macht und demotiviert ist, wird nicht über Nacht zu einem High-Performance-Team. Manchmal ist ein Neustart für ALLE Seiten besser."</p>
+
+                <p><strong>Tonfall:</strong> Empathisch, aber klar</p>
+
+                <hr>
+
+                <h3>Frage 4: "Was wenn es nicht funktioniert?"</h3>
+
+                <p><strong>FALSCHE Antwort:</strong></p>
+                <p class="status-critical">❌ "Das wird schon!"</p>
+
+                <p><strong>RICHTIGE Antwort:</strong></p>
+                <p class="status-success">✅ "Das ist die wichtigste Frage. Ehrlich: Turnarounds haben IMMER Risiken. Erfolgswahrscheinlichkeit bei Option 2: 75%. Das heißt 25% Risiko. ABER: Das Risiko bei 'nichts tun' ist 100% - wir verlieren weiter Geld."</p>
+
+                <p><strong>Dann Commitment:</strong></p>
+                <p>✅ "Wenn nach 3-4 Monaten klar wird, dass es nicht funktioniert, sage ich es Ihnen ehrlich. Dann können wir immer noch zu Option 3 (Aufgeben) wechseln."</p>
+
+                <p><strong>Tonfall:</strong> Ehrlich, realistisch, aber lösungsorientiert</p>
+
+                <hr>
+
+                <h3>Frage 5: "Warum soll ich DIR vertrauen?"</h3>
+
+                <p><strong>FALSCHE Antwort:</strong></p>
+                <p class="status-critical">❌ "Weil ich der Beste bin!"</p>
+
+                <p><strong>RICHTIGE Antwort:</strong></p>
+                <p class="status-success">✅ "Das ist die wichtigste Frage. Ehrlich: Sie kennen mich erst seit 1 Woche. Vertrauen muss man sich verdienen."</p>
+
+                <p><strong>Dann Beweise:</strong></p>
+                <p>✅ "Was ich anbieten kann:</p>
+                <ol>
+                    <li>Ich habe in 1 Woche mehr analysiert als andere in Monaten (alle Dokumente hier)</li>
+                    <li>Ich habe bereits Verbesserungen umgesetzt - ohne Budget (Convenience reduziert, neue Gerichte, Lieferanten kontaktiert)</li>
+                    <li>Ich bin transparent und ehrlich - auch bei Risiken</li>
+                    <li>Ich habe die Expertise - gastro-professionell</li>
+                </ol>
+
+                <p><strong>Dann Action:</strong></p>
+                <p>✅ "Probieren Sie die 3 Gerichte die ich heute vorbereitet habe. Das ist mein Beweis - nicht Worte, sondern Taten."</p>
+
+                <p><strong>Tonfall:</strong> Demütig, aber selbstbewusst</p>
+
+                <hr>
+
+                <h2>SCHLUSSWORT FÜR MARCEL</h2>
+
+                <p><strong>Du hast die Antworten. Du hast die Fakten. Du bist vorbereitet.</strong></p>
+
+                <p>Kritische Fragen sind KEIN Angriff - sie sind berechtigte Due Diligence.</p>
+
+                <p><strong>Bleib ruhig. Sei ehrlich. Zeige Lösungen.</strong></p>
+
+                <p>Und am wichtigsten: <strong>Sei authentisch.</strong> Du bist nicht perfekt, und das ist okay. Du bist hier um zu helfen - und das zeigt sich in deiner Haltung.</p>
+
+                <p><strong>Du schaffst das! 💪</strong></p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // LocalStorage key
+        const STORAGE_KEY = 'kadermeeting-checklist-state';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCheckboxStates();
+            setupEventListeners();
+            updateAllProgress();
+            setupNavigation();
+        });
+
+        // Load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                Object.keys(state).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = state[id];
+                        updateCheckboxItem(checkbox);
+                    }
+                });
+            }
+        }
+
+        // Save checkbox states to localStorage
+        function saveCheckboxStates() {
+            const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+            const state = {};
+            checkboxes.forEach(checkbox => {
+                state[checkbox.id] = checkbox.checked;
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateCheckboxItem(this);
+                    saveCheckboxStates();
+                    updateSectionProgress(this.closest('.checkbox-item').dataset.section);
+                    updateAllProgress();
+                });
+            });
+        }
+
+        // Update checkbox item styling
+        function updateCheckboxItem(checkbox) {
+            const item = checkbox.closest('.checkbox-item');
+            if (checkbox.checked) {
+                item.classList.add('checked');
+            } else {
+                item.classList.remove('checked');
+            }
+        }
+
+        // Update section progress
+        function updateSectionProgress(sectionName) {
+            const section = document.getElementById(sectionName);
+            if (!section) return;
+
+            const checkboxes = section.querySelectorAll('.checkbox-item input[type="checkbox"]');
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+            // Update nav badge
+            const badge = document.getElementById(`progress-${sectionName}`);
+            if (badge) {
+                badge.textContent = `${percentage}%`;
+            }
+
+            // Update special progress bars
+            if (sectionName === 'overview') {
+                updateHeuteProgress();
+            } else if (sectionName === 'sofortmassnahmen') {
+                updateWoche2Progress();
+            }
+        }
+
+        // Update all section progress
+        function updateAllProgress() {
+            const sections = ['overview', 'ist-analyse', 'optionen', 'equipment', 'sofortmassnahmen', 'presentation', 'faq'];
+            sections.forEach(section => updateSectionProgress(section));
+        }
+
+        // Update "Heute" progress bar
+        function updateHeuteProgress() {
+            const checkboxes = document.querySelectorAll('#overview .checkbox-item input[type="checkbox"]');
+            const heute = Array.from(checkboxes).slice(0, 9); // First 9 checkboxes
+            const total = heute.length;
+            const checked = heute.filter(cb => cb.checked).length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+            const fillElement = document.getElementById('progress-heute-fill');
+            if (fillElement) {
+                fillElement.style.width = `${percentage}%`;
+                fillElement.textContent = `${percentage}%`;
+            }
+        }
+
+        // Update "Woche 2" progress bar
+        function updateWoche2Progress() {
+            const checkboxes = document.querySelectorAll('#sofortmassnahmen .checkbox-item input[type="checkbox"]');
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+            const fillElement = document.getElementById('progress-woche2-fill');
+            if (fillElement) {
+                fillElement.style.width = `${percentage}%`;
+                fillElement.textContent = `${percentage}%`;
+            }
+        }
+
+        // Setup navigation
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+
+                    // Add active class to clicked link
+                    this.classList.add('active');
+
+                    // Scroll to section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Update active nav on scroll
+            window.addEventListener('scroll', function() {
+                let current = '';
+                const sections = document.querySelectorAll('.document');
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - 100)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Reset all checkboxes (for debugging)
+        function resetAllCheckboxes() {
+            if (confirm('Möchten Sie wirklich ALLE Checkboxen zurücksetzen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Optional: Add keyboard shortcut to reset (Ctrl+Shift+R)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                resetAllCheckboxes();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ski-Menü 2-Wochen-Rotation | Hotel Dakota</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #32373c;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #32373c 0%, #1a1d20 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #dba765;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #e8e8e8;
+            font-weight: 300;
+        }
+
+        .header .price-tag {
+            display: inline-block;
+            background: #dba765;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .header .info {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Week Navigation */
+        .week-nav {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .week-btn {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            border: 3px solid #dba765;
+            border-radius: 10px;
+            background: white;
+            color: #32373c;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .week-btn.active {
+            background: linear-gradient(135deg, #dba765 0%, #c4915a 100%);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(219, 167, 101, 0.4);
+        }
+
+        .week-btn:hover:not(.active) {
+            background: #f9f9f9;
+            transform: translateY(-2px);
+        }
+
+        /* Day Card */
+        .day-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #dba765;
+        }
+
+        .day-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #dba765;
+        }
+
+        .day-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #32373c;
+        }
+
+        /* Course Section */
+        .course-section {
+            margin-bottom: 25px;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #32373c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-title .emoji {
+            font-size: 1.8rem;
+        }
+
+        /* Alternative Grid */
+        .alternatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .alternative-item {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .alternative-item:hover {
+            border-color: #dba765;
+            transform: translateX(5px);
+        }
+
+        .alternative-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .alternative-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #32373c;
+        }
+
+        .alternative-desc {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .badge.vegetarian {
+            background: #27ae60;
+            color: white;
+        }
+
+        .badge.vegan {
+            background: #16a085;
+            color: white;
+        }
+
+        .badge.meat {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge.fish {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .btn {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dba765 0%, #c4915a 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(219, 167, 101, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #32373c 0%, #1a1d20 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(50, 55, 60, 0.4);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #fff9f0 0%, #fef5e7 100%);
+            border-left: 5px solid #dba765;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            font-family: 'Playfair Display', serif;
+            color: #dba765;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        .footer .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: #dba765;
+            margin-bottom: 10px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .action-buttons, .week-nav {
+                display: none;
+            }
+
+            .day-card {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .week-nav {
+                flex-direction: column;
+            }
+
+            .week-btn {
+                width: 100%;
+            }
+
+            .alternatives-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>⛷️ Ski-Menü - 2 Wochen Rotation</h1>
+            <div class="subtitle">Hotel Dakota - Für Reiseveranstalter</div>
+            <div class="price-tag">CHF 45.- pro Person (3-Gang)</div>
+            <div class="info">
+                Täglich wechselndes Menü | 3 Alternativen pro Gang<br>
+                Perfekt für Ski-Gruppen im Berner Oberland
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3>📋 Konzept: 2-Wochen-Rotation</h3>
+            <ul>
+                <li>✅ <strong>14 verschiedene Tagesmenüs</strong> (keine Wiederholung in 2 Wochen)</li>
+                <li>✅ <strong>Jeden Tag 3 Alternativen pro Gang:</strong> Fleisch/Fisch | Vegetarisch | Vegan/Glutenfrei</li>
+                <li>✅ <strong>Fixpreis CHF 45.-</strong> inkl. 3-Gang-Menü (Vorspeise + Hauptgang + Dessert)</li>
+                <li>✅ <strong>Deftig & energiereich</strong> - perfekt nach einem Ski-Tag</li>
+                <li>✅ <strong>Regionale Produkte</strong> aus dem Berner Oberland</li>
+            </ul>
+        </div>
+
+        <!-- Week Navigation -->
+        <div class="week-nav">
+            <button class="week-btn active" onclick="switchWeek(1)">📅 Woche 1</button>
+            <button class="week-btn" onclick="switchWeek(2)">📅 Woche 2</button>
+        </div>
+
+        <!-- Week 1 Container -->
+        <div id="week-1" class="week-container">
+            <!-- Will be filled by JavaScript -->
+        </div>
+
+        <!-- Week 2 Container -->
+        <div id="week-2" class="week-container" style="display: none;">
+            <!-- Will be filled by JavaScript -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="sendToTourOperator()">
+                📧 An Reiseveranstalter senden
+            </button>
+            <button class="btn btn-secondary" onclick="exportToPDF()">
+                📄 Als PDF exportieren
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+                🖨️ Drucken
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="logo">"Destination Delicious"</div>
+            <div>Genuss. Design. Atmosphäre.</div>
+            <div style="margin-top: 15px;">
+                📞 +41 33 971 50 01 | 📧 groups@dakota-airlounge.ch | 🌐 www.dakota-airlounge.ch
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SKI-MENU DATABASE (2 Wochen Rotation basierend auf Mittagsmenüs)
+        const SKI_MENU = {
+            week1: [
+                {
+                    day: "Montag",
+                    vorspeise: [
+                        { name: "Kürbissuppe", desc: "Ingwer | Kokosmilch | Haselnüsse", type: "vegetarian" },
+                        { name: "Rindssuppe klar", desc: "Mit Gemüseeinlage | Kräuter", type: "meat" },
+                        { name: "Gemischter Salat", desc: "Marktgemüse | Balsamico-Dressing", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Älplermagronen", desc: "Röstzwiebeln | Apfelmus | Alpkäse", type: "vegetarian" },
+                        { name: "Bratwurst", desc: "Senf | Kartoffelsalat", type: "meat" },
+                        { name: "Vegane Gemüse-Pasta", desc: "Saisonales Gemüse | Tomatensoße", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Apfelstrudel warm", desc: "Vanillesauce", type: "vegetarian" },
+                        { name: "Obstsalat", desc: "Saisonale Früchte | Minze", type: "vegan" },
+                        { name: "Joghurt mit Honig", desc: "Berner Honig | Nüsse", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Dienstag",
+                    vorspeise: [
+                        { name: "Berner Gerstensuppe", desc: "Geräucherte Forelle | Petersilien-Öl", type: "fish" },
+                        { name: "Gemüsecremesuppe", desc: "Saisonales Gemüse | Croutons", type: "vegetarian" },
+                        { name: "Rote-Bete-Suppe", desc: "Mit Ingwer | Kokosmilch", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Felchen Müllerin Art", desc: "Petersilienkartoffeln | Sauce Tartare", type: "fish" },
+                        { name: "Capuns", desc: "Mangoldwickel | Rahmsauce | Gemüse", type: "vegetarian" },
+                        { name: "Gebratener Tofu", desc: "Asiatisches Gemüse | Sojasoße | Reis", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Meringues", desc: "Schlagrahm | Saisonale Früchte", type: "vegetarian" },
+                        { name: "Schokoladen-Mousse", desc: "Dunkle Schokolade 70%", type: "vegetarian" },
+                        { name: "Fruchtkompott", desc: "Warmes Kompott | Zimt", type: "vegan" }
+                    ]
+                },
+                {
+                    day: "Mittwoch",
+                    vorspeise: [
+                        { name: "Tomatensuppe", desc: "Basilikum | Crème fraîche", type: "vegetarian" },
+                        { name: "Fleischbrühe", desc: "Mit Flädle | Schnittlauch", type: "meat" },
+                        { name: "Linsensuppe", desc: "Mit Gemüse | Kräuter", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Kalbsgeschnetzeltes Zürcher Art", desc: "Champignon-Rahmsauce | Rösti", type: "meat" },
+                        { name: "Pizzoccheri", desc: "Buchweizennudeln | Wirsing | Alpkäse", type: "vegetarian" },
+                        { name: "Polenta", desc: "Steinpilz-Ragout | Ohne Käse", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Toblerone-Mousse", desc: "Honig-Nougat | Mandelsplitter", type: "vegetarian" },
+                        { name: "Fruchtsalat", desc: "Exotische Früchte | Minze", type: "vegan" },
+                        { name: "Crème Brûlée", desc: "Tonkabohne | Karamellkruste", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Donnerstag",
+                    vorspeise: [
+                        { name: "Gemischter Salat", desc: "Mit Ziegenkäse | Honig-Senf-Dressing", type: "vegetarian" },
+                        { name: "Randen-Carpaccio", desc: "Ziegenkäse | Walnüsse", type: "vegetarian" },
+                        { name: "Grüner Salat", desc: "Ohne Käse | Balsamico", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Cordon Bleu vom Kalb", desc: "Pommes Frites | Gemischter Salat", type: "meat" },
+                        { name: "Steinpilz-Risotto", desc: "Parmesan | Trüffelöl", type: "vegetarian" },
+                        { name: "Gemüse-Curry", desc: "Kokosmilch | Reis | Koriander", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Vermicelles", desc: "Marroni | Schlagrahm | Meringue", type: "vegetarian" },
+                        { name: "Apfelkompott warm", desc: "Zimt | Vanille", type: "vegan" },
+                        { name: "Kastanien-Mousse", desc: "Apfelsorbet | Walnüsse", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Freitag",
+                    vorspeise: [
+                        { name: "Kürbissuppe", desc: "Ingwer | Kokosmilch", type: "vegetarian" },
+                        { name: "Rindssuppe", desc: "Mit Gemüse | Kräuter", type: "meat" },
+                        { name: "Erbsensuppe", desc: "Mit Minze | Croutons", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Schweinsbraten", desc: "Jus | Kartoffelgratin | Rotkohl", type: "meat" },
+                        { name: "Spinat-Ricotta-Cannelloni", desc: "Tomatensauce | Parmesan", type: "vegetarian" },
+                        { name: "Gemüse-Lasagne", desc: "Ohne Käse | Tomatensauce", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Apfelstrudel", desc: "Vanillesauce | Zimt", type: "vegetarian" },
+                        { name: "Birnenkompott", desc: "Warmes Kompott | Nelken", type: "vegan" },
+                        { name: "Schoko-Mousse", desc: "Dunkle Schokolade | Beeren", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Samstag",
+                    vorspeise: [
+                        { name: "Gemischter Salat", desc: "Balsamico-Dressing", type: "vegan" },
+                        { name: "Randen-Salat", desc: "Mit Ziegenkäse | Walnüsse", type: "vegetarian" },
+                        { name: "Grüner Salat", desc: "Mit Kräutern", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Kalbsschnitzel Wiener Art", desc: "Pommes | Preiselbeeren | Zitrone", type: "meat" },
+                        { name: "Kürbis-Risotto", desc: "Salbei | Parmesan", type: "vegetarian" },
+                        { name: "Gebratenes Gemüse", desc: "Quinoa | Tahini-Soße", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Meringues", desc: "Schlagrahm | Früchte", type: "vegetarian" },
+                        { name: "Obstsalat", desc: "Saisonale Früchte", type: "vegan" },
+                        { name: "Crème Brûlée", desc: "Vanille | Karamell", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Sonntag",
+                    vorspeise: [
+                        { name: "Berner Gerstensuppe", desc: "Mit Forelle | Petersilie", type: "fish" },
+                        { name: "Kürbissuppe", desc: "Ingwer | Kokosmilch", type: "vegetarian" },
+                        { name: "Gemüsesuppe", desc: "Saisonal | Kräuter", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Rindsbraten", desc: "Jus | Spätzli | Glasierte Rüebli", type: "meat" },
+                        { name: "Käse-Fondue (klein)", desc: "Brot | Cornichons", type: "vegetarian" },
+                        { name: "Veganes Fondue", desc: "Cashew-Basis | Brot | Gemüse", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Toblerone-Mousse", desc: "Nougat | Mandeln", type: "vegetarian" },
+                        { name: "Fruchtsalat", desc: "Mit Minze", type: "vegan" },
+                        { name: "Apfelstrudel", desc: "Vanillesauce", type: "vegetarian" }
+                    ]
+                }
+            ],
+            week2: [
+                {
+                    day: "Montag",
+                    vorspeise: [
+                        { name: "Tomatensuppe", desc: "Basilikum | Crème fraîche", type: "vegetarian" },
+                        { name: "Rindssuppe", desc: "Mit Flädle", type: "meat" },
+                        { name: "Karotten-Ingwer-Suppe", desc: "Kokosmilch", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Käsewähe warm", desc: "Gemischter Salat", type: "vegetarian" },
+                        { name: "Hauswurst", desc: "Senf | Kartoffelsalat", type: "meat" },
+                        { name: "Gemüse-Quiche", desc: "Ohne Käse | Salat", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Meringues", desc: "Schlagrahm | Früchte", type: "vegetarian" },
+                        { name: "Obstsalat", desc: "Saisonal", type: "vegan" },
+                        { name: "Joghurt-Parfait", desc: "Beeren | Honig", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Dienstag",
+                    vorspeise: [
+                        { name: "Kürbissuppe", desc: "Ingwer | Haselnüsse", type: "vegetarian" },
+                        { name: "Fleischbrühe", desc: "Gemüseeinlage", type: "meat" },
+                        { name: "Linsensuppe", desc: "Mit Gemüse", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Forelle gebraten", desc: "Salzkartoffeln | Nussbutter | Zitrone", type: "fish" },
+                        { name: "Gemüse-Quiche", desc: "Gemischter Salat", type: "vegetarian" },
+                        { name: "Tofu-Scramble", desc: "Mit Gemüse | Bratkartoffeln", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Apfelstrudel", desc: "Vanillesauce", type: "vegetarian" },
+                        { name: "Birnenkompott", desc: "Zimt", type: "vegan" },
+                        { name: "Schokomousse", desc: "Dunkle Schokolade", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Mittwoch",
+                    vorspeise: [
+                        { name: "Gemischter Salat", desc: "Balsamico", type: "vegan" },
+                        { name: "Randen-Carpaccio", desc: "Ziegenkäse | Walnüsse", type: "vegetarian" },
+                        { name: "Grüner Salat", desc: "Kräuter-Dressing", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Hackbraten", desc: "Kartoffelstock | Rahmsoße", type: "meat" },
+                        { name: "Polenta mit Steinpilz", desc: "Parmesan", type: "vegetarian" },
+                        { name: "Quinoa-Bowl", desc: "Geröstetes Gemüse | Tahini", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Crème Brûlée", desc: "Tonkabohne", type: "vegetarian" },
+                        { name: "Fruchtsalat", desc: "Exotisch | Minze", type: "vegan" },
+                        { name: "Kastanien-Mousse", desc: "Apfelkompott", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Donnerstag",
+                    vorspeise: [
+                        { name: "Berner Gerstensuppe", desc: "Mit Forelle", type: "fish" },
+                        { name: "Kürbissuppe", desc: "Ingwer | Kokosmilch", type: "vegetarian" },
+                        { name: "Gemüsecremesuppe", desc: "Saisonal", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Kalbsschnitzel", desc: "Pommes | Zitrone", type: "meat" },
+                        { name: "Kürbis-Risotto", desc: "Salbei | Parmesan", type: "vegetarian" },
+                        { name: "Veganes Curry", desc: "Kokosmilch | Reis", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Meringues", desc: "Schlagrahm", type: "vegetarian" },
+                        { name: "Obstsalat", desc: "Früchte der Saison", type: "vegan" },
+                        { name: "Toblerone-Mousse", desc: "Nougat", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Freitag",
+                    vorspeise: [
+                        { name: "Tomatensuppe", desc: "Basilikum", type: "vegetarian" },
+                        { name: "Rindssuppe", desc: "Mit Gemüse", type: "meat" },
+                        { name: "Erbsensuppe", desc: "Minze", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Egli-Filet gebraten", desc: "Pommes | Sauce Tartare", type: "fish" },
+                        { name: "Spaghetti Aglio e Olio", desc: "Chili | Parmesan", type: "vegetarian" },
+                        { name: "Pasta Pomodoro", desc: "Ohne Käse | Basilikum", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Apfelstrudel", desc: "Vanillesauce", type: "vegetarian" },
+                        { name: "Birnenkompott", desc: "Gewürze", type: "vegan" },
+                        { name: "Schokomousse", desc: "Beeren", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Samstag",
+                    vorspeise: [
+                        { name: "Gemischter Salat", desc: "Ziegenkäse", type: "vegetarian" },
+                        { name: "Randen-Salat", desc: "Walnüsse", type: "vegetarian" },
+                        { name: "Grüner Salat", desc: "Balsamico", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Siedfleisch", desc: "Meerrettichsauce | Salzkartoffeln", type: "meat" },
+                        { name: "Tagliatelle Champignon", desc: "Rahmsauce | Parmesan", type: "vegetarian" },
+                        { name: "Gebratenes Gemüse", desc: "Quinoa | Kräuter", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Vermicelles", desc: "Marroni | Schlagrahm", type: "vegetarian" },
+                        { name: "Obstsalat", desc: "Saisonal", type: "vegan" },
+                        { name: "Crème Brûlée", desc: "Vanille", type: "vegetarian" }
+                    ]
+                },
+                {
+                    day: "Sonntag",
+                    vorspeise: [
+                        { name: "Kürbissuppe", desc: "Ingwer | Kokosmilch", type: "vegetarian" },
+                        { name: "Fleischbrühe", desc: "Mit Flädle", type: "meat" },
+                        { name: "Linsensuppe", desc: "Mit Gemüse", type: "vegan" }
+                    ],
+                    hauptgericht: [
+                        { name: "Rindsgeschnetzeltes Stroganoff", desc: "Butternüdeli | Gurken-Salat", type: "meat" },
+                        { name: "Gnocchi Gorgonzola", desc: "Walnüsse", type: "vegetarian" },
+                        { name: "Vegane Lasagne", desc: "Tomatensauce | Gemüse", type: "vegan" }
+                    ],
+                    dessert: [
+                        { name: "Toblerone-Mousse", desc: "Mandeln", type: "vegetarian" },
+                        { name: "Fruchtsalat", desc: "Minze", type: "vegan" },
+                        { name: "Apfelstrudel", desc: "Vanillesauce", type: "vegetarian" }
+                    ]
+                }
+            ]
+        };
+
+        // Render Menu
+        function renderMenu() {
+            renderWeek(1);
+            renderWeek(2);
+        }
+
+        function renderWeek(weekNumber) {
+            const weekData = weekNumber === 1 ? SKI_MENU.week1 : SKI_MENU.week2;
+            const container = document.getElementById(`week-${weekNumber}`);
+            container.innerHTML = '';
+
+            weekData.forEach(dayMenu => {
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+
+                dayCard.innerHTML = `
+                    <div class="day-header">
+                        <div class="day-title">${dayMenu.day}</div>
+                        <div class="day-price">CHF 45.-</div>
+                    </div>
+
+                    <div class="course-section">
+                        <div class="course-title">
+                            <span class="emoji">🥣</span>
+                            Vorspeise (3 Alternativen)
+                        </div>
+                        <div class="alternatives-grid">
+                            ${dayMenu.vorspeise.map(item => `
+                                <div class="alternative-item">
+                                    <div class="alternative-header">
+                                        <div class="alternative-name">${item.name}</div>
+                                    </div>
+                                    <div class="alternative-desc">${item.desc}</div>
+                                    <span class="badge ${item.type}">${getBadgeText(item.type)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="course-section">
+                        <div class="course-title">
+                            <span class="emoji">🍽️</span>
+                            Hauptgericht (3 Alternativen)
+                        </div>
+                        <div class="alternatives-grid">
+                            ${dayMenu.hauptgericht.map(item => `
+                                <div class="alternative-item">
+                                    <div class="alternative-header">
+                                        <div class="alternative-name">${item.name}</div>
+                                    </div>
+                                    <div class="alternative-desc">${item.desc}</div>
+                                    <span class="badge ${item.type}">${getBadgeText(item.type)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="course-section">
+                        <div class="course-title">
+                            <span class="emoji">🍰</span>
+                            Dessert (3 Alternativen)
+                        </div>
+                        <div class="alternatives-grid">
+                            ${dayMenu.dessert.map(item => `
+                                <div class="alternative-item">
+                                    <div class="alternative-header">
+                                        <div class="alternative-name">${item.name}</div>
+                                    </div>
+                                    <div class="alternative-desc">${item.desc}</div>
+                                    <span class="badge ${item.type}">${getBadgeText(item.type)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(dayCard);
+            });
+        }
+
+        function getBadgeText(type) {
+            const badges = {
+                'vegetarian': '🌿 Vegetarisch',
+                'vegan': '🌱 Vegan',
+                'meat': '🥩 Fleisch',
+                'fish': '🐟 Fisch'
+            };
+            return badges[type] || '';
+        }
+
+        // Switch Week
+        function switchWeek(weekNumber) {
+            // Hide all weeks
+            document.querySelectorAll('.week-container').forEach(container => {
+                container.style.display = 'none';
+            });
+
+            // Show selected week
+            document.getElementById(`week-${weekNumber}`).style.display = 'block';
+
+            // Update buttons
+            document.querySelectorAll('.week-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Send to Tour Operator
+        function sendToTourOperator() {
+            const emailBody = `Guten Tag,
+
+anbei finden Sie unser Ski-Menü mit 2-Wochen-Rotation für Reiseveranstalter.
+
+⛷️ SKI-MENÜ KONZEPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💰 PREIS: CHF 45.- pro Person (3-Gang)
+📅 ROTATION: 14 verschiedene Tagesmenüs (2 Wochen)
+🍽️ AUSWAHL: Jeden Tag 3 Alternativen pro Gang
+   → Fleisch/Fisch | Vegetarisch | Vegan/Glutenfrei
+
+✅ IHRE VORTEILE:
+• Deftig & energiereich - perfekt nach einem Ski-Tag
+• Regionale Produkte aus dem Berner Oberland
+• Keine Wiederholung in 2 Wochen
+• Flexible Anpassungen für Allergien/Unverträglichkeiten
+• Fixpreis-Kalkulation für Gruppen
+
+📧 KONTAKT & BUCHUNG:
+Telefon: +41 33 971 50 01
+Email: groups@dakota-airlounge.ch
+
+Für eine detaillierte Menü-Übersicht besuchen Sie bitte unsere Website oder fordern Sie das PDF an.
+
+Mit freundlichen Grüssen,
+Hotel Dakota - Dakota Air Lounge
+Meiringen, Berner Oberland
+
+"Destination Delicious"`;
+
+            const mailtoLink = `mailto:?subject=Ski-Menü 2-Wochen-Rotation - Hotel Dakota&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // Export to PDF
+        function exportToPDF() {
+            alert('PDF-Export wird vorbereitet... Diese Funktion erstellt ein komplettes 14-Tage PDF mit allen Menüs.');
+            // This would require more complex jsPDF implementation
+            // For now, users can use Print function
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderMenu);
+    </script>
+</body>
+</html>

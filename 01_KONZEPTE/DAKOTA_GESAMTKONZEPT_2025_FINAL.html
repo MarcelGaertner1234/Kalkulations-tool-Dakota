@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Dakota - Kulinarisches Gesamtkonzept 2025</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .page {
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: 2cm;
+            background: white;
+            page-break-after: always;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 8cm 2cm;
+            background: linear-gradient(135deg, #1a3a52 0%, #2c5f77 100%);
+            color: white;
+        }
+
+        .cover h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        .cover .subtitle {
+            font-size: 1.3em;
+            margin-bottom: 2em;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .cover .info {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 3em;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #1a3a52;
+            margin: 1em 0 0.5em 0;
+            border-bottom: 3px solid #1a3a52;
+            padding-bottom: 0.3em;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #2c5f77;
+            margin: 1em 0 0.5em 0;
+            page-break-after: avoid;
+        }
+
+        h4 {
+            font-size: 1.2em;
+            color: #555;
+            margin: 0.8em 0 0.3em 0;
+            page-break-after: avoid;
+        }
+
+        .section-intro {
+            background: #f0f5f8;
+            padding: 1.5em;
+            margin: 1em 0 2em 0;
+            border-left: 4px solid #1a3a52;
+            font-style: italic;
+        }
+
+        .dish {
+            margin: 1.5em 0;
+            padding: 1em 0;
+            border-bottom: 1px solid #eee;
+            page-break-inside: avoid;
+        }
+
+        .dish h4 {
+            color: #1a3a52;
+            margin-bottom: 0.3em;
+        }
+
+        .price {
+            font-size: 1.1em;
+            color: #2c7a3f;
+            font-weight: bold;
+            margin: 0.3em 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 0.2em 0.6em;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 0.5em;
+        }
+
+        .badge.vegetarian {
+            background: #27ae60;
+        }
+
+        .badge.signature {
+            background: #d4a253;
+        }
+
+        .badge.premium {
+            background: #8b4513;
+        }
+
+        .description {
+            color: #555;
+            font-style: italic;
+            margin: 0.5em 0;
+        }
+
+        .details {
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 0.5em;
+        }
+
+        .summary-box {
+            background: #f0f5f8;
+            padding: 1.5em;
+            margin: 2em 0;
+            border-radius: 5px;
+            page-break-inside: avoid;
+        }
+
+        .summary-box h4 {
+            color: #1a3a52;
+            margin-bottom: 1em;
+        }
+
+        .summary-box ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+
+        .summary-box li {
+            margin: 0.5em 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            page-break-inside: avoid;
+        }
+
+        table th {
+            background: #1a3a52;
+            color: white;
+            padding: 0.8em;
+            text-align: left;
+        }
+
+        table td {
+            padding: 0.8em;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f0f5f8;
+        }
+
+        .highlight {
+            background: #fff8dc;
+            padding: 1em;
+            margin: 1em 0;
+            border-left: 4px solid #d4a253;
+            page-break-inside: avoid;
+        }
+
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 3em;
+            padding-top: 1em;
+            border-top: 1px solid #ddd;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .page {
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="page cover">
+    <h1>HOTEL DAKOTA</h1>
+    <div class="subtitle">Kulinarisches Gesamtkonzept 2025</div>
+    <div class="subtitle">Alpine Berner Küche - Regional, Nachvollziehbar, Ehrlich</div>
+    <div class="info">
+        <p>Konzept & Ausarbeitung: Marcel Gärtner</p>
+        <p>Amthausgasse 2, 3860 Meiringen</p>
+        <p>Oktober 2025</p>
+    </div>
+</div>
+
+<!-- INHALTSVERZEICHNIS -->
+<div class="page">
+    <h2>Inhaltsverzeichnis</h2>
+
+    <div style="margin: 2em 0;">
+        <h4>1. Unsere Philosophie & Vision</h4>
+        <p style="margin-left: 1em; color: #777;">Alpine Berner Küche - Regional, Nachvollziehbar, Ehrlich</p>
+
+        <h4 style="margin-top: 1.5em;">2. Dakota Air Lounge - Drei Stimmungen</h4>
+        <p style="margin-left: 1em; color: #777;">Mittag, Abend, Après - Ein Restaurant, drei Erlebnisse</p>
+
+        <h4 style="margin-top: 1.5em;">3. Restaurant - Abendkarte</h4>
+        <p style="margin-left: 1em; color: #777;">13 Gerichte + 3 Menüs (mit kreativen Neuinterpretationen)</p>
+
+        <h4 style="margin-top: 1.5em;">4. Restaurant - Mittagskarte</h4>
+        <p style="margin-left: 1em; color: #777;">10 Gerichte + Tagesgerichte + 3 Menüs</p>
+
+        <h4 style="margin-top: 1.5em;">5. Packages & Erlebnis-Angebote</h4>
+        <p style="margin-left: 1em; color: #777;">7 Packages von "Hike'n'Dine" bis "Wellness & Genuss"</p>
+
+        <h4 style="margin-top: 1.5em;">6. Lieferanten & Wirtschaftlichkeit</h4>
+        <p style="margin-left: 1em; color: #777;">Regionales Netzwerk & Food Cost-Übersicht</p>
+
+        <h4 style="margin-top: 1.5em;">7. Zusammenfassung & Nächste Schritte</h4>
+        <p style="margin-left: 1em; color: #777;">Highlights, Zahlen, Umsetzungsplan</p>
+    </div>
+</div>
+
+<!-- PHILOSOPHIE -->
+<div class="page">
+    <h2>Unsere Philosophie & Vision</h2>
+
+    <div class="section-intro">
+        <h3>"Alpine Berner Küche - Regional, Nachvollziehbar, Ehrlich"</h3>
+        <p>Wir kochen mit Produkten aus dem Berner Oberland und den umliegenden Regionen. Jedes Gericht erzählt eine Geschichte über die Berge, die Täler und die Menschen, die hier leben. Wir respektieren Traditionen und interpretieren sie zeitgemäß - ohne Schnickschnack, mit Handwerk und Herz.</p>
+    </div>
+
+    <h3>Unsere Werte</h3>
+    <div class="summary-box">
+        <ul>
+            <li><strong>ALPIN</strong> - Produkte aus dem Berner Oberland, Haslital, Alpen. Alpkäse, Bergkräuter, Wild, Forellen aus Berner Bächen</li>
+            <li><strong>REGIONAL</strong> - 90% der Produkte aus der Schweiz, 70% aus dem Berner Oberland. Jeder Lieferant wird genannt</li>
+            <li><strong>NACHVOLLZIEHBAR</strong> - Keine "Erde", keine Schäume ohne Grund. Gerichte, die man versteht und wiedererkennt</li>
+            <li><strong>EHRLICH</strong> - Handwerk vor Show. Sous-vide, Fermentation, Räuchern - als Technik, nicht als Effekt</li>
+            <li><strong>ZUGÄNGLICH</strong> - Nicht elitär, nicht abgehoben. Hotel-Gäste UND Externe willkommen</li>
+            <li><strong>NACHHALTIG</strong> - Lokale Produzenten stärken, saisonale Küche, Too Good To Go Partner</li>
+        </ul>
+    </div>
+</div>
+
+<!-- DAKOTA AIR LOUNGE KONZEPT -->
+<div class="page">
+    <h2>Dakota Air Lounge - Drei Stimmungen</h2>
+
+    <div class="section-intro">
+        <strong>Vision:</strong> "Ein Restaurant, drei Stimmungen"<br>
+        Wir schaffen verschiedene kulinarische Erlebnisse zu verschiedenen Tageszeiten - jede mit eigener Identität und Charakter.
+    </div>
+
+    <h3>MITTAGS: "Wanderer & Business" (12:00-14:00)</h3>
+
+    <div class="summary-box">
+        <h4>Zielgruppe:</h4>
+        <p>Wanderer nach Morgen-Tour, Lokale Business-Gäste, Hotel-Gäste mit aktivem Vormittag</p>
+
+        <h4 style="margin-top: 1em;">Konzept:</h4>
+        <ul>
+            <li><strong>Schnell</strong> - Service max. 45 Min. garantiert</li>
+            <li><strong>Kraftvoll</strong> - Energiereich für Nachmittags-Aktivitäten</li>
+            <li><strong>Preissensibel</strong> - CHF 24-38 Hauptgang</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Beispiel-Gerichte:</h4>
+        <p>Berner Gerstensuppe mit Hauswurst • Älplermagronen mit Apfelmus • Zürcher Geschnetzeltes mit Rösti</p>
+        <p><strong>Menüs:</strong> 2-Gang CHF 38 | 3-Gang CHF 48 | Wanderer-Menü CHF 42</p>
+    </div>
+
+    <h3 style="margin-top: 2em;">ABENDS: "Alpine Fine Dining" (18:30-21:30)</h3>
+
+    <div class="summary-box">
+        <h4>Zielgruppe:</h4>
+        <p>Hotel-Gäste (Halbpension), Externe Gäste aus Meiringen & Umgebung, Genuss-Reisende</p>
+
+        <h4 style="margin-top: 1em;">Konzept:</h4>
+        <ul>
+            <li><strong>Erlebnis</strong> - Service 90-120 Min.</li>
+            <li><strong>Kreativität</strong> - Klassiker modern interpretiert</li>
+            <li><strong>Touch of Excellence</strong> - Handwerk, Präzision</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Beispiel-Gerichte:</h4>
+        <p>Berner Forelle geräuchert • Alpkäse-Variation • Schweinsbäckli Low & Slow • Wild aus den Berner Bergen (saisonal)</p>
+        <p><strong>Menüs:</strong> 4-Gang CHF 95 | 6-Gang Degustation CHF 145 | Vegetarisch 4-Gang CHF 90</p>
+    </div>
+
+    <h3 style="margin-top: 2em;">APRÈS-AKTIVITÄT: "Bärner Bröckli & Bar" (15:00-18:00)</h3>
+
+    <div class="summary-box">
+        <h4>Zielgruppe:</h4>
+        <p>Rückkehrer von Wanderungen, Apéro vor Dinner, Gesellige Gruppen</p>
+
+        <h4 style="margin-top: 1em;">Konzept:</h4>
+        <ul>
+            <li><strong>Sharing</strong> - Kleine Gerichte zum Teilen im Tapas-Stil</li>
+            <li><strong>Gesellig</strong> - Berner Weine, regionale Biere, Schnäpse</li>
+            <li><strong>Gemütlich</strong> - Lounge-Atmosphäre</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Beispiel-Gerichte:</h4>
+        <p>Mini-Älplermagronen • Hauswurst-Plättli • Alpkäse-Kroketten • Fermentierte Gemüse-Variation • Mini-Rösti</p>
+        <p><strong>Board für 2 Personen:</strong> CHF 42 (5 kleine Gerichte)</p>
+    </div>
+</div>
+
+<!-- ABENDKARTE SEITE 1 -->
+<div class="page">
+    <h2>Restaurant - Abendkarte</h2>
+
+    <div class="section-intro">
+        13 Gerichte + 3 Menüs (inkl. kreativer Neuinterpretationen)<br>
+        Balance: 50% Klassiker ganzjährig + 50% Saisonal (Herbst/Winter)<br>
+        <strong>NEU:</strong> Kreative Multi-Texturen-Gerichte (Kürbis, Alpkäse-Reise, Forelle, Apfel)<br>
+        <strong>TIPP:</strong> "Bärner Bröckli" als Aperitivo-Angebot (15:00-18:00 Uhr in der Bar)
+    </div>
+
+    <h3>Vorspeisen</h3>
+
+    <div class="dish">
+        <h4>BERNER GERSTENSUPPE MIT GERÄUCHERTER FORELLE</h4>
+        <div class="price">CHF 22</div>
+        <p class="description">Gerste aus Schweizer Bio-Anbau | Berner Forelle geräuchert | Sellerie | Petersilien-Öl | Sauerteigbrot</p>
+        <p>Gerstensuppe ist ein Klassiker der alpinen Küche - kraftvoll, wärmend, erdverbunden. Die geräucherte Forelle aus Reichenbach bringt die Frische der Berner Bäche. Räuchern ist eine alte Bergstradition zur Konservierung.</p>
+        <p class="details">Lieferant: Forellenzucht Reichenbach, Bio-Hof Hasliberg</p>
+    </div>
+
+    <div class="dish">
+        <h4>KÜRBIS IN DREI TEXTUREN <span class="badge vegetarian">Vegetarisch</span> <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 22</div>
+        <p class="description">Kürbissuppe samtweich | Kürbis-Püree | Kürbis geröstet | Kürbiskernöl-Schaum | Geröstete Kürbiskerne</p>
+        <p>Hokkaido-Kürbis aus dem Haslital - drei Mal! Cremige Suppe trifft auf intensives Püree und knusprig geröstete Stücke. Der Kürbiskernöl-Schaum gibt die letzte Raffinesse. Ein Herbstgedicht in drei Akten!</p>
+        <p class="details">Lieferant: Bio-Hof Hasliberg | Saisonal: Herbst/Winter</p>
+    </div>
+
+    <div class="dish">
+        <h4>ALPKÄSE-REISE DURCH DIE JAHRESZEITEN <span class="badge signature">Signature</span></h4>
+        <div class="price">CHF 28</div>
+        <p class="description">4 Alpkäse (jung, mittel, alt, extra-alt) | Honig aus Meiringen | Walnuss-Pesto | Haselnuss-Crumble | Quitten-Chutney | Trockenfleisch | Sauerteigbrot</p>
+        <p>Eine Reise durch die Reifestadien des Alpkäses! Vier Sorten von der Engstlenalp - vom cremig-milden Frühlingskäse bis zum intensiv-kristallinen 24-Monate-Käse. Jeder Käse mit eigenem Begleiter: Honig, Walnuss-Pesto, Haselnuss-Crumble, Quitten-Chutney. Dazu hauchdünn aufgeschnittenes Trockenfleisch.</p>
+        <p class="details">Lieferanten: Alpkäserei Engstlenalp, Berner Alpwurst, Imkerei Meiringen</p>
+    </div>
+
+    <div class="dish">
+        <h4>FORELLE-TARTAR VOM REICHENBACHER BACH <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 28</div>
+        <p class="description">Forelle roh gewürfelt | Apfel-Brunoise (Brienz) | Dill-Öl | Senfkörner-Kaviar | Ziegenkäse-Schaum | Knusprige Kartoffel-Chips</p>
+        <p>Frischeste Forelle aus Reichenbach, von Hand gewürfelt und roh mariniert mit Dill-Öl und Apfelsaft. Die Apfel-Brunoise bringt fruchtige Säure, Senfkörner (in Berner Manier) geben die "Kaviar"-Note. Ziegenkäse-Schaum aus dem Haslital verbindet alles. Dazu knusprige Kartoffel-Chips. Ein Gedicht aus Berner Gewässern!</p>
+        <p class="details">Lieferanten: Forellenzucht Reichenbach, Obstgarten Brienz, Ziegenkäserei Haslital</p>
+    </div>
+</div>
+
+<!-- ABENDKARTE SEITE 2 -->
+<div class="page">
+    <h3>Hauptgänge</h3>
+
+    <div class="dish">
+        <h4>BERNER FORELLE ZWEI MAL <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 44</div>
+        <p class="description">Forelle konfiert 52°C | Forelle geräuchert | Sellerie-Püree | Sellerie geröstet | Beurre Blanc mit Dill | Apfel-Radieschen-Salat</p>
+        <p>Forelle aus Reichenbach - zwei Mal! Einmal butterzart sous-vide konfiert bei 52°C, einmal klassisch über Buchenholz geräuchert. Sellerie kommt ebenfalls in zwei Texturen: cremiges Püree und geröstete Stücke. Dazu frischer Apfel-Radieschen-Salat für Knackigkeit. Die Dill-Beurre-Blanc verbindet alle Elemente.</p>
+        <p class="details">Lieferanten: Forellenzucht Reichenbach, Bio-Hof Hasliberg, Obstgarten Brienz</p>
+    </div>
+
+    <div class="dish">
+        <h4>SCHWEINSBÄCKLI LOW & SLOW <span class="badge signature">Signature</span></h4>
+        <div class="price">CHF 46</div>
+        <p class="description">Schweinsbäckli 12h sous-vide | Topinambur-Püree | Gebrannte Zwiebel | Federkohl karamellisiert | Apfel-Wacholder-Jus | Knusprige Schwarte</p>
+        <p>Schweinsbäckli - ein oft vergessenes Stück vom Schwein, aber voller Geschmack! 12 Stunden bei niedriger Temperatur gegart (sous-vide 68°C), wird es butterzart. Die Schwarte wird separat knusprig gebraten. Dazu Topinambur-Püree (nussig, erdig), gebrannte Zwiebel und karamellisierter Federkohl. Der Apfel-Wacholder-Jus vereint alle Aromen des Berner Oberlands.</p>
+        <p class="details">Lieferanten: Metzgerei Trachsel, Bio-Hof Hasliberg | Saisonal: Herbst/Winter</p>
+    </div>
+
+    <div class="dish">
+        <h4>REH MIT ROTKOHL UND KNÖPFLI</h4>
+        <div class="price">CHF 54</div>
+        <p class="description">Rehrücken rosa | Rotkohl geschmort | Knöpfli hausgemacht | Preiselbeeren | Wildjus</p>
+        <p>Wild aus den Berner Bergen - ein Herbst/Winter-Klassiker! Rehrücken perfekt rosa gebraten, dazu traditioneller Rotkohl (mit Äpfeln und Zimt geschmort) und hausgemachte Knöpfli. Preiselbeeren und intensiver Wildjus vollenden das Gericht.</p>
+        <p class="details">Lieferanten: Jagd & Wild Berner Oberland, Bio-Hof Hasliberg | Saisonal: Herbst/Winter</p>
+    </div>
+
+    <div class="dish">
+        <h4>KALBSBRIES MIT MORCHELN <span class="badge premium">Premium</span> <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 52</div>
+        <p class="description">Kalbsbries rosa gebraten | Morchel-Ragout | Bärlauch-Risotto | Morcheljus | Haselnuss-Butter</p>
+        <p>Eine Berner Delikatesse! Kalbsbries wird außen knusprig, innen cremig gebraten. Dazu Morcheln aus den Berner Wäldern (gesammelt im Frühling, getrocknet aufbewahrt) in einem intensiven Ragout. Das Bärlauch-Risotto bringt Frische, die Haselnuss-Butter den nussigen Abschluss. Ein Gericht für Kenner!</p>
+        <p class="details">Lieferanten: Metzgerei Trachsel, Morchel-Sammler Haslital | Saisonal: Frühling/Sommer (frische Morcheln) oder ganzjährig (getrocknete)</p>
+    </div>
+
+    <div class="dish">
+        <h4>HERBST-RISOTTO MIT STEINPILZEN <span class="badge vegetarian">Vegetarisch</span> <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 42</div>
+        <p class="description">Risotto mit Steinpilzen | Kürbis geröstet | Kastanien | Parmesan | Trüffelöl | Haselnüsse karamellisiert</p>
+        <p>Ein vegetarisches Herbstgedicht! Cremiges Risotto mit getrockneten Steinpilzen aus den Berner Wäldern. Dazu gerösteter Kürbis, Kastanien und karamellisierte Haselnüsse. Ein Hauch Trüffelöl und frisch gehobelter Parmesan vollenden das Gericht. Kraftvoll, reichhaltig, vegetarisch!</p>
+        <p class="details">Lieferanten: Bio-Hof Hasliberg, Pilz-Sammler Berner Oberland | Saisonal: Herbst/Winter</p>
+    </div>
+
+    <div class="dish">
+        <h4>DRY-AGED ENTRECÔTE VOM BERNER RIND <span class="badge premium">28 Tage gereift</span> <span class="badge signature">Premium</span></h4>
+        <div class="price">CHF 58</div>
+        <p class="description">Dry-Aged Entrecôte 250g | Holzkohle gegrillt | Pommes Frites | Gegrilltes Gemüse | Kräuterbutter</p>
+        <p><strong>DIE GESCHICHTE:</strong> Unser Berner Entrecôte reift 28 Tage lang in kontrollierter Umgebung. Die natürlichen Enzyme brechen das Fleisch auf - es wird butterzart und der Geschmack intensiviert sich. Dann grillen wir es auf Holzkohle für die perfekte Kruste. Die Reifung ist eine alte Tradition alpiner Fleischveredelung.</p>
+        <p class="details">Lieferant: Metzgerei Trachsel (seit 1920) | <strong>⭐ Signature-Gericht ⭐</strong></p>
+    </div>
+
+    <h3 style="margin-top: 2em;">Desserts</h3>
+
+    <div class="dish">
+        <h4>APFEL-EXPLOSION AUS BRIENZ <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 18</div>
+        <p class="description">Apfel in fünf Texturen | Apfel-Mousse | Apfel-Kompott warm | Apfel-Chips knusprig | Apfel-Sorbet | Apfel-Gel | Haselnuss-Crumble | Calvados-Schaum</p>
+        <p>Eine Ode an den Berner Apfel! Fünf verschiedene Zubereitungen des Apfels aus dem Obstgarten Brienz: Luftige Mousse, warmes Kompott, knusprige Chips, kaltes Sorbet und ein klares Gel. Dazu Haselnuss-Crumble und ein Hauch Calvados-Schaum. Ein Herbstdessert mit allen Sinnen!</p>
+        <p class="details">Lieferanten: Obstgarten Brienz (alte Apfelsorten) | Saisonal: Herbst/Winter</p>
+    </div>
+
+    <div class="dish">
+        <h4>SCHOKOLADE & KIRSCH <span class="badge signature">Kreativ</span></h4>
+        <div class="price">CHF 18</div>
+        <p class="description">Schokoladen-Mousse 70% | Schokoladen-Sorbet | Kirschen mariniert in Kirschwasser | Kirsch-Gel | Schokoladen-Crumble | Salzkaramell</p>
+        <p>Die klassische Kombination neu interpretiert! Luftige Schokoladen-Mousse (70%) trifft auf kaltes Sorbet, knuspriges Crumble und flüssiges Salzkaramell. Dazu marinierte Kirschen aus Brienz in echtem Berner Kirschwasser und ein klares Kirsch-Gel. Drei Temperaturen, fünf Texturen, hundert Prozent Genuss!</p>
+        <p class="details">Lieferant: Obstgarten Brienz | Kirschwasser aus dem Berner Oberland</p>
+    </div>
+
+    <div class="dish">
+        <h4>BERNER ALPKÄSE-AUSWAHL</h4>
+        <div class="price">CHF 22</div>
+        <p class="description">3 Berner Alpkäse | Quitten-Kompott | Baumnüsse | Sauerteigbrot</p>
+        <p>Käse-Dessert für Kenner! Drei handverlesene Alpkäse von der Engstlenalp in unterschiedlichen Reifegraden (jung-cremig, mittel-würzig, alt-kristallin).</p>
+        <p class="details">Lieferant: Alpkäserei Engstlenalp</p>
+    </div>
+</div>
+
+<!-- MENÜS -->
+<div class="page">
+    <h3>Menüs</h3>
+
+    <div class="summary-box">
+        <h4>4-GANG-MENÜ "BERNER ALPEN REISE" - CHF 95</h4>
+        <p><strong>Gang 1:</strong> Berner Gerstensuppe mit geräucherter Forelle<br>
+        <strong>Gang 2:</strong> Randen-Carpaccio mit Ziegenkäse (vegetarische Alternative)<br>
+        <strong>Gang 3:</strong> Schweinsbäckli Low & Slow mit Federkohl<br>
+        <strong>Gang 4:</strong> Kastanien-Mousse mit Apfelkompott</p>
+        <p style="color: #2c5f77; margin-top: 0.5em;"><em>Eine kulinarische Reise durch das Berner Oberland</em></p>
+    </div>
+
+    <div class="summary-box">
+        <h4>6-GANG-DEGUSTATION "ALPINE HIGHLIGHTS" - CHF 145</h4>
+        <p><strong>Gang 1:</strong> Amuse-Bouche (Überraschung vom Küchenchef)<br>
+        <strong>Gang 2:</strong> Berner Gerstensuppe mit geräucherter Forelle<br>
+        <strong>Gang 3:</strong> Felchen-Ceviche vom Brienzersee<br>
+        <strong>Gang 4:</strong> Geschmorter Markbeinknochen (klein)<br>
+        <strong>Gang 5:</strong> Reh mit Rotkohl und Knöpfli (saisonal)<br>
+        <strong>Gang 6:</strong> Schokoladen-Variation<br>
+        <strong>Gang 7:</strong> Petits Fours</p>
+        <p style="color: #2c5f77; margin-top: 0.5em;"><em>Die Höhepunkte der Dakota-Küche</em></p>
+    </div>
+
+    <div class="summary-box">
+        <h4>VEGETARISCHES 4-GANG-MENÜ - CHF 90</h4>
+        <p><strong>Gang 1:</strong> Kürbissuppe mit Ingwer und Haselnuss<br>
+        <strong>Gang 2:</strong> Randen-Carpaccio mit Ziegenkäse<br>
+        <strong>Gang 3:</strong> Sellerie im Salzteig mit Steinpilz-Ragout (saisonal)<br>
+        <strong>Gang 4:</strong> Kastanien-Mousse mit Apfelkompott</p>
+        <p style="color: #2c5f77; margin-top: 0.5em;"><em>Gemüse, Pilze, Nüsse - die vegetarischen Schätze der Berge</em></p>
+    </div>
+
+    <h3 style="margin-top: 2em;">Wein- & Bier-Pairing</h3>
+
+    <div class="summary-box">
+        <h4>Wein-Pairing zum 4-Gang-Menü - CHF 65</h4>
+        <p>4 Gläser à 1dl Schweizer Wein perfekt abgestimmt auf die Gerichte</p>
+    </div>
+
+    <div class="summary-box">
+        <h4>Berner Bier-Pairing - CHF 45</h4>
+        <p>4 Biere à 2dl aus regionalen Brauereien des Berner Oberlands</p>
+    </div>
+</div>
+
+<!-- MITTAGSKARTE -->
+<div class="page">
+    <h2>Restaurant - Mittagskarte</h2>
+
+    <div class="section-intro">
+        10 Gerichte + Tagesgerichte + 3 Menüs<br>
+        Fokus: Schnell (45 Min. garantiert), Kraftvoll, Preissensibel
+    </div>
+
+    <h3>Vorspeisen</h3>
+
+    <div class="dish">
+        <h4>TAGESSUPPE</h4>
+        <div class="price">CHF 12</div>
+        <p class="description">Wechselnde Suppe je nach Saison | Brot</p>
+        <p>Täglich frisch zubereitet. Immer saisonal, immer hausgemacht.</p>
+    </div>
+
+    <div class="dish">
+        <h4>BERNER GERSTENSUPPE MIT HAUSWURST</h4>
+        <div class="price">CHF 16</div>
+        <p class="description">Gerste | Hauswurst | Gemüse | Sauerteigbrot</p>
+        <p>Der kraftvolle Klassiker. Perfekt nach einer Morgenwanderung!</p>
+        <p class="details">Lieferanten: Bio-Hof Hasliberg, Metzgerei Trachsel</p>
+    </div>
+
+    <h3 style="margin-top: 2em;">Hauptgänge</h3>
+
+    <div class="dish">
+        <h4>TAGESGERICHT <span class="badge signature">Highlight</span></h4>
+        <div class="price">CHF 28</div>
+        <p class="description">Wechselndes Hauptgericht je nach Markt und Saison</p>
+        <p><strong>Beispiele:</strong> Siedfleisch mit Meerrettich • Geschmortes Rindsragout mit Spätzli • Polenta mit Pilzragout • Älplermagronen</p>
+        <p class="details">Täglich wechselnd, immer regional</p>
+    </div>
+
+    <div class="dish">
+        <h4>ÄLPLERMAGRONEN MIT APFELMUS</h4>
+        <div class="price">CHF 24</div>
+        <p class="description">Kartoffeln | Teigwaren | Alpkäse | Röstzwiebeln | Apfelmus</p>
+        <p>Der Berner Klassiker! Kraftvoll, sättigend, ehrlich. Perfekt für Wanderer.</p>
+        <p class="details">Lieferanten: Alpkäserei Engstlenalp, Bio-Hof Hasliberg</p>
+    </div>
+
+    <div class="dish">
+        <h4>ZÜRCHER GESCHNETZELTES MIT RÖSTI</h4>
+        <div class="price">CHF 32</div>
+        <p class="description">Kalbsgeschnetzeltes | Champignon-Rahmsauce | Rösti | Marktgemüse</p>
+        <p>Der Klassiker. Zartes Kalbfleisch in cremiger Champignon-Sauce, mit goldbrauner Rösti.</p>
+        <p class="details">Lieferant: Metzgerei Trachsel, Bio-Hof Hasliberg</p>
+    </div>
+
+    <div class="dish">
+        <h4>FELCHEN GEBRATEN VOM BRIENZERSEE</h4>
+        <div class="price">CHF 28</div>
+        <p class="description">Felchen Müllerin Art | Petersilienkartoffeln | Zitrone | Nussbutter</p>
+        <p>Frischer Felchen vom Brienzersee, klassisch in Butter gebraten.</p>
+        <p class="details">Lieferant: Fischerei Brienzersee</p>
+    </div>
+
+    <h3 style="margin-top: 2em;">Menüs</h3>
+
+    <div class="summary-box">
+        <h4>2-GANG BUSINESS-MENÜ - CHF 38</h4>
+        <p>Tagessuppe + Hauptgang (Wahl aus 4 Gerichten)</p>
+        <p style="color: #2c7a3f; margin-top: 0.5em;"><strong>Service: 45 Min. garantiert!</strong></p>
+    </div>
+
+    <div class="summary-box">
+        <h4>3-GANG KOMPLETT-MENÜ - CHF 48</h4>
+        <p>Vorspeise + Hauptgang + Dessert</p>
+    </div>
+
+    <div class="summary-box">
+        <h4>WANDERER-MENÜ - CHF 42</h4>
+        <p>Gerstensuppe + Älplermagronen + Apfelkuchen<br>
+        <em>Das perfekte Menü für Wanderer - kraftvoll und schnell!</em></p>
+    </div>
+</div>
+
+<!-- PACKAGES -->
+<div class="page">
+    <h2>Packages & Erlebnis-Angebote</h2>
+
+    <div class="section-intro">
+        Erlebnis-Angebote verbinden kulinarischen Genuss mit Outdoor-Aktivitäten im Berner Oberland<br>
+        7 Packages für unvergessliche Erlebnisse - von Wanderung bis Wellness
+    </div>
+
+    <div class="dish">
+        <h4>HIKE'N'DINE <span class="badge signature">Bestseller</span></h4>
+        <div class="price">CHF 220 pro Person</div>
+        <p class="description">Geführte Wanderung + 4-Gang-Menü am Abend</p>
+        <p><strong>Ablauf:</strong></p>
+        <ul style="margin: 0.5em 0 0 2em;">
+            <li>09:00 Uhr: Geführte Wanderung mit lokalem Guide (ca. 4h, mittlere Schwierigkeit)</li>
+            <li>13:00 Uhr: Wanderer-Mittagessen im Dakota (Tagesgericht + Getränk inklusive)</li>
+            <li>18:30 Uhr: 4-Gang-Menü "Berner Alpen Reise" mit Weinpairing</li>
+        </ul>
+        <p style="margin-top: 0.5em;"><strong>Zielgruppe:</strong> Outdoor-Enthusiasten, die kulinarischen Genuss mit Naturerlebnis verbinden</p>
+        <p class="details">Verfügbar: Mai-Oktober | Min. 2 Personen | Max. 10 Personen</p>
+    </div>
+
+    <div class="dish">
+        <h4>BIKE'N'BEEF BERNER STYLE</h4>
+        <div class="price">CHF 380 pro Person</div>
+        <p class="description">E-Bike-Tour + Dry-Aged Steak-Dinner + Übernachtung</p>
+        <p><strong>Das Package:</strong></p>
+        <ul style="margin: 0.5em 0 0 2em;">
+            <li>E-Bike-Miete für einen Tag (Touring-Bike mit GPS-Route)</li>
+            <li>Picknick-Korb für unterwegs (Berner Spezialitäten)</li>
+            <li>Abends: Dry-Aged Entrecôte (28 Tage gereift) mit Beilagen + Wein</li>
+            <li>1 Übernachtung im Doppelzimmer inkl. Frühstück</li>
+        </ul>
+        <p class="details">Verfügbar: Ganzjährig | Min. 2 Personen</p>
+    </div>
+
+    <div class="dish">
+        <h4>WINE AROUND SCHWEIZ</h4>
+        <div class="price">CHF 145 pro Person</div>
+        <p class="description">Schweizer Wein-Tasting + 4-Gang-Menü</p>
+        <p><strong>Ablauf:</strong></p>
+        <ul style="margin: 0.5em 0 0 2em;">
+            <li>18:00 Uhr: Schweizer Wein-Tasting (6 Weine aus 5 Regionen) mit Sommelier</li>
+            <li>19:30 Uhr: 4-Gang-Menü mit perfekt abgestimmten Weinen</li>
+        </ul>
+        <p class="details">Verfügbar: Freitag & Samstag | Min. 4 Personen | Max. 12 Personen</p>
+    </div>
+
+    <div class="dish">
+        <h4>WELLNESS & GENUSS</h4>
+        <div class="price">CHF 650 pro Person (2 Übernachtungen)</div>
+        <p class="description">Wellness-Wochenende + kulinarische Highlights</p>
+        <p><strong>Das Package:</strong></p>
+        <ul style="margin: 0.5em 0 0 2em;">
+            <li>2 Übernachtungen im Superior-Doppelzimmer</li>
+            <li>2x Frühstück, 1x Lunch, 2x Dinner (À la carte oder Menü)</li>
+            <li>1x Massage (50 Min.)</li>
+            <li>Zugang zum Wellness-Bereich</li>
+        </ul>
+        <p class="details">Verfügbar: Ganzjährig | Min. Aufenthalt: 2 Nächte</p>
+    </div>
+
+    <div class="dish">
+        <h4>FONDUE & FACKELWANDERUNG</h4>
+        <div class="price">CHF 95 pro Person</div>
+        <p class="description">Winterlicher Abend mit Fackelwanderung + Alpkäse-Fondue</p>
+        <p><strong>Ablauf:</strong></p>
+        <ul style="margin: 0.5em 0 0 2em;">
+            <li>18:00 Uhr: Fackelwanderung (ca. 1h, leicht)</li>
+            <li>19:30 Uhr: Alpkäse-Fondue mit Brot, Kartoffeln, eingelegtem Gemüse + Berner Wein</li>
+        </ul>
+        <p class="details">Verfügbar: Dezember-März | Min. 6 Personen | Max. 20 Personen</p>
+    </div>
+</div>
+
+<!-- LIEFERANTEN & WIRTSCHAFTLICHKEIT -->
+<div class="page">
+    <h2>Lieferanten & Wirtschaftlichkeit</h2>
+
+    <h3>Regionales Lieferanten-Netzwerk</h3>
+
+    <table>
+        <tr>
+            <th>Kategorie</th>
+            <th>Lieferant</th>
+            <th>Produkte</th>
+        </tr>
+        <tr>
+            <td><strong>Fleisch & Wurst</strong></td>
+            <td>Metzgerei Trachsel, Meiringen</td>
+            <td>Schweinsbäckli, Kalbsleber, Hauswurst, Dry-Aged Entrecôte</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Jagd & Wild Berner Oberland</td>
+            <td>Reh, Hirsch, Gämse (Herbst/Winter)</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Berner Alpwurst</td>
+            <td>Hauswurst, Landjäger, Trockenfleisch</td>
+        </tr>
+        <tr>
+            <td><strong>Fisch</strong></td>
+            <td>Forellenzucht Reichenbach</td>
+            <td>Berner Forellen, Saiblinge</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Fischerei Brienzersee</td>
+            <td>Felchen, Egli</td>
+        </tr>
+        <tr>
+            <td><strong>Käse</strong></td>
+            <td>Alpkäserei Engstlenalp</td>
+            <td>Alpkäse (jung, mittel, alt) - Rohmilch</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Ziegenkäserei Haslital</td>
+            <td>Ziegenfrischkäse, gereifter Ziegenkäse</td>
+        </tr>
+        <tr>
+            <td><strong>Gemüse & Obst</strong></td>
+            <td>Bio-Hof Hasliberg</td>
+            <td>Kartoffeln, Kürbis, Kohl, Randen</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Obstgarten Brienz</td>
+            <td>Äpfel, Birnen, Zwetschgen (alte Sorten)</td>
+        </tr>
+    </table>
+
+    <div class="highlight">
+        <strong>90% Schweizer Produkte | 70% aus Berner Oberland</strong><br>
+        Alle Lieferanten werden auf der Karte genannt - Transparenz ist Pflicht!
+    </div>
+
+    <h3 style="margin-top: 2em;">Food Cost Übersicht</h3>
+
+    <table>
+        <tr>
+            <th>Outlet</th>
+            <th>Durchschnitt Food Cost</th>
+            <th>Target</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Restaurant Abend (inkl. Bärner Bröckli)</td>
+            <td>30%</td>
+            <td>28-35%</td>
+            <td style="color: #2c7a3f;"><strong>✓ Perfekt</strong></td>
+        </tr>
+        <tr>
+            <td>Restaurant Mittag</td>
+            <td>30%</td>
+            <td>28-35%</td>
+            <td style="color: #2c7a3f;"><strong>✓ Perfekt</strong></td>
+        </tr>
+        <tr>
+            <td>Packages (Durchschnitt)</td>
+            <td>28%</td>
+            <td>25-30%</td>
+            <td style="color: #2c7a3f;"><strong>✓ Perfekt</strong></td>
+        </tr>
+    </table>
+
+    <h3 style="margin-top: 2em;">Umsatz-Prognose</h3>
+
+    <table>
+        <tr>
+            <th>Kategorie</th>
+            <th>Prognose/Monat</th>
+            <th>Prognose/Jahr</th>
+        </tr>
+        <tr>
+            <td>Restaurant Mittag (30 Covers/Tag)</td>
+            <td>CHF 24,000</td>
+            <td>CHF 288,000</td>
+        </tr>
+        <tr>
+            <td>Restaurant Abend (40 Covers/Tag)</td>
+            <td>CHF 63,000</td>
+            <td>CHF 756,000</td>
+        </tr>
+        <tr>
+            <td>Bärner Bröckli (8 Boards/Tag)</td>
+            <td>CHF 7,730</td>
+            <td>CHF 92,720</td>
+        </tr>
+        <tr>
+            <td>Packages (71 Packages/Monat)</td>
+            <td>CHF 23,560</td>
+            <td>CHF 282,720</td>
+        </tr>
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td><strong>CHF 118,290</strong></td>
+            <td><strong>CHF 1,419,440</strong></td>
+        </tr>
+    </table>
+
+    <div class="summary-box">
+        <h4>Gewinn-Prognose (nach Kosten):</h4>
+        <ul>
+            <li>Umsatz/Monat: CHF 118,290</li>
+            <li>Food Cost (30%): CHF 35,487</li>
+            <li>Personalkosten (35%): CHF 41,402</li>
+            <li>Overhead (15%): CHF 17,744</li>
+            <li><strong>Gewinn/Monat: CHF 23,657 (20%)</strong></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ZUSAMMENFASSUNG -->
+<div class="page">
+    <h2>Zusammenfassung & Nächste Schritte</h2>
+
+    <div class="section-intro">
+        <h3>Hotel Dakota ist bereit für die beste alpine Küche im Berner Oberland!</h3>
+        <p>Dieses Konzept bringt authentische Berner Küche auf ein neues Level. Regional, nachvollziehbar, ehrlich - mit Touch of Excellence. Tradition trifft auf Innovation.</p>
+    </div>
+
+    <h3>Die Zahlen auf einen Blick</h3>
+
+    <div class="summary-box">
+        <table style="border: none;">
+            <tr>
+                <td style="border: none;"><strong>Total Gerichte:</strong></td>
+                <td style="border: none;">21</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Restaurant Abend:</strong></td>
+                <td style="border: none;">13 Gerichte + 3 Menüs (mit kreativen Neuinterpretationen)</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Restaurant Mittag:</strong></td>
+                <td style="border: none;">10 Gerichte + 3 Menüs</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Packages:</strong></td>
+                <td style="border: none;">7 Erlebnis-Angebote</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Food Cost:</strong></td>
+                <td style="border: none;">30% Durchschnitt (Target 28-35%)</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Lieferanten:</strong></td>
+                <td style="border: none;">9 Partner, alle regional</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Umsatz-Prognose:</strong></td>
+                <td style="border: none;">CHF 1,419,440/Jahr</td>
+            </tr>
+            <tr>
+                <td style="border: none;"><strong>Gewinn-Prognose:</strong></td>
+                <td style="border: none;">CHF 283,890/Jahr (20%)</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 style="margin-top: 2em;">Besondere Highlights</h3>
+
+    <div class="highlight">
+        <h4>Restaurant Abend:</h4>
+        <p>• <strong>13 kreative Gerichte</strong> - Fokus auf Qualität statt Quantität<br>
+        • <strong>Multi-Texturen-Highlights</strong> - Kürbis in drei Texturen, Alpkäse-Reise, Forelle zwei Mal, Apfel-Explosion<br>
+        • <strong>Premium-Spezialitäten</strong> - Kalbsbries mit Morcheln, Dry-Aged Entrecôte (28 Tage)<br>
+        • <strong>"Bärner Bröckli"</strong> - Als Aperitivo in der Bar (15:00-18:00 Uhr)<br>
+        • <strong>6-Gang Degustation</strong> - Die Höhepunkte der Dakota-Küche (CHF 145)</p>
+    </div>
+
+    <div class="highlight">
+        <h4>Restaurant Mittag:</h4>
+        <p>• <strong>Wanderer-Menü</strong> - Kraftvoll und schnell (CHF 42)<br>
+        • <strong>45 Min. Service-Garantie</strong> - Perfekt für Business und Outdoor<br>
+        • <strong>Tagesgericht</strong> - Täglich wechselnd, saisonal (CHF 28)</p>
+    </div>
+
+    <div class="highlight">
+        <h4>Packages & Angebote:</h4>
+        <p>• <strong>Hike'n'Dine</strong> - Wanderung + 4-Gang-Menü (CHF 220)<br>
+        • <strong>Bike'n'Beef Berner Style</strong> - E-Bike + Steak-Dinner + Übernachtung (CHF 380)<br>
+        • <strong>Wellness & Genuss</strong> - 2 Übernachtungen + Kulinarik (CHF 650)</p>
+    </div>
+
+    <h3 style="margin-top: 2em;">Was macht das Dakota Food-Konzept einzigartig?</h3>
+
+    <div class="summary-box">
+        <ul>
+            <li><strong>Alpine Authentizität</strong> - Berner Küche modern interpretiert, aber bodenständig</li>
+            <li><strong>Fokussierte Karte</strong> - 13 Gerichte am Abend, 8 am Mittag - Qualität vor Quantität</li>
+            <li><strong>Kreative Multi-Texturen</strong> - Regional interpretiert (Kürbis, Alpkäse, Forelle, Apfel)</li>
+            <li><strong>"Bärner Bröckli"</strong> - Sharing-Konzept als Bar-Angebot (15:00-18:00 Uhr)</li>
+            <li><strong>100% regionale Lieferanten</strong> - von Metzgerei Trachsel bis Alpkäserei Engstlenalp</li>
+            <li><strong>Wirtschaftlich sinnvoll</strong> - Food Cost 30%, faire Preise, starke Synergien</li>
+            <li><strong>Gastfreundschaft</strong> - Hotel-Gäste UND Externe, zugänglich, ehrlich</li>
+        </ul>
+    </div>
+
+    <h3 style="margin-top: 2em;">Nächste Schritte</h3>
+
+    <div class="summary-box">
+        <h4>Phase 1: Feedback & Freigabe (Woche 1)</h4>
+        <ul>
+            <li>Feedback-Runde mit Hotel Dakota Management</li>
+            <li>Anpassungen besprechen</li>
+            <li>Gerichte & Preise freigeben</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Phase 2: Lieferanten-Akquise (Woche 2-3)</h4>
+        <ul>
+            <li>Kontakt mit Metzgerei Trachsel, Forellenzucht, Alpkäsereien</li>
+            <li>Lieferverträge aushandeln</li>
+            <li>Liefer-Rhythmen festlegen</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Phase 3: Rezeptur-Entwicklung & Team-Training (Woche 4-6)</h4>
+        <ul>
+            <li>Rezepturen ausarbeiten und testen</li>
+            <li>Food Cost final kalkulieren</li>
+            <li>Küchenbrigade schulen (Sous-vide, Fermentation, Räuchern)</li>
+            <li>Service-Briefings zu jedem Gericht</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Phase 4: Soft Opening (Woche 7)</h4>
+        <ul>
+            <li>Nur Hotel-Gäste (Halbpension)</li>
+            <li>Feedback sammeln, Timing optimieren</li>
+        </ul>
+
+        <h4 style="margin-top: 1em;">Phase 5: Grand Opening (Woche 8)</h4>
+        <ul>
+            <li>Externe Gäste willkommen</li>
+            <li>Marketing: Lokale Presse, Social Media</li>
+            <li>Packages lancieren</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p><strong>Erstellt: Oktober 2025</strong></p>
+        <p>Marcel Gärtner - Gastroexperte</p>
+        <p>Für: Hotel Dakota, Meiringen (Berner Oberland)</p>
+        <p style="margin-top: 1em;"><em>Alpine Berner Küche - Regional, Nachvollziehbar, Ehrlich</em></p>
+    </div>
+</div>
+
+</body>
+</html>

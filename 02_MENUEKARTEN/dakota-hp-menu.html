@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HP-Menü | Hotel Dakota - Halbpension</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #32373c;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #32373c 0%, #1a1d20 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #dba765;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #e8e8e8;
+            font-weight: 300;
+        }
+
+        .header .info {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #dba765;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #dba765;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .emoji {
+            font-size: 2.5rem;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .menu-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            border-color: #dba765;
+            box-shadow: 0 10px 25px rgba(219, 167, 101, 0.2);
+        }
+
+        .menu-item.selected {
+            border-color: #dba765;
+            background: linear-gradient(135deg, #fff9f0 0%, #fef5e7 100%);
+            box-shadow: 0 5px 15px rgba(219, 167, 101, 0.3);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .menu-item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #32373c;
+            flex: 1;
+        }
+
+        .menu-item-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #dba765;
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+
+        .menu-item-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .menu-item-details {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dba765;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .badge.vegetarian {
+            background: #27ae60;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dba765 0%, #c4915a 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(219, 167, 101, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #32373c 0%, #1a1d20 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(50, 55, 60, 0.4);
+        }
+
+        /* Summary Section */
+        .summary {
+            background: linear-gradient(135deg, #32373c 0%, #1a1d20 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .summary h2 {
+            font-family: 'Playfair Display', serif;
+            color: #dba765;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #dba765;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 2px solid #dba765;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .action-buttons {
+                display: none;
+            }
+
+            .menu-item:hover {
+                transform: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: #dba765;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏔️ Halbpension-Menü</h1>
+            <div class="subtitle">Hotel Dakota - Dakota Air Lounge</div>
+            <div class="info">
+                3-Gang Menü für Hotelgäste | Täglich 18:30 - 21:30 Uhr<br>
+                Amthausgasse 2, 3860 Meiringen | Berner Oberland
+            </div>
+        </div>
+
+        <!-- VORSPEISEN -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🥣</span>
+                Gang 1 - Vorspeise (Bitte wählen)
+            </h2>
+            <div class="menu-grid" id="vorspeisen-grid">
+                <!-- Will be filled by JavaScript -->
+            </div>
+        </div>
+
+        <!-- HAUPTGERICHTE -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🍽️</span>
+                Gang 2 - Hauptgericht (Bitte wählen)
+            </h2>
+            <div class="menu-grid" id="hauptgerichte-grid">
+                <!-- Will be filled by JavaScript -->
+            </div>
+        </div>
+
+        <!-- DESSERTS -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🍰</span>
+                Gang 3 - Dessert (Bitte wählen)
+            </h2>
+            <div class="menu-grid" id="desserts-grid">
+                <!-- Will be filled by JavaScript -->
+            </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="summary">
+            <h2>📋 Ihre Menü-Auswahl</h2>
+            <div class="summary-item">
+                <span>Vorspeise:</span>
+                <span id="selected-vorspeise">Noch nicht gewählt</span>
+            </div>
+            <div class="summary-item">
+                <span>Hauptgericht:</span>
+                <span id="selected-hauptgericht">Noch nicht gewählt</span>
+            </div>
+            <div class="summary-item">
+                <span>Dessert:</span>
+                <span id="selected-dessert">Noch nicht gewählt</span>
+            </div>
+            <div class="summary-item">
+                <span>Gesamt-Preis:</span>
+                <span id="total-price">CHF 0.00</span>
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="sendToReception()">
+                📧 An Rezeption weiterleiten
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+                🖨️ Menü drucken
+            </button>
+            <button class="btn btn-secondary" onclick="resetSelection()">
+                🔄 Auswahl zurücksetzen
+            </button>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="logo">"Destination Delicious"</div>
+            <div>Genuss. Design. Atmosphäre.</div>
+            <div style="margin-top: 15px;">
+                📞 +41 33 971 50 01 | 📧 info@dakota-airlounge.ch | 🌐 www.dakota-airlounge.ch
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // HP-MENU DATABASE
+        const HP_MENU = {
+            vorspeisen: [
+                {
+                    name: "Kürbissuppe mit Ingwer",
+                    preis: 20,
+                    beschreibung: "Kokosmilch | Haselnussöl | Geröstete Haselnüsse",
+                    details: "Hokkaido-Kürbis, Ingwer, Kokosmilch, Haselnussöl, geröstete Haselnüsse",
+                    vegetarisch: true
+                },
+                {
+                    name: "Berner Gerstensuppe",
+                    preis: 22,
+                    beschreibung: "Geräucherte Forelle | Petersilien-Öl | Sauerteigbrot",
+                    details: "Klare Gerstensuppe, geräucherte Forelle, Petersilien-Öl, Sauerteigbrot",
+                    vegetarisch: false
+                },
+                {
+                    name: "Gemischter Salat mit Ziegenkäse",
+                    preis: 16,
+                    beschreibung: "Marktgemüse | Ziegenfrischkäse | Honig-Senf-Dressing",
+                    details: "Frischer Blattsalat, Tomaten, Gurken, Ziegenfrischkäse, Honig-Senf-Dressing",
+                    vegetarisch: true
+                },
+                {
+                    name: "Randen-Carpaccio",
+                    preis: 24,
+                    beschreibung: "Ziegenkäse | Walnüsse karamellisiert | Randen-Essenz",
+                    details: "Rote Randen (geröstet + roh), Ziegenfrischkäse, Walnüsse karamellisiert, Randen-Essenz",
+                    vegetarisch: true
+                }
+            ],
+            hauptgerichte: [
+                {
+                    name: "Berner Forelle konfiert",
+                    preis: 42,
+                    beschreibung: "Sous-vide 52°C | Sellerie-Püree | Beurre Blanc | Bergkräuter",
+                    details: "Forelle sous-vide gegart, Sellerie-Püree, Beurre Blanc, Bergkräuter",
+                    vegetarisch: false
+                },
+                {
+                    name: "Forelle gebraten (Müllerin Art)",
+                    preis: 30,
+                    beschreibung: "Petersilienkartoffeln | Zitrone | Nussbutter",
+                    details: "Forelle klassisch in Butter gebraten, Petersilienkartoffeln, Zitrone, Nussbutter",
+                    vegetarisch: false
+                },
+                {
+                    name: "Zürcher Geschnetzeltes",
+                    preis: 36,
+                    beschreibung: "Kalbfleisch | Champignon-Rahmsauce | Rösti",
+                    details: "Zartes Kalbfleisch in cremiger Champignon-Rahmsauce mit goldbrauner Rösti",
+                    vegetarisch: false
+                },
+                {
+                    name: "Polenta mit Steinpilz-Ragout",
+                    preis: 28,
+                    beschreibung: "Cremige Polenta | Geschmortes Steinpilz-Ragout | Parmesan",
+                    details: "Cremige Polenta mit geschmortem Steinpilz-Ragout und frisch gehobeltem Parmesan",
+                    vegetarisch: true
+                },
+                {
+                    name: "Pizzoccheri Valtellinesi",
+                    preis: 28,
+                    beschreibung: "Buchweizennudeln | Wirsing | Kartoffeln | Alpkäse | Salbei-Butter",
+                    details: "Breite Buchweizennudeln mit Wirsing, Kartoffeln und geschmolzenem Alpkäse",
+                    vegetarisch: true
+                }
+            ],
+            desserts: [
+                {
+                    name: "Apfelstrudel warm",
+                    preis: 14,
+                    beschreibung: "Blätterteig hausgemacht | Boskop-Äpfel | Zimt | Vanillesauce",
+                    details: "Blätterteig hausgemacht, Boskop-Äpfel, Zimt, Rosinen, warme Vanillesauce",
+                    vegetarisch: true
+                },
+                {
+                    name: "Meringues mit Schlagrahm",
+                    preis: 14,
+                    beschreibung: "Meiringer Spezialität | Baiser | Saisonale Früchte",
+                    details: "Meringue (Baiser), Schlagrahm, saisonale Früchte - die Meiringer Spezialität!",
+                    vegetarisch: true
+                },
+                {
+                    name: "Toblerone-Mousse",
+                    preis: 16,
+                    beschreibung: "Toblerone-Schokolade | Honig-Nougat | Mandelsplitter | Schlagrahm",
+                    details: "Toblerone-Schokolade, Mousse luftig, Honig-Nougat, Mandelsplitter, Schlagrahm",
+                    vegetarisch: true
+                },
+                {
+                    name: "Crème Brûlée",
+                    preis: 16,
+                    beschreibung: "Mit Tonkabohne | Karamellkruste | Shortbread",
+                    details: "Crème mit Tonkabohne, knusprige Karamellkruste, Shortbread-Keks",
+                    vegetarisch: true
+                }
+            ]
+        };
+
+        // Selection State
+        let selectedItems = {
+            vorspeise: null,
+            hauptgericht: null,
+            dessert: null
+        };
+
+        // Initialize Menu
+        function initializeMenu() {
+            renderMenuCategory('vorspeisen', 'vorspeisen-grid', 'vorspeise');
+            renderMenuCategory('hauptgerichte', 'hauptgerichte-grid', 'hauptgericht');
+            renderMenuCategory('desserts', 'desserts-grid', 'dessert');
+        }
+
+        // Render Menu Category
+        function renderMenuCategory(category, gridId, selectionKey) {
+            const grid = document.getElementById(gridId);
+            const items = HP_MENU[category];
+
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'menu-item';
+                itemDiv.onclick = () => selectItem(category, index, selectionKey);
+                itemDiv.id = `${selectionKey}-${index}`;
+
+                itemDiv.innerHTML = `
+                    <div class="menu-item-header">
+                        <div class="menu-item-name">${item.name}</div>
+                        <div class="menu-item-price">CHF ${item.preis}</div>
+                    </div>
+                    <div class="menu-item-desc">${item.beschreibung}</div>
+                    <div class="menu-item-details">${item.details}</div>
+                    ${item.vegetarisch ? '<span class="badge vegetarian">🌿 Vegetarisch</span>' : ''}
+                `;
+
+                grid.appendChild(itemDiv);
+            });
+        }
+
+        // Select Item
+        function selectItem(category, index, selectionKey) {
+            // Deselect all in this category
+            document.querySelectorAll(`[id^="${selectionKey}-"]`).forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Select this item
+            const selectedElement = document.getElementById(`${selectionKey}-${index}`);
+            selectedElement.classList.add('selected');
+
+            // Update selection state
+            selectedItems[selectionKey] = HP_MENU[category][index];
+
+            // Update summary
+            updateSummary();
+        }
+
+        // Update Summary
+        function updateSummary() {
+            const vorspeisenText = selectedItems.vorspeise
+                ? `${selectedItems.vorspeise.name} (CHF ${selectedItems.vorspeise.preis})`
+                : 'Noch nicht gewählt';
+
+            const hauptgerichtText = selectedItems.hauptgericht
+                ? `${selectedItems.hauptgericht.name} (CHF ${selectedItems.hauptgericht.preis})`
+                : 'Noch nicht gewählt';
+
+            const dessertText = selectedItems.dessert
+                ? `${selectedItems.dessert.name} (CHF ${selectedItems.dessert.preis})`
+                : 'Noch nicht gewählt';
+
+            document.getElementById('selected-vorspeise').textContent = vorspeisenText;
+            document.getElementById('selected-hauptgericht').textContent = hauptgerichtText;
+            document.getElementById('selected-dessert').textContent = dessertText;
+
+            // Calculate total
+            const total = (selectedItems.vorspeise?.preis || 0) +
+                         (selectedItems.hauptgericht?.preis || 0) +
+                         (selectedItems.dessert?.preis || 0);
+
+            document.getElementById('total-price').textContent = `CHF ${total.toFixed(2)}`;
+        }
+
+        // Reset Selection
+        function resetSelection() {
+            selectedItems = {
+                vorspeise: null,
+                hauptgericht: null,
+                dessert: null
+            };
+
+            document.querySelectorAll('.menu-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            updateSummary();
+        }
+
+        // Send to Reception
+        function sendToReception() {
+            if (!selectedItems.vorspeise || !selectedItems.hauptgericht || !selectedItems.dessert) {
+                alert('Bitte wählen Sie alle 3 Gänge aus, bevor Sie die Auswahl an die Rezeption senden.');
+                return;
+            }
+
+            const heute = new Date().toLocaleDateString('de-CH', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const total = (selectedItems.vorspeise.preis +
+                          selectedItems.hauptgericht.preis +
+                          selectedItems.dessert.preis).toFixed(2);
+
+            const emailBody = `Guten Tag,
+
+Halbpension-Menü Bestellung für ${heute}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🥣 VORSPEISE:
+${selectedItems.vorspeise.name} - CHF ${selectedItems.vorspeise.preis}
+${selectedItems.vorspeise.beschreibung}
+
+🍽️ HAUPTGERICHT:
+${selectedItems.hauptgericht.name} - CHF ${selectedItems.hauptgericht.preis}
+${selectedItems.hauptgericht.beschreibung}
+
+🍰 DESSERT:
+${selectedItems.dessert.name} - CHF ${selectedItems.dessert.preis}
+${selectedItems.dessert.beschreibung}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GESAMT: CHF ${total}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bitte an die Küche weiterleiten.
+
+Mit freundlichen Grüssen,
+Hotel Dakota Rezeption`;
+
+            const mailtoLink = `mailto:info@dakota-airlounge.ch?subject=HP-Menü Bestellung - ${heute}&body=${encodeURIComponent(emailBody)}`;
+
+            window.location.href = mailtoLink;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeMenu);
+    </script>
+</body>
+</html>

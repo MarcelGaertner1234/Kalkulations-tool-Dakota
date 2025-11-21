@@ -1,0 +1,4553 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dakota Kalkulations-Tool | Professional Food Cost Management</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase SDK v9 (Modular) -->
+    <script type="module">
+        // Firebase v9 Modular SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcJIxRaSEgZ81zgbS0ABPrshHnWi7WeII",
+            authDomain: "dakota-485ec.firebaseapp.com",
+            projectId: "dakota-485ec",
+            storageBucket: "dakota-485ec.firebasestorage.app",
+            messagingSenderId: "167881815096",
+            appId: "1:167881815096:web:4f21dc27bcf1ad7dcc62cd",
+            measurementId: "G-C40N5JEB9E"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const firestoreDB = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Export to global scope for use in main script
+        window.firebaseApp = app;
+        window.firestoreDB = firestoreDB;
+        window.firebaseAuth = auth;
+        window.firebaseModules = {
+            collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy,
+            signInAnonymously, onAuthStateChanged
+        };
+
+        console.log('✅ Firebase initialized successfully');
+    </script>
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dakota-gold: #dba765;
+            --dakota-dark: #32373c;
+            --dakota-light: #f5f5f5;
+            --dakota-white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: var(--dakota-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dakota-dark);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--dakota-dark) 0%, #1a1d20 100%);
+            color: var(--dakota-gold);
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dakota-gold);
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* ===== NAVIGATION TABS ===== */
+        .nav-tabs {
+            background: var(--dakota-white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 100px;
+            z-index: 999;
+        }
+
+        .tabs-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 1.25rem 2rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-button:hover {
+            background: rgba(219, 167, 101, 0.1);
+            color: var(--dakota-gold);
+        }
+
+        .tab-button.active {
+            color: var(--dakota-gold);
+            border-bottom-color: var(--dakota-gold);
+            background: rgba(219, 167, 101, 0.05);
+        }
+
+        .tab-icon {
+            font-size: 1.2rem;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--dakota-white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--dakota-gold);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dakota-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--dakota-gold);
+            color: var(--dakota-white);
+        }
+
+        .btn-primary:hover {
+            background: #c89654;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(219, 167, 101, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dakota-dark);
+            color: var(--dakota-white);
+        }
+
+        .btn-secondary:hover {
+            background: #1a1d20;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dakota-dark);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--dakota-gold);
+            box-shadow: 0 0 0 3px rgba(219, 167, 101, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        /* ===== TABLE ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: var(--dakota-dark);
+            color: var(--dakota-gold);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 3px solid var(--dakota-gold);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background: rgba(219, 167, 101, 0.05);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: var(--dakota-dark);
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .badge-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .badge-gold {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--dakota-gold);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        /* ===== SEARCH & FILTER ===== */
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        /* ===== AUTOCOMPLETE COMPONENT ===== */
+        .autocomplete-container {
+            position: relative;
+            flex: 2;
+        }
+
+        .autocomplete-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .autocomplete-input:focus {
+            outline: none;
+            border-color: var(--dakota-gold);
+            box-shadow: 0 0 0 3px rgba(219, 167, 101, 0.1);
+        }
+
+        .autocomplete-input.has-selection {
+            background-color: #f0f8f0;
+            border-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid var(--dakota-gold);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background-color: rgba(219, 167, 101, 0.1);
+        }
+
+        .autocomplete-item-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .autocomplete-item-category {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-left: 0.5rem;
+        }
+
+        .autocomplete-no-results {
+            padding: 1rem;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* ===== FOOD COST INDICATOR ===== */
+        .food-cost-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .food-cost-excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .food-cost-good {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .food-cost-warning {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(219, 167, 101, 0.3);
+            border-top-color: var(--dakota-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tabs-container {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                border-bottom: 1px solid #eee;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 0.9rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ===== ACTION BUTTONS IN TABLE ===== */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            color: var(--dakota-gold);
+            transform: scale(1.1);
+        }
+
+        .btn-icon.delete:hover {
+            color: var(--danger);
+        }
+
+        /* ===== CALCULATION RESULT ===== */
+        .calc-result {
+            background: linear-gradient(135deg, var(--dakota-gold) 0%, #c89654 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .calc-result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .calc-result-item {
+            text-align: center;
+        }
+
+        .calc-result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-result-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* ===== REZEPT DETAIL MODAL ===== */
+        .rezept-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .rezept-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rezept-modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .rezept-modal-header {
+            background: linear-gradient(135deg, var(--dakota-dark) 0%, #1a1d20 100%);
+            color: var(--dakota-gold);
+            padding: 2rem;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+
+        .rezept-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rezept-modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .rezept-modal-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .rezept-modal-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .rezept-modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rezept-modal-body {
+            padding: 2rem;
+        }
+
+        .rezept-modal-section {
+            margin-bottom: 2rem;
+        }
+
+        .rezept-modal-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dakota-dark);
+            border-bottom: 2px solid var(--dakota-gold);
+            padding-bottom: 0.5rem;
+        }
+
+        .rezept-zutaten-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .rezept-zutat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--dakota-light);
+            border-radius: 6px;
+            border-left: 3px solid var(--dakota-gold);
+        }
+
+        .rezept-zutat-name {
+            font-weight: 600;
+            color: var(--dakota-dark);
+        }
+
+        .rezept-zutat-menge {
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .rezept-zubereitung-list {
+            counter-reset: step-counter;
+            list-style: none;
+        }
+
+        .rezept-zubereitung-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .rezept-zubereitung-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--dakota-gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .rezept-cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            background: var(--dakota-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .rezept-cost-item {
+            text-align: center;
+        }
+
+        .rezept-cost-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dakota-dark);
+        }
+
+        .rezept-cost-value.good {
+            color: var(--success);
+        }
+
+        .rezept-cost-value.warning {
+            color: var(--warning);
+        }
+
+        .rezept-cost-value.danger {
+            color: var(--danger);
+        }
+
+        .rezept-cost-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+        }
+
+        .rezept-bemerkung {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .rezept-quelle {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .rezept-quelle a {
+            color: var(--dakota-gold);
+            text-decoration: none;
+        }
+
+        .rezept-quelle a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">DAKOTA KALKULATIONS-TOOL</div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalLebensmittel">0</div>
+                    <div class="stat-label">Lebensmittel</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalRezepte">0</div>
+                    <div class="stat-label">Rezepte</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="avgFoodCost">0%</div>
+                    <div class="stat-label">Ø Food Cost</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="nav-tabs">
+        <div class="tabs-container">
+            <button class="tab-button active" onclick="switchTab('lebensmittel')">
+                <span class="tab-icon">🥕</span> Lebensmittel-Datenbank
+            </button>
+            <button class="tab-button" onclick="switchTab('rezepte')">
+                <span class="tab-icon">📖</span> Rezept-Datenbank
+            </button>
+            <button class="tab-button" onclick="switchTab('kalkulation')">
+                <span class="tab-icon">💰</span> Kalkulation
+            </button>
+            <button class="tab-button" onclick="switchTab('einkaufsliste')">
+                <span class="tab-icon">🛒</span> Einkaufsliste
+            </button>
+            <button class="tab-button" onclick="switchTab('menuekarten')">
+                <span class="tab-icon">🍽️</span> Menükarten
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- TAB 1: LEBENSMITTEL-DATENBANK -->
+        <div id="tab-lebensmittel" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>🥕</span> Lebensmittel-Stammdaten
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="openLebensmittelModal()">
+                            ➕ Neues Lebensmittel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Lebensmittel importieren (.json)
+                                <input type="file" id="importLebensmittelFile" accept=".json" style="display: none;" onchange="importLebensmittelJSON(event)">
+                            </label>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportLebensmittelJSON()">
+                                📤 Lebensmittel exportieren (.json)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchLebensmittel"
+                           placeholder="Lebensmittel suchen... (Name, Kategorie, Lieferant)"
+                           onkeyup="searchLebensmittel()">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Filter nach Kategorie:</label>
+                    <select class="form-select" id="filterKategorie" onchange="filterLebensmittel()">
+                        <option value="">Alle Kategorien</option>
+                        <option value="Fleisch">Fleisch</option>
+                        <option value="Fisch & Meeresfrüchte">Fisch & Meeresfrüchte</option>
+                        <option value="Käse">Käse</option>
+                        <option value="Milchprodukte">Milchprodukte</option>
+                        <option value="Gemüse">Gemüse</option>
+                        <option value="Pilze">Pilze</option>
+                        <option value="Teigwaren & Getreide">Teigwaren & Getreide</option>
+                        <option value="Gewürze & Kräuter">Gewürze & Kräuter</option>
+                        <option value="Öle & Essig">Öle & Essig</option>
+                        <option value="Früchte">Früchte</option>
+                        <option value="Premium-Zutaten">Premium-Zutaten</option>
+                        <option value="Alkohol (Kochen)">Alkohol (Kochen)</option>
+                        <option value="Sonstige">Sonstige</option>
+                    </select>
+                </div>
+
+                <div id="lebensmittelTable"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: REZEPT-DATENBANK -->
+        <div id="tab-rezepte" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>📖</span> Rezept-Verwaltung
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="openRezeptModal()">
+                            ➕ Neues Rezept
+                        </button>
+                    </div>
+                </div>
+
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Rezepte importieren (.json)
+                                <input type="file" id="importRezepteFile" accept=".json" style="display: none;" onchange="importRezepteJSON(event)">
+                            </label>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportRezepteJSON()">
+                                📤 Rezepte exportieren (.json)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchRezepte"
+                           placeholder="Rezepte suchen... (Name, Kategorie)"
+                           onkeyup="searchRezepte()">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Filter nach Kategorie:</label>
+                    <select class="form-select" id="filterRezeptKategorie" onchange="filterRezepte()">
+                        <option value="">Alle Kategorien</option>
+                        <option value="Vorspeise">Vorspeise</option>
+                        <option value="Suppe">Suppe</option>
+                        <option value="Hauptgericht Fleisch">Hauptgericht Fleisch</option>
+                        <option value="Hauptgericht Vegetarisch">Hauptgericht Vegetarisch</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Beilage">Beilage</option>
+                    </select>
+                </div>
+
+                <div id="rezepteTable"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: KALKULATION -->
+        <div id="tab-kalkulation" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>💰</span> Rezept-Kalkulation
+                    </h2>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Rezept auswählen:</label>
+                    <select class="form-select" id="calcRezeptSelect" onchange="loadRezeptForCalculation()">
+                        <option value="">-- Rezept wählen --</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Anzahl Personen:</label>
+                        <input type="number" class="form-input" id="calcPersonen" value="1" min="1" max="1000"
+                               onchange="recalculate()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Verkaufspreis (CHF/Person):</label>
+                        <input type="number" class="form-input" id="calcVerkaufspreis" step="0.01"
+                               onchange="recalculate()">
+                    </div>
+                </div>
+
+                <div id="calcDetails"></div>
+                <div id="calcResult"></div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="exportCalcPDF()">
+                        📄 Als PDF exportieren
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveCalculation()">
+                        💾 Kalkulation speichern
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: EINKAUFSLISTE -->
+        <div id="tab-einkaufsliste" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>🛒</span> Einkaufsliste Generator
+                    </h2>
+                    <button class="btn btn-primary" onclick="generateEinkaufsliste()">
+                        ✨ Einkaufsliste generieren
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Rezepte auswählen (mehrere möglich):</label>
+                    <div id="einkaufslisteRezepte" style="max-height: 300px; overflow-y: auto; border: 2px solid #ddd; border-radius: 8px; padding: 1rem;">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+                </div>
+
+                <div id="einkaufslisteResult"></div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="exportEinkaufslistePDF()">
+                        📄 Als PDF exportieren
+                    </button>
+                    <button class="btn btn-secondary" onclick="printEinkaufsliste()">
+                        🖨️ Drucken
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: MENÜKARTEN -->
+        <div id="tab-menuekarten" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>🍽️</span> Menükarten-Verwaltung
+                    </h2>
+                    <button class="btn btn-primary" onclick="openMenuekartenModal()">
+                        ➕ Neue Menükarte erstellen
+                    </button>
+                </div>
+
+                <!-- IMPORT/EXPORT BEREICH -->
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header" style="background: #e9ecef;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #495057;">
+                            <span>📤</span> Import/Export Daten
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                                📥 Menükarten importieren (.json)
+                                <input type="file" id="importMenuekartenFile" accept=".json" style="display: none;" onchange="importMenuekartenJSON(event)">
+                            </label>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportMenuekartenJSON()">
+                                📤 Menükarten exportieren (.json)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Filter nach Typ:</label>
+                    <select class="form-select" id="filterMenuekartenTyp" onchange="filterMenuekarten()" style="max-width: 400px;">
+                        <option value="">Alle Typen</option>
+                        <option value="abendkarte">🌙 Aktuelle à la carte Karte (Abendkarte)</option>
+                        <option value="mittagsmenu">☀️ Mittagsmenü (Mittagskarte)</option>
+                    </select>
+                </div>
+
+                <div id="menuekartenTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: LEBENSMITTEL BEARBEITEN/ERSTELLEN -->
+    <div id="lebensmittelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="lebensmittelModalTitle">Neues Lebensmittel</h2>
+                <button class="modal-close" onclick="closeLebensmittelModal()">×</button>
+            </div>
+
+            <form id="lebensmittelForm" onsubmit="saveLebensmittel(event)">
+                <input type="hidden" id="lm_id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Name *</label>
+                        <input type="text" class="form-input" id="lm_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kategorie *</label>
+                        <select class="form-select" id="lm_kategorie" required>
+                            <option value="">-- Wählen --</option>
+                            <option value="Fleisch">Fleisch</option>
+                            <option value="Fisch & Meeresfrüchte">Fisch & Meeresfrüchte</option>
+                            <option value="Käse">Käse</option>
+                            <option value="Milchprodukte">Milchprodukte</option>
+                            <option value="Gemüse">Gemüse</option>
+                            <option value="Pilze">Pilze</option>
+                            <option value="Teigwaren & Getreide">Teigwaren & Getreide</option>
+                            <option value="Gewürze & Kräuter">Gewürze & Kräuter</option>
+                            <option value="Öle & Essig">Öle & Essig</option>
+                            <option value="Früchte">Früchte</option>
+                            <option value="Premium-Zutaten">Premium-Zutaten</option>
+                            <option value="Alkohol (Kochen)">Alkohol (Kochen)</option>
+                            <option value="Sonstige">Sonstige</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Preis pro Einheit (CHF) *</label>
+                        <input type="number" class="form-input" id="lm_preis" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Einheit *</label>
+                        <select class="form-select" id="lm_einheit" required>
+                            <option value="kg">Kilogramm (kg)</option>
+                            <option value="L">Liter (L)</option>
+                            <option value="Stk">Stück (Stk)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Rüstverlust (%)</label>
+                        <input type="number" class="form-input" id="lm_ruestverlust" value="0" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Garverlust (%)</label>
+                        <input type="number" class="form-input" id="lm_garverlust" value="0" min="0" max="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Lieferant</label>
+                    <input type="text" class="form-input" id="lm_lieferant">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bemerkungen</label>
+                    <textarea class="form-textarea" id="lm_bemerkungen" rows="3"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success">💾 Speichern</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeLebensmittelModal()">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: REZEPT BEARBEITEN/ERSTELLEN -->
+    <div id="rezeptModal" class="modal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h2 id="rezeptModalTitle">Neues Rezept</h2>
+                <button class="modal-close" onclick="closeRezeptModal()">×</button>
+            </div>
+
+            <form id="rezeptForm" onsubmit="saveRezept(event)">
+                <input type="hidden" id="rz_id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Rezeptname *</label>
+                        <input type="text" class="form-input" id="rz_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kategorie *</label>
+                        <select class="form-select" id="rz_kategorie" required>
+                            <option value="">-- Wählen --</option>
+                            <option value="Vorspeise">Vorspeise</option>
+                            <option value="Suppe">Suppe</option>
+                            <option value="Hauptgang">Hauptgang</option>
+                            <option value="Dessert">Dessert</option>
+                            <option value="Amuse-Bouche">Amuse-Bouche</option>
+                            <option value="Zwischengang">Zwischengang</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Portionen *</label>
+                        <input type="number" class="form-input" id="rz_portionen" value="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Verkaufspreis (CHF) *</label>
+                        <input type="number" class="form-input" id="rz_verkaufspreis" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Beschreibung</label>
+                    <textarea class="form-textarea" id="rz_beschreibung" rows="2"></textarea>
+                </div>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
+
+                <h3 style="margin-bottom: 1rem;">Zutaten</h3>
+                <div id="rzZutatenContainer">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+
+                <button type="button" class="btn btn-primary btn-sm" onclick="addRezeptZutat()" style="margin-top: 1rem;">
+                    ➕ Zutat hinzufügen
+                </button>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
+
+                <h3 style="margin-bottom: 1rem;">Zubereitung</h3>
+                <div id="rzZubereitungContainer">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="addZubereitungsSchritt()" style="margin-top: 1rem;">
+                    ➕ Zubereitungsschritt hinzufügen
+                </button>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
+
+                <h3 style="margin-bottom: 1rem;">Allergene & Zusatzinformationen</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Allergene (kommagetrennt)</label>
+                    <input type="text" class="form-input" id="rz_allergene"
+                           placeholder="z.B. Gluten, Milch, Eier, Nüsse">
+                    <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.25rem;">
+                        Verfügbar: Gluten, Milch, Eier, Fisch, Nüsse, Erdnüsse, Soja, Sellerie, Senf, Sesam, Sulfite, Lupinen, Weichtiere, Krebstiere
+                    </small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Zubereitungszeit</label>
+                        <input type="text" class="form-input" id="rz_zubereitungszeit"
+                               placeholder="z.B. 45 Minuten">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Schwierigkeit</label>
+                        <select class="form-select" id="rz_schwierigkeit">
+                            <option value="">-- Nicht angegeben --</option>
+                            <option value="Einfach">Einfach</option>
+                            <option value="Mittel">Mittel</option>
+                            <option value="Schwer">Schwer</option>
+                            <option value="Profi">Profi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Quelle</label>
+                    <input type="text" class="form-input" id="rz_quelle"
+                           placeholder="z.B. Betty Bossi, Eigenes Rezept, https://...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bemerkung / Tipp</label>
+                    <textarea class="form-textarea" id="rz_bemerkung" rows="2"
+                              placeholder="Tipp für die Zubereitung oder Anrichtung..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success">💾 Rezept speichern</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeRezeptModal()">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: MENÜKARTE BEARBEITEN/ERSTELLEN -->
+    <div id="menuekarteModal" class="modal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <div class="modal-header">
+                <h2 id="menuekarteModalTitle">Neue Menükarte</h2>
+                <button class="modal-close" onclick="closeMenuekarteModal()">×</button>
+            </div>
+
+            <form id="menuekarteForm" onsubmit="saveMenuekarte(event)">
+                <input type="hidden" id="mk_id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Kartenname *</label>
+                        <input type="text" class="form-input" id="mk_name"
+                               placeholder="z.B. Abendkarte Dezember 2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Typ *</label>
+                        <select class="form-select" id="mk_typ" required>
+                            <option value="">-- Wählen --</option>
+                            <option value="abendkarte">🌙 Aktuelle à la carte Karte (Abendkarte)</option>
+                            <option value="mittagsmenu">☀️ Mittagsmenü (Mittagskarte)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="mk_aktiv">
+                        Diese Karte ist aktuell aktiv
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bemerkungen</label>
+                    <textarea class="form-textarea" id="mk_bemerkungen" rows="2"
+                              placeholder="z.B. Saison: Winter 2025, Gültig bis..."></textarea>
+                </div>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
+
+                <h3 style="margin-bottom: 1rem;">Gerichte auf der Karte</h3>
+
+                <!-- Rezept-Auswahl -->
+                <div style="margin-bottom: 2rem;">
+                    <label class="form-label">Rezept hinzufügen:</label>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 2;">
+                            <select class="form-select" id="mk_rezept_select">
+                                <option value="">-- Rezept auswählen --</option>
+                                <!-- Wird dynamisch gefüllt -->
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <select class="form-select" id="mk_rezept_kategorie">
+                                <option value="Vorspeise">Vorspeise</option>
+                                <option value="Suppe">Suppe</option>
+                                <option value="Hauptgang">Hauptgang</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Beilage">Beilage</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <select class="form-select" id="mk_rezept_wochentag">
+                                <option value="">Kein Wochentag</option>
+                                <option value="Montag">Montag</option>
+                                <option value="Dienstag">Dienstag</option>
+                                <option value="Mittwoch">Mittwoch</option>
+                                <option value="Donnerstag">Donnerstag</option>
+                                <option value="Freitag">Freitag</option>
+                                <option value="Samstag">Samstag</option>
+                                <option value="Sonntag">Sonntag</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="addRezeptToKarte()">
+                            ➕ Hinzufügen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Liste der hinzugefügten Gerichte -->
+                <div id="mk_gerichte_container">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
+
+                <!-- Kalkulation Preview -->
+                <div id="mk_kalkulation_preview" style="background: var(--dakota-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Karten-Kalkulation</h3>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_anzahl_gerichte">0</div>
+                            <div style="font-size: 0.85rem; opacity: 0.7;">Gerichte</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_avg_foodcost">0%</div>
+                            <div style="font-size: 0.85rem; opacity: 0.7;">Ø Food Cost</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_avg_preis">0.-</div>
+                            <div style="font-size: 0.85rem; opacity: 0.7;">Ø Verkaufspreis</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_total_wareneinsatz">0.-</div>
+                            <div style="font-size: 0.85rem; opacity: 0.7;">Total Wareneinsatz</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success">💾 Menükarte speichern</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeMenuekarteModal()">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== GLOBAL STATE =====
+        let db;
+        let lebensmittelData = [];
+        let rezepteData = [];
+        let menuekartenData = [];
+        let currentMenuekarteGerichte = [];
+        let currentEditId = null;
+
+        // ===== INDEXEDDB INIT =====
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('DakotaKalkulationDB', 2);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+
+                    // Lebensmittel Store
+                    if (!db.objectStoreNames.contains('lebensmittel')) {
+                        const lmStore = db.createObjectStore('lebensmittel', { keyPath: 'id', autoIncrement: true });
+                        lmStore.createIndex('name', 'name', { unique: false });
+                        lmStore.createIndex('kategorie', 'kategorie', { unique: false });
+                    }
+
+                    // Rezepte Store
+                    if (!db.objectStoreNames.contains('rezepte')) {
+                        const rzStore = db.createObjectStore('rezepte', { keyPath: 'id', autoIncrement: true });
+                        rzStore.createIndex('name', 'name', { unique: false });
+                        rzStore.createIndex('kategorie', 'kategorie', { unique: false });
+                    }
+
+                    // Menükarten Store (Version 2)
+                    if (!db.objectStoreNames.contains('menuekarten')) {
+                        const mkStore = db.createObjectStore('menuekarten', { keyPath: 'id', autoIncrement: true });
+                        mkStore.createIndex('typ', 'typ', { unique: false });
+                        mkStore.createIndex('name', 'name', { unique: false });
+                        mkStore.createIndex('aktiv', 'aktiv', { unique: false });
+                    }
+                };
+            });
+        }
+
+        // FIX 3: Migration - Fehlende gastro_id nachträglich vergeben
+        // Diese Funktion repariert bestehende Lebensmittel ohne gastro_id
+        async function migrateLebensmittelGastroIds() {
+            const lmOhneGastroId = lebensmittelData.filter(lm => !lm.gastro_id);
+
+            if (lmOhneGastroId.length === 0) {
+                console.log('✓ Alle Lebensmittel haben bereits eine gastro_id');
+                return;
+            }
+
+            console.log(`🔧 MIGRATION: ${lmOhneGastroId.length} Lebensmittel ohne gastro_id gefunden`);
+
+            // Finde höchste bestehende gastro_id
+            let nextId = lebensmittelData.reduce((max, lm) => {
+                return (lm.gastro_id && lm.gastro_id > max) ? lm.gastro_id : max;
+            }, 280) + 1; // Start nach höchster GASTRO_DATENBANK ID
+
+            // Alle Lebensmittel ohne gastro_id migrieren
+            for (const lm of lmOhneGastroId) {
+                lm.gastro_id = nextId++;
+                await updateLebensmittel(lm.id, lm);
+                console.log(`  ✓ ${lm.name} → gastro_id: ${lm.gastro_id}`);
+            }
+
+            // Daten neu laden
+            await loadLebensmittel();
+            console.log(`✅ MIGRATION ABGESCHLOSSEN - ${lmOhneGastroId.length} Lebensmittel aktualisiert`);
+        }
+
+        // ===== ZUBEREITUNGSSCHRITTE HELPER-FUNKTIONEN =====
+        // Diese Funktionen werden vom Rezept-Edit-Modal verwendet
+
+        // Zubereitungsschritte dynamisch hinzufügen
+        function addZubereitungsSchritt(text = '') {
+            const container = document.getElementById('rzZubereitungContainer');
+            const index = container.children.length;
+
+            const div = document.createElement('div');
+            div.className = 'zutat-row';
+            div.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.75rem; align-items: start;';
+            div.innerHTML = `
+                <span style="padding: 0.75rem; background: var(--dakota-gold); color: white; border-radius: 4px; font-weight: bold; min-width: 45px; text-align: center; font-size: 1.1rem;">
+                    ${index + 1}
+                </span>
+                <textarea class="form-textarea rz-zubereitung-schritt" rows="2"
+                          placeholder="Zubereitungsschritt ${index + 1}..."
+                          style="flex: 1;">${text}</textarea>
+                <button type="button" class="btn-icon delete" onclick="this.parentElement.remove(); updateZubereitungsNummern();" title="Schritt entfernen">🗑️</button>
+            `;
+
+            container.appendChild(div);
+        }
+
+        // Nummerierung der Zubereitungsschritte aktualisieren
+        function updateZubereitungsNummern() {
+            const container = document.getElementById('rzZubereitungContainer');
+            Array.from(container.children).forEach((div, index) => {
+                const numSpan = div.querySelector('span');
+                if (numSpan) numSpan.textContent = index + 1;
+                const textarea = div.querySelector('textarea');
+                if (textarea) textarea.placeholder = `Zubereitungsschritt ${index + 1}...`;
+            });
+        }
+
+        // ===== FIRESTORE HELPER-FUNKTIONEN =====
+        // Hybrid-Architektur: IndexedDB (lokal/schnell) + Firestore (Cloud/Sync)
+
+        let firestoreSyncEnabled = false;
+        let firestoreListeners = [];
+        let isSyncing = false; // FIX 3: Flag um Listener während Import/Migration zu ignorieren
+
+        // Wait for Firebase to be initialized
+        async function waitForFirebase() {
+            let attempts = 0;
+            while (!window.firestoreDB && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+            if (!window.firestoreDB) {
+                console.error('❌ Firebase konnte nicht geladen werden');
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize Firestore Sync
+        async function initFirestoreSync() {
+            console.log('🔄 Initialisiere Firestore-Synchronisation...');
+
+            const ready = await waitForFirebase();
+            if (!ready) {
+                console.warn('⚠️ Firestore nicht verfügbar, arbeite nur lokal');
+                return;
+            }
+
+            try {
+                // Anonymous Authentication
+                const { signInAnonymously, onAuthStateChanged } = window.firebaseModules;
+
+                onAuthStateChanged(window.firebaseAuth, async (user) => {
+                    if (user) {
+                        console.log('✅ Firebase Auth: Angemeldet als', user.uid);
+                        firestoreSyncEnabled = true;
+
+                        // FIX 2: Migration ZUERST, dann Listener (verhindert Race Condition)
+                        // Migriere lokale Daten zu Firestore (nur beim ersten Mal)
+                        await checkAndMigrateToFirestore();
+
+                        // Setup Echtzeit-Listeners NACH der Migration
+                        setupRealtimeListeners();
+                    } else {
+                        console.log('🔐 Melde an bei Firebase...');
+                        await signInAnonymously(window.firebaseAuth);
+                    }
+                });
+
+            } catch (error) {
+                console.error('❌ Firestore Init Fehler:', error);
+                firestoreSyncEnabled = false;
+            }
+        }
+
+        // Setup Realtime Listeners für alle 3 Collections
+        function setupRealtimeListeners() {
+            const { collection, onSnapshot } = window.firebaseModules;
+
+            // Listener: Lebensmittel
+            const lmUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'lebensmittel'),
+                (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Lebensmittel-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
+                    snapshot.docChanges().forEach(async (change) => {
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            // Update IndexedDB lokal
+                            await syncFromFirestoreToIndexedDB('lebensmittel', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('lebensmittel', parseInt(change.doc.id, 10));
+                        }
+                    });
+
+                    // UI refresh
+                    if (document.querySelector('#tab-lebensmittel.active')) {
+                        loadLebensmittel();
+                    }
+                },
+                (error) => console.error('Lebensmittel Listener Error:', error)
+            );
+
+            // Listener: Rezepte
+            const rzUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'rezepte'),
+                (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Rezepte-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
+                    snapshot.docChanges().forEach(async (change) => {
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            await syncFromFirestoreToIndexedDB('rezepte', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('rezepte', parseInt(change.doc.id, 10));
+                        }
+                    });
+
+                    if (document.querySelector('#tab-rezepte.active')) {
+                        loadRezepte();
+                    }
+                },
+                (error) => console.error('Rezepte Listener Error:', error)
+            );
+
+            // Listener: Menükarten
+            const mkUnsubscribe = onSnapshot(
+                collection(window.firestoreDB, 'menuekarten'),
+                (snapshot) => {
+                    // FIX 3: Ignoriere Änderungen während Import/Migration
+                    if (isSyncing) {
+                        console.log('⏳ Menükarten-Listener pausiert während Import/Migration');
+                        return;
+                    }
+
+                    snapshot.docChanges().forEach(async (change) => {
+                        // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
+                        const data = {
+                            ...change.doc.data(),
+                            id: parseInt(change.doc.id, 10)
+                        };
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            await syncFromFirestoreToIndexedDB('menuekarten', data);
+                        } else if (change.type === 'removed') {
+                            await deleteFromIndexedDB('menuekarten', parseInt(change.doc.id, 10));
+                        }
+                    });
+
+                    if (document.querySelector('#tab-menuekarten.active')) {
+                        loadMenuekartenTab();
+                    }
+                },
+                (error) => console.error('Menükarten Listener Error:', error)
+            );
+
+            firestoreListeners.push(lmUnsubscribe, rzUnsubscribe, mkUnsubscribe);
+            console.log('✅ Echtzeit-Listeners aktiviert');
+        }
+
+        // Sync: Firestore → IndexedDB
+        async function syncFromFirestoreToIndexedDB(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+
+                // FIX: Sicherstellen dass ID ein Number ist (Firestore liefert Strings)
+                if (typeof data.id === 'string') {
+                    data.id = parseInt(data.id, 10);
+                }
+
+                // Prüfe ob existiert
+                const getRequest = store.get(data.id);
+
+                getRequest.onsuccess = () => {
+                    const existing = getRequest.result;
+
+                    // Update nur wenn Firestore-Version neuer ist
+                    if (!existing || !existing._firestoreTimestamp ||
+                        data._firestoreTimestamp > existing._firestoreTimestamp) {
+
+                        // FIX: Menükarten - Daten validieren beim Laden aus Firestore
+                        if (storeName === 'menuekarten' && data.gerichte) {
+                            // Sicherstellen dass gerichte ein Array ist (nicht Object/Map)
+                            if (!Array.isArray(data.gerichte)) {
+                                console.warn(`⚠️ Repariere ${data.name}: gerichte war Object, konvertiere zu Array`);
+                                data.gerichte = Object.values(data.gerichte);
+                            }
+
+                            // Datentypen forcieren: rezept_id und reihenfolge als Numbers
+                            data.gerichte = data.gerichte.map(g => ({
+                                ...g,
+                                rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                                reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                                kategorie: g.kategorie || ''
+                            }));
+                        }
+
+                        store.put(data);
+                    }
+                };
+
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // Delete from IndexedDB
+        async function deleteFromIndexedDB(storeName, docId) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.delete(docId);
+
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // Sync: IndexedDB → Firestore
+        async function syncToFirestore(storeName, data) {
+            if (!firestoreSyncEnabled) return;
+
+            try {
+                const { doc, setDoc } = window.firebaseModules;
+                const docRef = doc(window.firestoreDB, storeName, String(data.id));
+
+                // Timestamp hinzufügen
+                const dataWithTimestamp = {
+                    ...data,
+                    _firestoreTimestamp: Date.now(),
+                    _lastModified: new Date().toISOString()
+                };
+
+                // FIX: Menükarten - Arrays explizit schützen, Datentypen forcieren
+                if (storeName === 'menuekarten' && dataWithTimestamp.gerichte) {
+                    // Sicherstellen dass gerichte ein Array ist (nicht Object/Map)
+                    if (!Array.isArray(dataWithTimestamp.gerichte)) {
+                        console.warn('⚠️ gerichte war kein Array, konvertiere zu Array');
+                        dataWithTimestamp.gerichte = Object.values(dataWithTimestamp.gerichte);
+                    }
+
+                    // Datentypen forcieren: rezept_id und reihenfolge als Numbers
+                    dataWithTimestamp.gerichte = dataWithTimestamp.gerichte.map(g => ({
+                        ...g,
+                        rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                        reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                        kategorie: g.kategorie || ''
+                    }));
+                }
+
+                await setDoc(docRef, dataWithTimestamp, { merge: true });
+                console.log(`✅ Sync zu Firestore: ${storeName}/${data.id}`);
+
+            } catch (error) {
+                console.error(`❌ Firestore Sync Error (${storeName}):`, error);
+            }
+        }
+
+        // Delete from Firestore
+        async function deleteFromFirestore(storeName, docId) {
+            if (!firestoreSyncEnabled) return;
+
+            try {
+                const { doc, deleteDoc } = window.firebaseModules;
+                const docRef = doc(window.firestoreDB, storeName, String(docId));
+                await deleteDoc(docRef);
+                console.log(`🗑️ Gelöscht aus Firestore: ${storeName}/${docId}`);
+
+            } catch (error) {
+                console.error(`❌ Firestore Delete Error (${storeName}):`, error);
+            }
+        }
+
+        // Migriere alle lokalen Daten zu Firestore (einmalig)
+        async function checkAndMigrateToFirestore() {
+            // Prüfe ob bereits migriert
+            const migrated = localStorage.getItem('firestore_migrated');
+            if (migrated === 'true') {
+                console.log('✓ Daten bereits in Firestore vorhanden');
+                return;
+            }
+
+            console.log('🚀 Starte Migration: IndexedDB → Firestore...');
+
+            // FIX 3: Flag setzen um Firestore-Listener zu ignorieren während Migration
+            isSyncing = true;
+
+            try {
+                // Migriere Lebensmittel
+                const lmCount = await migrateCollectionToFirestore('lebensmittel', lebensmittelData);
+                console.log(`✅ ${lmCount} Lebensmittel migriert`);
+
+                // Migriere Rezepte
+                const rzCount = await migrateCollectionToFirestore('rezepte', rezepteData);
+                console.log(`✅ ${rzCount} Rezepte migriert`);
+
+                // Migriere Menükarten
+                const mkCount = await migrateCollectionToFirestore('menuekarten', menuekartenData);
+                console.log(`✅ ${mkCount} Menükarten migriert`);
+
+                // Markiere als migriert
+                localStorage.setItem('firestore_migrated', 'true');
+
+                alert(`🎉 Migration abgeschlossen!\n\n${lmCount} Lebensmittel\n${rzCount} Rezepte\n${mkCount} Menükarten\n\nSind jetzt in der Cloud synchronisiert.`);
+
+            } catch (error) {
+                console.error('❌ Migration fehlgeschlagen:', error);
+                alert(`❌ Migration fehlgeschlagen:\n\n${error.message}\n\nBitte Console prüfen.`);
+            } finally {
+                // FIX 3: Flag zurücksetzen (wird IMMER ausgeführt, auch bei Fehler)
+                isSyncing = false;
+            }
+        }
+
+        // Migriere eine Collection zu Firestore
+        async function migrateCollectionToFirestore(storeName, dataArray) {
+            if (!dataArray || dataArray.length === 0) return 0;
+
+            let count = 0;
+            for (const item of dataArray) {
+                await syncToFirestore(storeName, item);
+                count++;
+
+                // Progress alle 10 Einträge
+                if (count % 10 === 0) {
+                    console.log(`  ${storeName}: ${count}/${dataArray.length}...`);
+                }
+            }
+
+            return count;
+        }
+
+        // Manuelle Migration nur für Menükarten (für Console)
+        // Aufruf: window.manualMigrateMenuekarten()
+        window.manualMigrateMenuekarten = async function() {
+            if (!firestoreSyncEnabled) {
+                console.error('❌ Firestore ist nicht aktiviert!');
+                return;
+            }
+
+            console.log('🚀 Starte manuelle Menükarten-Migration...');
+
+            // Menükarten neu laden
+            await loadMenuekarten();
+
+            const mkCount = await migrateCollectionToFirestore('menuekarten', menuekartenData);
+            console.log(`✅ ${mkCount} Menükarten zu Firestore migriert!`);
+
+            alert(`🎉 Migration abgeschlossen!\n\n${mkCount} Menükarten sind jetzt in Firestore.\n\nÖffne Firebase Console um sie zu sehen.`);
+        };
+
+        // Repariere korrupte Menükarten in Firestore (für Console)
+        // Aufruf: window.repairMenuekartenInFirestore()
+        window.repairMenuekartenInFirestore = async function() {
+            if (!firestoreSyncEnabled) {
+                console.error('❌ Firestore ist nicht aktiviert!');
+                return;
+            }
+
+            console.log('🔧 Starte Reparatur von Menükarten in Firestore...');
+
+            try {
+                const { collection, getDocs, doc, setDoc } = window.firebaseModules;
+                const querySnapshot = await getDocs(collection(window.firestoreDB, 'menuekarten'));
+
+                let repaired = 0;
+                let total = 0;
+
+                for (const docSnapshot of querySnapshot.docs) {
+                    total++;
+                    const data = docSnapshot.data();
+                    let needsRepair = false;
+
+                    console.log(`\n📋 Prüfe: ${data.name} (ID: ${docSnapshot.id})`);
+
+                    // Check 1: gerichte ist Array?
+                    if (data.gerichte && !Array.isArray(data.gerichte)) {
+                        console.log(`  ⚠️ gerichte ist Object/Map → konvertiere zu Array`);
+                        data.gerichte = Object.values(data.gerichte);
+                        needsRepair = true;
+                    }
+
+                    // Check 2: rezept_id und reihenfolge als Numbers?
+                    if (data.gerichte && Array.isArray(data.gerichte)) {
+                        const before = JSON.stringify(data.gerichte);
+                        data.gerichte = data.gerichte.map(g => ({
+                            ...g,
+                            rezept_id: typeof g.rezept_id === 'string' ? parseInt(g.rezept_id, 10) : (g.rezept_id || 0),
+                            reihenfolge: typeof g.reihenfolge === 'string' ? parseInt(g.reihenfolge, 10) : (g.reihenfolge || 0),
+                            kategorie: g.kategorie || ''
+                        }));
+                        const after = JSON.stringify(data.gerichte);
+
+                        if (before !== after) {
+                            console.log(`  ⚠️ Datentypen korrigiert (rezept_id, reihenfolge)`);
+                            needsRepair = true;
+                        }
+                    }
+
+                    // Reparatur durchführen
+                    if (needsRepair) {
+                        await setDoc(doc(window.firestoreDB, 'menuekarten', docSnapshot.id), data);
+                        console.log(`  ✅ Repariert und gespeichert`);
+                        repaired++;
+                    } else {
+                        console.log(`  ✓ OK, keine Reparatur nötig`);
+                    }
+                }
+
+                console.log(`\n✅ Reparatur abgeschlossen!`);
+                console.log(`   Geprüft: ${total}`);
+                console.log(`   Repariert: ${repaired}`);
+
+                alert(`🎉 Reparatur abgeschlossen!\n\n• ${total} Menükarten geprüft\n• ${repaired} Menükarten repariert\n\nDie Daten in Firestore sind jetzt korrekt!`);
+
+            } catch (error) {
+                console.error('❌ Reparatur fehlgeschlagen:', error);
+                alert(`❌ Reparatur fehlgeschlagen:\n\n${error.message}\n\nBitte Console prüfen.`);
+            }
+        };
+
+
+        // ===== REZEPT-DATENBANK IMPORT =====
+
+        // Auto-Import beim ersten Start (ohne Bestätigungs-Dialog)
+
+        // ===== DB OPERATIONS =====
+        async function getAllLebensmittel() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['lebensmittel'], 'readonly');
+                const store = transaction.objectStore('lebensmittel');
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function addLebensmittel(data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['lebensmittel'], 'readwrite');
+                const store = transaction.objectStore('lebensmittel');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.add(data);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('lebensmittel', data);
+                    resolve(newId);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function updateLebensmittel(id, data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['lebensmittel'], 'readwrite');
+                const store = transaction.objectStore('lebensmittel');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
+                data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.put(data);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('lebensmittel', data);
+                    resolve(request.result);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteLebensmittel(id) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['lebensmittel'], 'readwrite');
+                const store = transaction.objectStore('lebensmittel');
+                const request = store.delete(id);
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('lebensmittel', id);
+                    resolve();
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // ===== GASTRO-DATENBANK IMPORT =====
+
+        // NEU: Auto-Import von Firebase (statt embedded Datenbank)
+        async function autoImportFromFirestore() {
+            if (!firestoreSyncEnabled) {
+                console.warn('⚠️ Firebase nicht verfügbar - nutze JSON-Import als Fallback');
+                alert('⚠️ Firebase-Verbindung nicht verfügbar.\n\nBitte importiere die Daten manuell über die JSON-Import Buttons.');
+                return false;
+            }
+
+            console.log('🚀 Erstinstallation: Lade Daten von Firebase...');
+
+            // FIX 3: Flag setzen um Firestore-Listener zu ignorieren während Import
+            isSyncing = true;
+
+            try {
+                const { collection, getDocs } = window.firebaseModules;
+
+                // Progress-Anzeige erstellen
+                const progressDiv = document.createElement('div');
+                progressDiv.id = 'firebase-import-progress';
+                progressDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    min-width: 400px;
+                    text-align: center;
+                `;
+                progressDiv.innerHTML = `
+                    <h3 style="margin-bottom: 1rem; color: var(--dakota-dark);">🚀 Erstinstallation</h3>
+                    <p style="color: #666; margin: 1rem 0;">Lade Daten von Firebase...</p>
+                    <div style="margin: 1rem 0;">
+                        <div style="background: #f0f0f0; height: 30px; border-radius: 15px; overflow: hidden;">
+                            <div id="firebase-progress-bar" style="background: var(--dakota-gold); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+                    <p id="firebase-progress-text" style="color: #666; margin-top: 0.5rem;">Starte Download...</p>
+                `;
+                document.body.appendChild(progressDiv);
+
+                const progressBar = document.getElementById('firebase-progress-bar');
+                const progressText = document.getElementById('firebase-progress-text');
+
+                // 1. Lebensmittel laden
+                progressText.textContent = 'Lade Lebensmittel...';
+                progressBar.style.width = '10%';
+
+                const lmSnapshot = await getDocs(collection(window.firestoreDB, 'lebensmittel'));
+
+                progressBar.style.width = '30%';
+                progressText.textContent = `${lmSnapshot.size} Lebensmittel gefunden...`;
+
+                let lmCount = 0;
+                for (const doc of lmSnapshot.docs) {
+                    const data = { ...doc.data(), id: parseInt(doc.id, 10) };
+                    await syncFromFirestoreToIndexedDB('lebensmittel', data);
+                    lmCount++;
+
+                    // Progress update alle 50 Produkte
+                    if (lmCount % 50 === 0) {
+                        progressBar.style.width = `${30 + (lmCount / lmSnapshot.size * 30)}%`;
+                    }
+                }
+
+                // 2. Rezepte laden
+                progressBar.style.width = '60%';
+                progressText.textContent = 'Lade Rezepte...';
+
+                const rzSnapshot = await getDocs(collection(window.firestoreDB, 'rezepte'));
+
+                progressBar.style.width = '70%';
+                progressText.textContent = `${rzSnapshot.size} Rezepte gefunden...`;
+
+                let rzCount = 0;
+                for (const doc of rzSnapshot.docs) {
+                    const data = { ...doc.data(), id: parseInt(doc.id, 10) };
+                    await syncFromFirestoreToIndexedDB('rezepte', data);
+                    rzCount++;
+
+                    // Progress update alle 20 Rezepte
+                    if (rzCount % 20 === 0) {
+                        progressBar.style.width = `${70 + (rzCount / rzSnapshot.size * 30)}%`;
+                    }
+                }
+
+                // Fertig!
+                progressBar.style.width = '100%';
+                progressText.textContent = 'Abgeschlossen!';
+
+                // Warte kurz bevor Dialog geschlossen wird
+                await new Promise(resolve => setTimeout(resolve, 500));
+                progressDiv.remove();
+
+                console.log(`✅ Firebase Auto-Import abgeschlossen: ${lmCount} Produkte, ${rzCount} Rezepte`);
+
+                // UI neu laden
+                await loadLebensmittel();
+                await loadRezepte();
+
+                alert(`🎉 Erstinstallation abgeschlossen!\n\n${lmCount} Lebensmittel\n${rzCount} Rezepte\n\nvon Firebase geladen.`);
+
+                return true;
+
+            } catch (error) {
+                console.error('❌ Firebase Auto-Import fehlgeschlagen:', error);
+                document.getElementById('firebase-import-progress')?.remove();
+                alert(`❌ Firebase-Import fehlgeschlagen:\n\n${error.message}\n\nBitte nutze die JSON-Import Buttons als Fallback.`);
+                return false;
+            } finally {
+                // FIX 3: Flag zurücksetzen (wird IMMER ausgeführt, auch bei Fehler)
+                isSyncing = false;
+            }
+        }
+
+        // Manueller Import mit Bestätigungs-Dialog
+
+        // ===== JSON-IMPORT FUNKTIONEN =====
+
+        // Import Lebensmittel aus JSON-Datei
+        async function importLebensmittelJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Lebensmittel Import\n\n${data.length} Lebensmittel gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand gastro_id oder name)
+                        const exists = lebensmittelData.find(lm =>
+                            (item.gastro_id && lm.gastro_id === item.gastro_id) ||
+                            lm.name === item.name
+                        );
+
+                        if (!exists) {
+                            await addLebensmittel(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadLebensmittel();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // Import Rezepte aus JSON-Datei
+        async function importRezepteJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Rezepte Import\n\n${data.length} Rezepte gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand name)
+                        const exists = rezepteData.find(rz => rz.name === item.name);
+
+                        if (!exists) {
+                            await addRezept(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadRezepte();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // Import Menükarten aus JSON-Datei
+        async function importMenuekartenJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data)) {
+                    alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
+                    return;
+                }
+
+                const confirmed = confirm(`📥 Menükarten Import\n\n${data.length} Menükarten gefunden.\n\nMöchten Sie diese importieren?`);
+                if (!confirmed) return;
+
+                let imported = 0;
+                let skipped = 0;
+
+                for (const item of data) {
+                    try {
+                        // Prüfe ob bereits vorhanden (anhand name + typ)
+                        const exists = menuekartenData.find(mk =>
+                            mk.name === item.name && mk.typ === item.typ
+                        );
+
+                        if (!exists) {
+                            await addMenuekarte(item);
+                            imported++;
+                        } else {
+                            skipped++;
+                        }
+                    } catch (err) {
+                        console.error('Fehler beim Importieren:', item, err);
+                    }
+                }
+
+                await loadMenuekarten();
+                await loadMenuekartenTab();
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                // Input zurücksetzen
+                event.target.value = '';
+
+            } catch (error) {
+                alert(`❌ Import fehlgeschlagen:\n\n${error.message}`);
+                console.error('Import-Fehler:', error);
+            }
+        }
+
+        // ===== EXPORT-FUNKTIONEN =====
+
+        // Export Lebensmittel zu JSON-Datei
+        async function exportLebensmittelJSON() {
+            try {
+                console.log('📤 Exportiere Lebensmittel...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllLebensmittel();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Lebensmittel zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-lebensmittel-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Lebensmittel exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Lebensmittel wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
+            }
+        }
+
+        // Export Rezepte zu JSON-Datei
+        async function exportRezepteJSON() {
+            try {
+                console.log('📤 Exportiere Rezepte...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllRezepte();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Rezepte zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-rezepte-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Rezepte exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Rezepte wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
+            }
+        }
+
+        // Export Menükarten zu JSON-Datei
+        async function exportMenuekartenJSON() {
+            try {
+                console.log('📤 Exportiere Menükarten...');
+
+                // Daten DIREKT aus IndexedDB holen (nicht aus globalem Array!)
+                const data = await getAllMenuekarten();
+
+                if (!data || data.length === 0) {
+                    alert('⚠️ Keine Menükarten zum Exportieren vorhanden!');
+                    return;
+                }
+
+                // JSON erstellen
+                const json = JSON.stringify(data, null, 2);
+
+                // Download
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dakota-menuekarten-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log(`✅ ${data.length} Menükarten exportiert`);
+                alert(`✅ Export erfolgreich!\n\n${data.length} Menükarten wurden exportiert.`);
+
+            } catch (error) {
+                console.error('❌ Export-Fehler:', error);
+                alert(`❌ Export fehlgeschlagen:\n\n${error.message}`);
+            }
+        }
+
+        // ===== REZEPT-IMPORT =====
+
+        async function getAllRezepte() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['rezepte'], 'readonly');
+                const store = transaction.objectStore('rezepte');
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function addRezept(data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['rezepte'], 'readwrite');
+                const store = transaction.objectStore('rezepte');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.add(data);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('rezepte', data);
+                    resolve(newId);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function updateRezept(id, data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['rezepte'], 'readwrite');
+                const store = transaction.objectStore('rezepte');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
+                data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.put(data);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('rezepte', data);
+                    resolve(request.result);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteRezept(id) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['rezepte'], 'readwrite');
+                const store = transaction.objectStore('rezepte');
+                const request = store.delete(id);
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('rezepte', id);
+                    resolve();
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // ===== MENüKARTEN DB OPERATIONS =====
+        async function getAllMenuekarten() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['menuekarten'], 'readonly');
+                const store = transaction.objectStore('menuekarten');
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function addMenuekarte(data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['menuekarten'], 'readwrite');
+                const store = transaction.objectStore('menuekarten');
+
+                // FIX: Timestamp SOFORT setzen um Duplikate durch Firestore-Listener zu verhindern
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.add(data);
+                request.onsuccess = async () => {
+                    const newId = request.result;
+                    data.id = newId;
+                    // Sync zu Firestore
+                    await syncToFirestore('menuekarten', data);
+                    resolve(newId);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function updateMenuekarte(id, data) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['menuekarten'], 'readwrite');
+                const store = transaction.objectStore('menuekarten');
+
+                // FIX: Timestamp aktualisieren um Duplikate zu verhindern
+                data.id = id;
+                data._firestoreTimestamp = Date.now();
+                data._lastModified = new Date().toISOString();
+
+                const request = store.put(data);
+                request.onsuccess = async () => {
+                    // Sync zu Firestore
+                    await syncToFirestore('menuekarten', data);
+                    resolve(request.result);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteMenuekarte(id) {
+            return new Promise(async (resolve, reject) => {
+                const transaction = db.transaction(['menuekarten'], 'readwrite');
+                const store = transaction.objectStore('menuekarten');
+                const request = store.delete(id);
+                request.onsuccess = async () => {
+                    // Delete von Firestore
+                    await deleteFromFirestore('menuekarten', id);
+                    resolve();
+                };
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // ===== TAB SWITCHING =====
+        function switchTab(tabName) {
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // FIX: Finde den Button anhand des onclick-Attributs statt event.target
+            // (event ist nicht als Parameter definiert und verursacht Fehler)
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => {
+                const onclickStr = btn.getAttribute('onclick') || '';
+                if (onclickStr.includes(`'${tabName}'`) || onclickStr.includes(`"${tabName}"`)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            // Load data for tab
+            if (tabName === 'lebensmittel') loadLebensmittel();
+            if (tabName === 'rezepte') loadRezepte();
+            if (tabName === 'kalkulation') loadKalkulationTab();
+            if (tabName === 'einkaufsliste') loadEinkaufslisteTab();
+            if (tabName === 'menuekarten') loadMenuekartenTab();
+        }
+
+        // ===== LEBENSMITTEL FUNCTIONS =====
+        async function loadLebensmittel() {
+            lebensmittelData = await getAllLebensmittel();
+            renderLebensmittelTable(lebensmittelData);
+            updateStats();
+        }
+
+        function renderLebensmittelTable(data) {
+            const container = document.getElementById('lebensmittelTable');
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🥕</div>
+                        <div class="empty-state-text">Noch keine Lebensmittel vorhanden</div>
+                        <button class="btn btn-primary" onclick="openLebensmittelModal()">
+                            ➕ Erstes Lebensmittel hinzufügen
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Kategorie</th>
+                            <th>Preis/Einheit</th>
+                            <th>Einheit</th>
+                            <th>Rüstverlust</th>
+                            <th>Garverlust</th>
+                            <th>Lieferant</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(lm => {
+                html += `
+                    <tr>
+                        <td><strong>${lm.name}</strong></td>
+                        <td><span class="badge badge-gold">${lm.kategorie}</span></td>
+                        <td>CHF ${lm.preis.toFixed(2)}</td>
+                        <td>${lm.einheit}</td>
+                        <td>${lm.ruestverlust || 0}%</td>
+                        <td>${lm.garverlust || 0}%</td>
+                        <td>${lm.lieferant || '-'}</td>
+                        <td class="action-buttons">
+                            <button class="btn-icon" onclick="editLebensmittel(${lm.id})" title="Bearbeiten">✏️</button>
+                            <button class="btn-icon delete" onclick="confirmDeleteLebensmittel(${lm.id})" title="Löschen">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function searchLebensmittel() {
+            const query = document.getElementById('searchLebensmittel').value.toLowerCase();
+            const filtered = lebensmittelData.filter(lm =>
+                lm.name.toLowerCase().includes(query) ||
+                lm.kategorie.toLowerCase().includes(query) ||
+                (lm.lieferant && lm.lieferant.toLowerCase().includes(query))
+            );
+            renderLebensmittelTable(filtered);
+        }
+
+        function filterLebensmittel() {
+            const kategorie = document.getElementById('filterKategorie').value;
+            if (!kategorie) {
+                renderLebensmittelTable(lebensmittelData);
+                return;
+            }
+            const filtered = lebensmittelData.filter(lm => lm.kategorie === kategorie);
+            renderLebensmittelTable(filtered);
+        }
+
+        function openLebensmittelModal(id = null) {
+            currentEditId = id;
+            const modal = document.getElementById('lebensmittelModal');
+            const title = document.getElementById('lebensmittelModalTitle');
+
+            if (id) {
+                title.textContent = 'Lebensmittel bearbeiten';
+                const lm = lebensmittelData.find(l => l.id === id);
+                document.getElementById('lm_id').value = lm.id;
+                document.getElementById('lm_name').value = lm.name;
+                document.getElementById('lm_kategorie').value = lm.kategorie;
+                document.getElementById('lm_preis').value = lm.preis;
+                document.getElementById('lm_einheit').value = lm.einheit;
+                document.getElementById('lm_ruestverlust').value = lm.ruestverlust || 0;
+                document.getElementById('lm_garverlust').value = lm.garverlust || 0;
+                document.getElementById('lm_lieferant').value = lm.lieferant || '';
+                document.getElementById('lm_bemerkungen').value = lm.bemerkungen || '';
+            } else {
+                title.textContent = 'Neues Lebensmittel';
+                document.getElementById('lebensmittelForm').reset();
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeLebensmittelModal() {
+            document.getElementById('lebensmittelModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        async function saveLebensmittel(event) {
+            event.preventDefault();
+
+            const data = {
+                name: document.getElementById('lm_name').value,
+                kategorie: document.getElementById('lm_kategorie').value,
+                preis: parseFloat(document.getElementById('lm_preis').value),
+                einheit: document.getElementById('lm_einheit').value,
+                ruestverlust: parseFloat(document.getElementById('lm_ruestverlust').value) || 0,
+                garverlust: parseFloat(document.getElementById('lm_garverlust').value) || 0,
+                lieferant: document.getElementById('lm_lieferant').value,
+                bemerkungen: document.getElementById('lm_bemerkungen').value
+            };
+
+            // FIX: Auto-Vergabe gastro_id für korrekte Rezept-Zuordnung
+            if (currentEditId) {
+                // Bearbeiten: gastro_id vom bestehenden Lebensmittel übernehmen
+                const existing = lebensmittelData.find(lm => lm.id === currentEditId);
+                data.gastro_id = existing ? existing.gastro_id : null;
+                await updateLebensmittel(currentEditId, data);
+            } else {
+                // Neu: Automatische gastro_id Vergabe (höchste bestehende + 1)
+                const maxGastroId = lebensmittelData.reduce((max, lm) => {
+                    return (lm.gastro_id && lm.gastro_id > max) ? lm.gastro_id : max;
+                }, 280); // Start nach höchster GASTRO_DATENBANK ID (280)
+
+                data.gastro_id = maxGastroId + 1;
+                await addLebensmittel(data);
+            }
+
+            closeLebensmittelModal();
+            await loadLebensmittel();
+        }
+
+        function editLebensmittel(id) {
+            openLebensmittelModal(id);
+        }
+
+        async function confirmDeleteLebensmittel(id) {
+            if (confirm('Lebensmittel wirklich löschen?')) {
+                await deleteLebensmittel(id);
+                await loadLebensmittel();
+            }
+        }
+
+        // ===== REZEPTE FUNCTIONS =====
+        async function loadRezepte() {
+            rezepteData = await getAllRezepte();
+            renderRezepteTable(rezepteData);
+            updateStats();
+        }
+
+        function renderRezepteTable(data) {
+            const container = document.getElementById('rezepteTable');
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-text">Noch keine Rezepte vorhanden</div>
+                        <button class="btn btn-primary" onclick="openRezeptModal()">
+                            ➕ Erstes Rezept hinzufügen
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Kategorie</th>
+                            <th>Portionen</th>
+                            <th>Verkaufspreis</th>
+                            <th>Wareneinsatz</th>
+                            <th>Food Cost</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(rz => {
+                const wareneinsatz = calculateRezeptWareneinsatz(rz);
+                const foodCost = (wareneinsatz / rz.verkaufspreis * 100).toFixed(1);
+                const foodCostClass = foodCost < 30 ? 'excellent' : foodCost < 35 ? 'good' : 'warning';
+
+                html += `
+                    <tr>
+                        <td><strong>${rz.name}</strong></td>
+                        <td><span class="badge badge-info">${rz.kategorie}</span></td>
+                        <td>${rz.portionen}</td>
+                        <td>CHF ${rz.verkaufspreis.toFixed(2)}</td>
+                        <td>CHF ${wareneinsatz.toFixed(2)}</td>
+                        <td><span class="food-cost-indicator food-cost-${foodCostClass}">${foodCost}%</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-icon" onclick="viewRezept(${rz.id})" title="Details">👁️</button>
+                            <button class="btn-icon" onclick="editRezept(${rz.id})" title="Bearbeiten">✏️</button>
+                            <button class="btn-icon delete" onclick="confirmDeleteRezept(${rz.id})" title="Löschen">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function calculateRezeptWareneinsatz(rezept) {
+            if (!rezept.zutaten) return 0;
+
+            let total = 0;
+            rezept.zutaten.forEach(zutat => {
+                // KORREKTUR: Rezepte verwenden produkt_id (nicht lebensmittel_id) und matchen gegen gastro_id
+                const lm = lebensmittelData.find(l => l.gastro_id === zutat.produkt_id);
+                if (!lm) return;
+
+                let menge = zutat.menge;
+
+                // Rüstverlust anwenden
+                if (lm.ruestverlust > 0) {
+                    menge = menge / (1 - lm.ruestverlust / 100);
+                }
+
+                // Garverlust anwenden
+                if (lm.garverlust > 0) {
+                    menge = menge / (1 - lm.garverlust / 100);
+                }
+
+                // Preis berechnen (Preis ist pro kg/L, Menge in g/ml)
+                const faktor = lm.einheit === 'Stk' ? 1 : 1000;
+                total += (menge / faktor) * lm.preis;
+            });
+
+            return total;
+        }
+
+        function searchRezepte() {
+            const query = document.getElementById('searchRezepte').value.toLowerCase();
+            const filtered = rezepteData.filter(rz =>
+                rz.name.toLowerCase().includes(query) ||
+                rz.kategorie.toLowerCase().includes(query)
+            );
+            renderRezepteTable(filtered);
+        }
+
+        function filterRezepte() {
+            const kategorie = document.getElementById('filterRezeptKategorie').value;
+            if (!kategorie) {
+                renderRezepteTable(rezepteData);
+                return;
+            }
+            const filtered = rezepteData.filter(rz => rz.kategorie === kategorie);
+            renderRezepteTable(filtered);
+        }
+
+        // ===== MENÜKARTEN LADEN =====
+
+        async function loadMenuekarten() {
+            menuekartenData = await getAllMenuekarten();
+            updateStats();
+        }
+
+        // ===== REZEPT-MODAL =====
+
+        function openRezeptModal(id = null) {
+            currentEditId = id;
+            const modal = document.getElementById('rezeptModal');
+            const title = document.getElementById('rezeptModalTitle');
+
+            if (id) {
+                title.textContent = 'Rezept bearbeiten';
+                const rz = rezepteData.find(r => r.id === id);
+                document.getElementById('rz_id').value = rz.id;
+                document.getElementById('rz_name').value = rz.name;
+                document.getElementById('rz_kategorie').value = rz.kategorie;
+                document.getElementById('rz_portionen').value = rz.portionen;
+                document.getElementById('rz_verkaufspreis').value = rz.verkaufspreis;
+                document.getElementById('rz_beschreibung').value = rz.beschreibung || '';
+
+                // Zutaten laden
+                const container = document.getElementById('rzZutatenContainer');
+                container.innerHTML = '';
+                if (rz.zutaten) {
+                    rz.zutaten.forEach((zutat, index) => {
+                        addRezeptZutat(zutat);
+                    });
+                }
+
+                // Zubereitungsschritte laden
+                const zubereitungContainer = document.getElementById('rzZubereitungContainer');
+                zubereitungContainer.innerHTML = '';
+                if (rz.zubereitung && rz.zubereitung.length > 0) {
+                    rz.zubereitung.forEach(schritt => {
+                        addZubereitungsSchritt(schritt);
+                    });
+                }
+
+                // Zusatzinformationen laden
+                document.getElementById('rz_allergene').value = rz.allergene ? rz.allergene.join(', ') : '';
+                document.getElementById('rz_zubereitungszeit').value = rz.zubereitungszeit || '';
+                document.getElementById('rz_schwierigkeit').value = rz.schwierigkeit || '';
+                document.getElementById('rz_quelle').value = rz.quelle || '';
+                document.getElementById('rz_bemerkung').value = rz.bemerkung || '';
+            } else {
+                title.textContent = 'Neues Rezept';
+                document.getElementById('rezeptForm').reset();
+                document.getElementById('rzZutatenContainer').innerHTML = '';
+                document.getElementById('rzZubereitungContainer').innerHTML = '';
+                addRezeptZutat(); // Eine leere Zutat
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeRezeptModal() {
+            document.getElementById('rezeptModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        // ===== AUTOCOMPLETE COMPONENT =====
+
+        /**
+         * Erstellt ein Autocomplete-Textfeld für Lebensmittel-Auswahl
+         * @param {string} containerId - ID des Containers
+         * @param {number|null} selectedGastroId - Bereits ausgewählte gastro_id (für Edit-Modus)
+         * @returns {HTMLElement} Container mit Autocomplete-Feld
+         */
+        function createAutocompleteField(containerId, selectedGastroId = null) {
+            const container = document.createElement('div');
+            container.className = 'autocomplete-container';
+            container.id = containerId;
+
+            // Hidden Input für gastro_id (wird an Backend/Speicherung übergeben)
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.className = 'zutat-select';
+            hiddenInput.value = selectedGastroId || '';
+
+            // Visible Input für User-Interaktion
+            const visibleInput = document.createElement('input');
+            visibleInput.type = 'text';
+            visibleInput.className = 'autocomplete-input';
+            visibleInput.placeholder = 'Zutat suchen... (z.B. Kalbshaxe, Zwiebeln)';
+            visibleInput.autocomplete = 'off';
+
+            // Dropdown für Ergebnisse
+            const dropdown = document.createElement('div');
+            dropdown.className = 'autocomplete-dropdown';
+
+            // Wenn bereits ausgewählt, zeige Lebensmittel-Name an
+            if (selectedGastroId) {
+                const selectedItem = lebensmittelData.find(lm => lm.gastro_id === selectedGastroId);
+                if (selectedItem) {
+                    visibleInput.value = selectedItem.name;
+                    visibleInput.classList.add('has-selection');
+                }
+            }
+
+            // State Management
+            let currentFocus = -1;
+            let filteredResults = [];
+
+            // FUNKTION: Filtern und Sortieren
+            function filterLebensmittel(query) {
+                if (!query || query.length < 1) return [];
+
+                const lowerQuery = query.toLowerCase();
+                const results = lebensmittelData.filter(lm => {
+                    const nameMatch = lm.name.toLowerCase().includes(lowerQuery);
+                    const kategorieMatch = lm.kategorie.toLowerCase().includes(lowerQuery);
+                    return nameMatch || kategorieMatch;
+                });
+
+                // Sortieren nach Relevanz (Exakte Treffer zuerst, dann Starts-With, dann Contains)
+                results.sort((a, b) => {
+                    const aName = a.name.toLowerCase();
+                    const bName = b.name.toLowerCase();
+
+                    // Exakter Match
+                    if (aName === lowerQuery) return -1;
+                    if (bName === lowerQuery) return 1;
+
+                    // Starts with
+                    const aStarts = aName.startsWith(lowerQuery);
+                    const bStarts = bName.startsWith(lowerQuery);
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+
+                    // Alphabetisch
+                    return aName.localeCompare(bName);
+                });
+
+                // Max 15 Ergebnisse (Performance)
+                return results.slice(0, 15);
+            }
+
+            // FUNKTION: Dropdown rendern
+            function renderDropdown(results) {
+                dropdown.innerHTML = '';
+
+                if (results.length === 0) {
+                    dropdown.innerHTML = '<div class="autocomplete-no-results">Keine Lebensmittel gefunden</div>';
+                    dropdown.classList.add('active');
+                    return;
+                }
+
+                results.forEach((lm, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    item.dataset.index = index;
+                    item.dataset.gastroId = lm.gastro_id;
+
+                    item.innerHTML = `
+                        <span class="autocomplete-item-name">${lm.name}</span>
+                        <span class="autocomplete-item-category">(${lm.kategorie})</span>
+                    `;
+
+                    // Click Event
+                    item.addEventListener('click', () => selectItem(lm));
+
+                    dropdown.appendChild(item);
+                });
+
+                dropdown.classList.add('active');
+                currentFocus = -1;
+            }
+
+            // FUNKTION: Item auswählen
+            function selectItem(lebensmittel) {
+                hiddenInput.value = lebensmittel.gastro_id;
+                visibleInput.value = lebensmittel.name;
+                visibleInput.classList.add('has-selection');
+                dropdown.classList.remove('active');
+                dropdown.innerHTML = '';
+            }
+
+            // FUNKTION: Dropdown schließen
+            function closeDropdown() {
+                dropdown.classList.remove('active');
+                dropdown.innerHTML = '';
+                currentFocus = -1;
+            }
+
+            // FUNKTION: Keyboard-Navigation (Pfeiltasten)
+            function setActiveFocus(index) {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+                items.forEach(item => item.classList.remove('selected'));
+
+                if (index >= 0 && index < items.length) {
+                    items[index].classList.add('selected');
+                    items[index].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            // EVENT: Input-Änderung
+            visibleInput.addEventListener('input', (e) => {
+                const query = e.target.value;
+
+                // Wenn User löscht, reset Selection
+                if (query === '') {
+                    hiddenInput.value = '';
+                    visibleInput.classList.remove('has-selection');
+                    closeDropdown();
+                    return;
+                }
+
+                // Bei Änderung nach Selection, remove green background
+                if (hiddenInput.value) {
+                    hiddenInput.value = '';
+                    visibleInput.classList.remove('has-selection');
+                }
+
+                // Filtern und Rendern
+                filteredResults = filterLebensmittel(query);
+                renderDropdown(filteredResults);
+            });
+
+            // EVENT: Keyboard-Navigation (Pfeiltasten, Enter, Escape)
+            visibleInput.addEventListener('keydown', (e) => {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentFocus++;
+                    if (currentFocus >= items.length) currentFocus = 0;
+                    setActiveFocus(currentFocus);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentFocus--;
+                    if (currentFocus < 0) currentFocus = items.length - 1;
+                    setActiveFocus(currentFocus);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentFocus >= 0 && currentFocus < filteredResults.length) {
+                        selectItem(filteredResults[currentFocus]);
+                    }
+                } else if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+
+            // EVENT: Click outside schließt Dropdown
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // Assembly
+            container.appendChild(hiddenInput);
+            container.appendChild(visibleInput);
+            container.appendChild(dropdown);
+
+            return container;
+        }
+
+        function addRezeptZutat(zutat = null) {
+            const container = document.getElementById('rzZutatenContainer');
+            const index = container.children.length;
+
+            const row = document.createElement('div');
+            row.className = 'form-row';
+            row.style.marginBottom = '1rem';
+            row.style.position = 'relative';
+
+            // === AUTOCOMPLETE STATT DROPDOWN ===
+            // Create form-group for autocomplete
+            const autocompleteFormGroup = document.createElement('div');
+            autocompleteFormGroup.className = 'form-group';
+            autocompleteFormGroup.style.flex = '2';
+
+            // Create autocomplete field (selectedGastroId = zutat.produkt_id im Edit-Modus)
+            const autocomplete = createAutocompleteField(
+                `autocomplete-${index}`,
+                zutat ? zutat.produkt_id : null
+            );
+            autocompleteFormGroup.appendChild(autocomplete);
+
+            // Create form-group for Menge
+            const mengeFormGroup = document.createElement('div');
+            mengeFormGroup.className = 'form-group';
+            mengeFormGroup.style.flex = '1';
+            const mengeInput = document.createElement('input');
+            mengeInput.type = 'number';
+            mengeInput.className = 'form-input zutat-menge';
+            mengeInput.placeholder = 'Menge';
+            mengeInput.value = zutat ? zutat.menge : '';
+            mengeInput.step = '0.1';
+            mengeInput.required = true;
+            mengeFormGroup.appendChild(mengeInput);
+
+            // Create form-group for Einheit
+            const einheitFormGroup = document.createElement('div');
+            einheitFormGroup.className = 'form-group';
+            einheitFormGroup.style.flex = '1';
+            const einheitSelect = document.createElement('select');
+            einheitSelect.className = 'form-select zutat-einheit';
+            einheitSelect.required = true;
+            einheitSelect.innerHTML = `
+                <option value="g" ${zutat && zutat.einheit === 'g' ? 'selected' : ''}>g</option>
+                <option value="ml" ${zutat && zutat.einheit === 'ml' ? 'selected' : ''}>ml</option>
+                <option value="Stk" ${zutat && zutat.einheit === 'Stk' ? 'selected' : ''}>Stk</option>
+            `;
+            einheitFormGroup.appendChild(einheitSelect);
+
+            // Create delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'btn-icon delete';
+            deleteBtn.textContent = '🗑️';
+            deleteBtn.style.position = 'absolute';
+            deleteBtn.style.right = '-40px';
+            deleteBtn.style.top = '50%';
+            deleteBtn.style.transform = 'translateY(-50%)';
+            deleteBtn.onclick = function() {
+                this.parentElement.remove();
+            };
+
+            // Assembly
+            row.appendChild(autocompleteFormGroup);
+            row.appendChild(mengeFormGroup);
+            row.appendChild(einheitFormGroup);
+            row.appendChild(deleteBtn);
+
+            container.appendChild(row);
+        }
+
+        async function saveRezept(event) {
+            event.preventDefault();
+
+            // Zutaten sammeln
+            const zutaten = [];
+            const zutatenRows = document.getElementById('rzZutatenContainer').children;
+
+            for (let row of zutatenRows) {
+                const lm_id = parseInt(row.querySelector('.zutat-select').value);
+                const menge = parseFloat(row.querySelector('.zutat-menge').value);
+                const einheit = row.querySelector('.zutat-einheit').value;
+
+                if (lm_id && menge) {
+                    // KORREKTUR: Speichere als produkt_id (nicht lebensmittel_id) für konsistentes Mapping
+                    zutaten.push({
+                        produkt_id: lm_id, // lm_id ist jetzt gastro_id vom Dropdown
+                        menge: menge,
+                        einheit: einheit
+                    });
+                }
+            }
+
+            // Zubereitungsschritte sammeln
+            const zubereitungsSchritte = Array.from(document.querySelectorAll('.rz-zubereitung-schritt'))
+                .map(textarea => textarea.value.trim())
+                .filter(text => text.length > 0);
+
+            // Allergene sammeln (kommagetrennt)
+            const allergeneInput = document.getElementById('rz_allergene').value;
+            const allergene = allergeneInput
+                ? allergeneInput.split(',').map(a => a.trim()).filter(a => a.length > 0)
+                : [];
+
+            const data = {
+                name: document.getElementById('rz_name').value,
+                kategorie: document.getElementById('rz_kategorie').value,
+                portionen: parseInt(document.getElementById('rz_portionen').value),
+                verkaufspreis: parseFloat(document.getElementById('rz_verkaufspreis').value),
+                beschreibung: document.getElementById('rz_beschreibung').value,
+                zutaten: zutaten,
+                // Neue Felder
+                zubereitung: zubereitungsSchritte,
+                allergene: allergene,
+                zubereitungszeit: document.getElementById('rz_zubereitungszeit').value || null,
+                schwierigkeit: document.getElementById('rz_schwierigkeit').value || null,
+                quelle: document.getElementById('rz_quelle').value || null,
+                bemerkung: document.getElementById('rz_bemerkung').value || null
+            };
+
+            if (currentEditId) {
+                // FIX: Bestehendes Rezept laden und mit neuen Daten mergen
+                // Verhindert Verlust von Feldern die nicht im Formular sind
+                // (zubereitungszeit, schwierigkeit, zubereitung, quelle, bemerkung)
+                const existingRezept = rezepteData.find(r => r.id === currentEditId);
+
+                const mergedData = {
+                    ...existingRezept,     // Alle bestehenden Felder erhalten
+                    ...data,               // Formular-Daten überschreiben
+                    id: currentEditId      // ID explizit setzen
+                };
+
+                await updateRezept(currentEditId, mergedData);
+            } else {
+                await addRezept(data);
+            }
+
+            closeRezeptModal();
+            await loadRezepte();
+        }
+
+        function editRezept(id) {
+            openRezeptModal(id);
+        }
+
+        async function confirmDeleteRezept(id) {
+            if (confirm('Rezept wirklich löschen?')) {
+                await deleteRezept(id);
+                await loadRezepte();
+            }
+        }
+
+        function viewRezept(id) {
+            const rezept = rezepteData.find(r => r.id === id);
+            if (!rezept) return;
+
+            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+            const foodCost = rezept.verkaufspreis > 0
+                ? (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1)
+                : '0.0';
+
+            // Fill Modal Header
+            document.getElementById('modalRezeptName').textContent = rezept.name;
+
+            // Meta Information
+            const metaHtml = `
+                <div class="rezept-modal-meta-item">
+                    <strong>📁 Kategorie:</strong> ${rezept.kategorie}
+                </div>
+                <div class="rezept-modal-meta-item">
+                    <strong>👥 Portionen:</strong> ${rezept.portionen}
+                </div>
+                <div class="rezept-modal-meta-item">
+                    <strong>💰 Verkaufspreis:</strong> CHF ${rezept.verkaufspreis.toFixed(2)}
+                </div>
+            `;
+            document.getElementById('modalRezeptMeta').innerHTML = metaHtml;
+
+            // Cost Summary with color coding
+            let foodCostClass = 'good';
+            if (parseFloat(foodCost) > 35) foodCostClass = 'warning';
+            if (parseFloat(foodCost) > 40) foodCostClass = 'danger';
+
+            const costSummaryHtml = `
+                <div class="rezept-cost-item">
+                    <div class="rezept-cost-value">CHF ${wareneinsatz.toFixed(2)}</div>
+                    <div class="rezept-cost-label">Wareneinsatz</div>
+                </div>
+                <div class="rezept-cost-item">
+                    <div class="rezept-cost-value ${foodCostClass}">${foodCost}%</div>
+                    <div class="rezept-cost-label">Food Cost</div>
+                </div>
+                <div class="rezept-cost-item">
+                    <div class="rezept-cost-value">CHF ${(rezept.verkaufspreis - wareneinsatz).toFixed(2)}</div>
+                    <div class="rezept-cost-label">Marge</div>
+                </div>
+                <div class="rezept-cost-item">
+                    <div class="rezept-cost-value">CHF ${(rezept.verkaufspreis / rezept.portionen).toFixed(2)}</div>
+                    <div class="rezept-cost-label">Preis/Portion</div>
+                </div>
+            `;
+            document.getElementById('modalCostSummary').innerHTML = costSummaryHtml;
+
+            // Zutaten List
+            let zutatenHtml = '';
+            if (rezept.zutaten && rezept.zutaten.length > 0) {
+                rezept.zutaten.forEach(zutat => {
+                    const lm = lebensmittelData.find(l => l.gastro_id === zutat.produkt_id);
+                    if (lm) {
+                        const einzelpreis = (lm.preis_pro_einheit * zutat.menge).toFixed(2);
+                        zutatenHtml += `
+                            <div class="rezept-zutat-item">
+                                <span class="rezept-zutat-name">${lm.name}</span>
+                                <span class="rezept-zutat-menge">${zutat.menge}${zutat.einheit} (CHF ${einzelpreis})</span>
+                            </div>
+                        `;
+                    } else {
+                        zutatenHtml += `
+                            <div class="rezept-zutat-item">
+                                <span class="rezept-zutat-name">⚠️ Unbekanntes Produkt (ID: ${zutat.produkt_id})</span>
+                                <span class="rezept-zutat-menge">${zutat.menge}${zutat.einheit}</span>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                zutatenHtml = '<p style="opacity: 0.6;">Keine Zutaten definiert.</p>';
+            }
+            document.getElementById('modalZutatenList').innerHTML = zutatenHtml;
+
+            // Zubereitung
+            if (rezept.zubereitung && rezept.zubereitung.length > 0) {
+                let zubereitungHtml = '';
+                rezept.zubereitung.forEach(schritt => {
+                    zubereitungHtml += `<li>${schritt}</li>`;
+                });
+                document.getElementById('modalZubereitungList').innerHTML = zubereitungHtml;
+                document.getElementById('modalZubereitungSection').style.display = 'block';
+            } else {
+                document.getElementById('modalZubereitungSection').style.display = 'none';
+            }
+
+            // Bemerkung
+            if (rezept.bemerkung) {
+                document.getElementById('modalBemerkung').textContent = rezept.bemerkung;
+                document.getElementById('modalBemerkungSection').style.display = 'block';
+            } else {
+                document.getElementById('modalBemerkungSection').style.display = 'none';
+            }
+
+            // Quelle
+            let quelleHtml = '';
+            if (rezept.quelle) {
+                if (rezept.quelle.startsWith('http')) {
+                    quelleHtml = `<strong>📚 Quelle:</strong> <a href="${rezept.quelle}" target="_blank" rel="noopener">${rezept.quelle}</a>`;
+                } else {
+                    quelleHtml = `<strong>📚 Quelle:</strong> ${rezept.quelle}`;
+                }
+            } else {
+                quelleHtml = '<em>Keine Quelle angegeben</em>';
+            }
+            document.getElementById('modalQuelle').innerHTML = quelleHtml;
+
+            // Show Modal
+            document.getElementById('rezeptModal').classList.add('active');
+        }
+
+        function closeRezeptDetailModal() {
+            document.getElementById('rezeptModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('rezeptModal');
+            if (e.target === modal) {
+                closeRezeptDetailModal();
+            }
+        });
+
+        // ===== KALKULATION FUNCTIONS =====
+        function loadKalkulationTab() {
+            const select = document.getElementById('calcRezeptSelect');
+            select.innerHTML = '<option value="">-- Rezept wählen --</option>';
+
+            rezepteData.forEach(rz => {
+                select.innerHTML += `<option value="${rz.id}">${rz.name} (${rz.kategorie})</option>`;
+            });
+        }
+
+        function loadRezeptForCalculation() {
+            const rezeptId = parseInt(document.getElementById('calcRezeptSelect').value);
+            if (!rezeptId) {
+                document.getElementById('calcDetails').innerHTML = '';
+                document.getElementById('calcResult').innerHTML = '';
+                return;
+            }
+
+            const rezept = rezepteData.find(r => r.id === rezeptId);
+            if (!rezept) return;
+
+            document.getElementById('calcPersonen').value = rezept.portionen;
+            document.getElementById('calcVerkaufspreis').value = rezept.verkaufspreis;
+
+            recalculate();
+        }
+
+        function recalculate() {
+            const rezeptId = parseInt(document.getElementById('calcRezeptSelect').value);
+            if (!rezeptId) return;
+
+            const rezept = rezepteData.find(r => r.id === rezeptId);
+            const personen = parseInt(document.getElementById('calcPersonen').value);
+            const verkaufspreis = parseFloat(document.getElementById('calcVerkaufspreis').value);
+
+            const faktor = personen / rezept.portionen;
+
+            // Zutaten-Details
+            let detailsHtml = '<h3 style="margin-top: 2rem;">Zutaten-Liste (skaliert)</h3>';
+            detailsHtml += '<table class="data-table"><thead><tr><th>Zutat</th><th>Menge</th><th>Einheit</th><th>Rüstverlust</th><th>Garverlust</th><th>Brutto-Menge</th><th>Wareneinsatz</th></tr></thead><tbody>';
+
+            let totalWareneinsatz = 0;
+
+            if (rezept.zutaten) {
+                rezept.zutaten.forEach(zutat => {
+                    // KORREKTUR: Rezepte verwenden produkt_id (nicht lebensmittel_id) und matchen gegen gastro_id
+                    const lm = lebensmittelData.find(l => l.gastro_id === zutat.produkt_id);
+                    if (!lm) return;
+
+                    const nettoMenge = zutat.menge * faktor;
+                    let bruttoMenge = nettoMenge;
+
+                    // Verluste
+                    if (lm.ruestverlust > 0) {
+                        bruttoMenge = bruttoMenge / (1 - lm.ruestverlust / 100);
+                    }
+                    if (lm.garverlust > 0) {
+                        bruttoMenge = bruttoMenge / (1 - lm.garverlust / 100);
+                    }
+
+                    const preisFaktor = lm.einheit === 'Stk' ? 1 : 1000;
+                    const wareneinsatz = (bruttoMenge / preisFaktor) * lm.preis;
+                    totalWareneinsatz += wareneinsatz;
+
+                    detailsHtml += `
+                        <tr>
+                            <td><strong>${lm.name}</strong></td>
+                            <td>${nettoMenge.toFixed(1)}</td>
+                            <td>${zutat.einheit}</td>
+                            <td>${lm.ruestverlust || 0}%</td>
+                            <td>${lm.garverlust || 0}%</td>
+                            <td>${bruttoMenge.toFixed(1)} ${zutat.einheit}</td>
+                            <td>CHF ${wareneinsatz.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            detailsHtml += '</tbody></table>';
+            document.getElementById('calcDetails').innerHTML = detailsHtml;
+
+            // Ergebnis
+            const totalVerkaufspreis = verkaufspreis * personen;
+            const foodCost = (totalWareneinsatz / totalVerkaufspreis * 100).toFixed(1);
+            const deckungsbeitrag = totalVerkaufspreis - totalWareneinsatz;
+            const foodCostClass = foodCost < 30 ? 'excellent' : foodCost < 35 ? 'good' : 'warning';
+
+            const resultHtml = `
+                <div class="calc-result">
+                    <h3>Kalkulations-Ergebnis</h3>
+                    <div class="calc-result-grid">
+                        <div class="calc-result-item">
+                            <div class="calc-result-value">${personen}</div>
+                            <div class="calc-result-label">Personen</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-value">CHF ${totalWareneinsatz.toFixed(2)}</div>
+                            <div class="calc-result-label">Wareneinsatz Total</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-value">CHF ${totalVerkaufspreis.toFixed(2)}</div>
+                            <div class="calc-result-label">Verkaufspreis Total</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-value">${foodCost}%</div>
+                            <div class="calc-result-label">Food Cost</div>
+                        </div>
+                        <div class="calc-result-item">
+                            <div class="calc-result-value">CHF ${deckungsbeitrag.toFixed(2)}</div>
+                            <div class="calc-result-label">Deckungsbeitrag</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('calcResult').innerHTML = resultHtml;
+        }
+
+        function exportCalcPDF() {
+            alert('PDF-Export wird in Kürze implementiert!');
+        }
+
+        function saveCalculation() {
+            alert('Kalkulation gespeichert! (wird im LocalStorage abgelegt)');
+        }
+
+        // ===== EINKAUFSLISTE FUNCTIONS =====
+        function loadEinkaufslisteTab() {
+            const container = document.getElementById('einkaufslisteRezepte');
+            container.innerHTML = '';
+
+            rezepteData.forEach(rz => {
+                const checkbox = document.createElement('div');
+                checkbox.style.marginBottom = '0.75rem';
+                checkbox.innerHTML = `
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" value="${rz.id}" class="einkaufsliste-checkbox">
+                        <strong>${rz.name}</strong> (${rz.kategorie}) - ${rz.portionen} Portionen
+                    </label>
+                `;
+                container.appendChild(checkbox);
+            });
+        }
+
+        function generateEinkaufsliste() {
+            const checkboxes = document.querySelectorAll('.einkaufsliste-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Bitte mindestens ein Rezept auswählen!');
+                return;
+            }
+
+            const zutatSummary = {};
+
+            checkboxes.forEach(cb => {
+                const rezeptId = parseInt(cb.value);
+                const rezept = rezepteData.find(r => r.id === rezeptId);
+
+                if (rezept && rezept.zutaten) {
+                    rezept.zutaten.forEach(zutat => {
+                        // KORREKTUR: Verwende gastro_id und produkt_id für konsistentes Mapping
+                        const lm = lebensmittelData.find(l => l.gastro_id === zutat.produkt_id);
+                        if (!lm) return;
+
+                        const key = `${lm.gastro_id}-${zutat.einheit}`;
+
+                        if (!zutatSummary[key]) {
+                            zutatSummary[key] = {
+                                name: lm.name,
+                                kategorie: lm.kategorie,
+                                menge: 0,
+                                einheit: zutat.einheit,
+                                lieferant: lm.lieferant
+                            };
+                        }
+
+                        zutatSummary[key].menge += zutat.menge;
+                    });
+                }
+            });
+
+            // Nach Kategorie gruppieren
+            const byKategorie = {};
+            Object.values(zutatSummary).forEach(item => {
+                if (!byKategorie[item.kategorie]) {
+                    byKategorie[item.kategorie] = [];
+                }
+                byKategorie[item.kategorie].push(item);
+            });
+
+            // Rendern
+            let html = '<h3 style="margin-top: 2rem;">Einkaufsliste</h3>';
+
+            Object.keys(byKategorie).sort().forEach(kategorie => {
+                html += `<h4 style="margin-top: 1.5rem; color: var(--dakota-gold);">${kategorie}</h4>`;
+                html += '<table class="data-table"><thead><tr><th>Zutat</th><th>Menge</th><th>Einheit</th><th>Lieferant</th></tr></thead><tbody>';
+
+                byKategorie[kategorie].forEach(item => {
+                    html += `
+                        <tr>
+                            <td><strong>${item.name}</strong></td>
+                            <td>${item.menge.toFixed(1)}</td>
+                            <td>${item.einheit}</td>
+                            <td>${item.lieferant || '-'}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+            });
+
+            document.getElementById('einkaufslisteResult').innerHTML = html;
+        }
+
+        function exportEinkaufslistePDF() {
+            alert('PDF-Export wird in Kürze implementiert!');
+        }
+
+        function printEinkaufsliste() {
+            window.print();
+        }
+
+        // ===== STATS UPDATE =====
+        function updateStats() {
+            document.getElementById('totalLebensmittel').textContent = lebensmittelData.length;
+            document.getElementById('totalRezepte').textContent = rezepteData.length;
+
+            if (rezepteData.length > 0) {
+                const avgFoodCost = rezepteData.reduce((sum, rz) => {
+                    const wareneinsatz = calculateRezeptWareneinsatz(rz);
+                    return sum + (wareneinsatz / rz.verkaufspreis * 100);
+                }, 0) / rezepteData.length;
+                document.getElementById('avgFoodCost').textContent = avgFoodCost.toFixed(1) + '%';
+            }
+        }
+
+        // ===== BEISPIEL-DATEN HINZUFÜGEN =====
+        async function addExampleData() {
+            // Beispiel-Lebensmittel
+            const exampleLM = [
+                { name: 'Alpkäse', kategorie: 'Käse', preis: 28.00, einheit: 'kg', ruestverlust: 0, garverlust: 0, lieferant: 'Alpkäserei Engstlenalp' },
+                { name: 'Rindsfilet', kategorie: 'Fleisch', preis: 65.00, einheit: 'kg', ruestverlust: 5, garverlust: 25, lieferant: 'Metzgerei Trachsel' },
+                { name: 'Kartoffeln', kategorie: 'Gemüse', preis: 3.00, einheit: 'kg', ruestverlust: 15, garverlust: 5, lieferant: 'Bio-Hof Hasliberg' },
+                { name: 'Rahm', kategorie: 'Milchprodukte', preis: 8.00, einheit: 'L', ruestverlust: 0, garverlust: 0, lieferant: 'Käserei Meiringen' },
+                { name: 'Butter', kategorie: 'Milchprodukte', preis: 16.00, einheit: 'kg', ruestverlust: 0, garverlust: 0, lieferant: 'Käserei Meiringen' }
+            ];
+
+            for (let lm of exampleLM) {
+                await addLebensmittel(lm);
+            }
+
+            await loadLebensmittel();
+
+            alert('Beispiel-Daten hinzugefügt! 🎉');
+        }
+
+        // ===== MENÜKARTEN FUNCTIONS =====
+        async function loadMenuekartenTab() {
+            // FIX: Sicherstellen dass Rezepte geladen sind, bevor Dropdown populiert wird
+            if (rezepteData.length === 0) {
+                console.log('📋 Lade Rezepte für Menükarten-Dropdown...');
+                await loadRezepte();
+            }
+
+            menuekartenData = await getAllMenuekarten();
+            populateMenuekartenRezeptDropdown();
+            renderMenuekartenTable(menuekartenData);
+        }
+
+        function populateMenuekartenRezeptDropdown() {
+            const select = document.getElementById('mk_rezept_select');
+            if (!select) {
+                console.warn('⚠️ Dropdown-Element "mk_rezept_select" nicht gefunden!');
+                return;
+            }
+
+            console.log(`📋 Populiere Dropdown mit ${rezepteData.length} Rezepten`);
+
+            select.innerHTML = '<option value="">-- Rezept auswählen --</option>';
+
+            // Gruppiert nach Kategorie
+            const kategorien = {};
+            rezepteData.forEach(rz => {
+                if (!kategorien[rz.kategorie]) kategorien[rz.kategorie] = [];
+                kategorien[rz.kategorie].push(rz);
+            });
+
+            Object.keys(kategorien).sort().forEach(kategorie => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = kategorie;
+                kategorien[kategorie].forEach(rz => {
+                    const option = document.createElement('option');
+                    option.value = rz.id;
+                    option.textContent = `${rz.name} (CHF ${rz.verkaufspreis.toFixed(2)})`;
+                    optgroup.appendChild(option);
+                });
+                select.appendChild(optgroup);
+            });
+
+            console.log(`✅ Dropdown erfolgreich gefüllt: ${Object.keys(kategorien).length} Kategorien`);
+        }
+
+        function renderMenuekartenTable(data) {
+            const container = document.getElementById('menuekartenTable');
+            if (!container) return;
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍽️</div>
+                        <div class="empty-state-text">Noch keine Menükarten erstellt</div>
+                        <button class="btn btn-primary" onclick="openMenuekartenModal()">
+                            ➕ Erste Menükarte erstellen
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Kartenname</th>
+                            <th>Typ</th>
+                            <th>Anzahl Gerichte</th>
+                            <th>Ø Food Cost</th>
+                            <th>Ø Preis</th>
+                            <th>Status</th>
+                            <th>Erstellt</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(mk => {
+                const gerichteCount = mk.gerichte ? mk.gerichte.length : 0;
+
+                // Food Cost & Preis berechnen
+                let avgFoodCost = 0;
+                let avgPreis = 0;
+
+                if (mk.gerichte && mk.gerichte.length > 0) {
+                    let totalFoodCost = 0;
+                    let totalPreis = 0;
+
+                    mk.gerichte.forEach(gericht => {
+                        const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                        if (rezept) {
+                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                            totalFoodCost += (wareneinsatz / rezept.verkaufspreis * 100);
+                            totalPreis += rezept.verkaufspreis;
+                        }
+                    });
+
+                    avgFoodCost = (totalFoodCost / mk.gerichte.length).toFixed(1);
+                    avgPreis = (totalPreis / mk.gerichte.length).toFixed(2);
+                }
+
+                const foodCostClass = avgFoodCost < 30 ? 'success' : avgFoodCost < 35 ? 'warning' : 'danger';
+                const statusBadge = mk.aktiv
+                    ? '<span class="badge badge-success">Aktiv</span>'
+                    : '<span class="badge badge-secondary">Inaktiv</span>';
+
+                const typ = mk.typ === 'abendkarte' ? '🌙 Abendkarte' : '☀️ Mittagsmenü';
+
+                html += `
+                    <tr>
+                        <td><strong>${mk.name}</strong></td>
+                        <td>${typ}</td>
+                        <td>${gerichteCount}</td>
+                        <td><span class="badge badge-${foodCostClass}">${avgFoodCost}%</span></td>
+                        <td>CHF ${avgPreis}</td>
+                        <td>${statusBadge}</td>
+                        <td>${new Date(mk.datum_erstellt).toLocaleDateString('de-CH')}</td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn-icon" onclick="viewMenuekarte(${mk.id})" title="Ansehen">👁️</button>
+                                <button class="btn-icon edit" onclick="openMenuekartenModal(${mk.id})" title="Bearbeiten">✏️</button>
+                                <button class="btn-icon delete" onclick="deleteMenuekarteConfirm(${mk.id})" title="Löschen">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function openMenuekartenModal(id = null) {
+            currentEditId = id;
+            const modal = document.getElementById('menuekarteModal');
+            const title = document.getElementById('menuekarteModalTitle');
+
+            populateMenuekartenRezeptDropdown();
+
+            if (id) {
+                title.textContent = 'Menükarte bearbeiten';
+                const mk = menuekartenData.find(m => m.id === id);
+
+                document.getElementById('mk_id').value = mk.id;
+                document.getElementById('mk_name').value = mk.name;
+                document.getElementById('mk_typ').value = mk.typ;
+                document.getElementById('mk_aktiv').checked = mk.aktiv;
+                document.getElementById('mk_bemerkungen').value = mk.bemerkungen || '';
+
+                currentMenuekarteGerichte = mk.gerichte ? [...mk.gerichte] : [];
+                renderGerichteListe();
+                updateKalkulationPreview();
+            } else {
+                title.textContent = 'Neue Menükarte erstellen';
+                document.getElementById('menuekarteForm').reset();
+                currentMenuekarteGerichte = [];
+                renderGerichteListe();
+                updateKalkulationPreview();
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeMenuekarteModal() {
+            document.getElementById('menuekarteModal').classList.remove('active');
+            currentEditId = null;
+            currentMenuekarteGerichte = [];
+        }
+
+        function addRezeptToKarte() {
+            const rezeptId = parseInt(document.getElementById('mk_rezept_select').value);
+            const kategorie = document.getElementById('mk_rezept_kategorie').value;
+            const wochentag = document.getElementById('mk_rezept_wochentag').value || null;
+
+            if (!rezeptId) {
+                alert('Bitte ein Rezept auswählen!');
+                return;
+            }
+
+            // Check if already added
+            if (currentMenuekarteGerichte.find(g => g.rezept_id === rezeptId)) {
+                alert('Dieses Rezept wurde bereits hinzugefügt!');
+                return;
+            }
+
+            currentMenuekarteGerichte.push({
+                rezept_id: rezeptId,
+                kategorie: kategorie,
+                wochentag: wochentag,
+                reihenfolge: currentMenuekarteGerichte.length + 1
+            });
+
+            renderGerichteListe();
+            updateKalkulationPreview();
+
+            // Reset dropdowns
+            document.getElementById('mk_rezept_select').value = '';
+            document.getElementById('mk_rezept_wochentag').value = '';
+        }
+
+        function removeGerichtFromKarte(index) {
+            currentMenuekarteGerichte.splice(index, 1);
+
+            // Update reihenfolge
+            currentMenuekarteGerichte.forEach((g, i) => g.reihenfolge = i + 1);
+
+            renderGerichteListe();
+            updateKalkulationPreview();
+        }
+
+        function renderGerichteListe() {
+            const container = document.getElementById('mk_gerichte_container');
+            if (!container) return;
+
+            if (currentMenuekarteGerichte.length === 0) {
+                container.innerHTML = '<p style="color: #999; font-style: italic;">Noch keine Gerichte hinzugefügt</p>';
+                return;
+            }
+
+            // Check: Verwenden Gerichte Wochentage?
+            const hasWochentage = currentMenuekarteGerichte.some(g => g.wochentag);
+
+            if (hasWochentage) {
+                // === NEUE LOGIK: Gruppierung nach Wochentag → Kategorie ===
+                const wochentagOrder = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+                const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+                let html = '';
+
+                wochentagOrder.forEach(wochentag => {
+                    const gerichteAmTag = currentMenuekarteGerichte.filter(g => g.wochentag === wochentag);
+                    if (gerichteAmTag.length === 0) return;
+
+                    html += `<h3 style="margin-top: 2rem; color: var(--dakota-gold); border-bottom: 3px solid var(--dakota-gold); padding-bottom: 0.5rem; font-size: 1.4rem;">📅 ${wochentag}</h3>`;
+
+                    // Nun nach Kategorie gruppieren
+                    const byKategorie = {};
+                    gerichteAmTag.forEach(g => {
+                        if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
+                        byKategorie[g.kategorie].push(g);
+                    });
+
+                    kategorieOrder.forEach(kategorie => {
+                        if (!byKategorie[kategorie]) return;
+
+                        html += `<h4 style="margin-top: 1.2rem; margin-left: 1rem; color: #666; font-size: 1.1rem;">${kategorie}</h4>`;
+                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+
+                        byKategorie[kategorie].forEach(gericht => {
+                            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                            if (!rezept) return;
+
+                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+                            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+                            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
+
+                            html += `
+                                <tr>
+                                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
+                                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
+                                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
+                                    <td style="white-space: nowrap;">
+                                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
+                                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
+                                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
+                                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+
+                        html += '</tbody></table>';
+                    });
+                });
+
+                // Gerichte OHNE Wochentag (falls vorhanden)
+                const gerichteOhneTag = currentMenuekarteGerichte.filter(g => !g.wochentag);
+                if (gerichteOhneTag.length > 0) {
+                    html += `<h3 style="margin-top: 2rem; color: #999; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem;">Ohne Wochentag</h3>`;
+
+                    const byKategorie = {};
+                    gerichteOhneTag.forEach(g => {
+                        if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
+                        byKategorie[g.kategorie].push(g);
+                    });
+
+                    const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+                    kategorieOrder.forEach(kategorie => {
+                        if (!byKategorie[kategorie]) return;
+
+                        html += `<h4 style="margin-top: 1rem; margin-left: 1rem; color: #666;">${kategorie}</h4>`;
+                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+
+                        byKategorie[kategorie].forEach(gericht => {
+                            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                            if (!rezept) return;
+
+                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+                            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+                            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
+
+                            html += `
+                                <tr>
+                                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
+                                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
+                                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
+                                    <td style="white-space: nowrap;">
+                                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
+                                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
+                                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
+                                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+
+                        html += '</tbody></table>';
+                    });
+                }
+
+                container.innerHTML = html;
+
+            } else {
+                // === ALTE LOGIK: Nur nach Kategorie gruppieren (für Abendkarten ohne Wochentage) ===
+                const byKategorie = {};
+                currentMenuekarteGerichte.forEach(gericht => {
+                    if (!byKategorie[gericht.kategorie]) byKategorie[gericht.kategorie] = [];
+                    byKategorie[gericht.kategorie].push(gericht);
+                });
+
+                let html = '';
+                const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+
+                kategorieOrder.forEach(kategorie => {
+                    if (!byKategorie[kategorie]) return;
+
+                    html += `<h4 style="margin-top: 1rem; color: var(--dakota-gold);">${kategorie}</h4>`;
+                    html += '<table class="data-table"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+
+                    byKategorie[kategorie].forEach((gericht, index) => {
+                        const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                        if (!rezept) return;
+
+                        const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                        const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+                        const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+
+                        const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
+
+                        html += `
+                            <tr>
+                                <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
+                                <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
+                                <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
+                                <td style="white-space: nowrap;">
+                                    <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
+                                    <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
+                                    <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
+                                    <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    html += '</tbody></table>';
+                });
+
+                container.innerHTML = html;
+            }
+        }
+
+        function updateKalkulationPreview() {
+            if (currentMenuekarteGerichte.length === 0) {
+                document.getElementById('mk_anzahl_gerichte').textContent = '0';
+                document.getElementById('mk_avg_foodcost').textContent = '0%';
+                document.getElementById('mk_avg_preis').textContent = '0.-';
+                document.getElementById('mk_total_wareneinsatz').textContent = '0.-';
+                return;
+            }
+
+            let totalWareneinsatz = 0;
+            let totalVerkaufspreis = 0;
+            let totalFoodCost = 0;
+
+            currentMenuekarteGerichte.forEach(gericht => {
+                const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                if (rezept) {
+                    const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                    totalWareneinsatz += wareneinsatz;
+                    totalVerkaufspreis += rezept.verkaufspreis;
+                    totalFoodCost += (wareneinsatz / rezept.verkaufspreis * 100);
+                }
+            });
+
+            const avgFoodCost = (totalFoodCost / currentMenuekarteGerichte.length).toFixed(1);
+            const avgPreis = (totalVerkaufspreis / currentMenuekarteGerichte.length).toFixed(2);
+
+            document.getElementById('mk_anzahl_gerichte').textContent = currentMenuekarteGerichte.length;
+            document.getElementById('mk_avg_foodcost').textContent = avgFoodCost + '%';
+            document.getElementById('mk_avg_preis').textContent = 'CHF ' + avgPreis;
+            document.getElementById('mk_total_wareneinsatz').textContent = 'CHF ' + totalWareneinsatz.toFixed(2);
+
+            // Color coding
+            const foodCostEl = document.getElementById('mk_avg_foodcost');
+            foodCostEl.style.color = avgFoodCost < 30 ? 'var(--success)' : avgFoodCost < 35 ? 'var(--warning)' : 'var(--danger)';
+        }
+
+        async function saveMenuekarte(event) {
+            event.preventDefault();
+
+            if (currentMenuekarteGerichte.length === 0) {
+                alert('Bitte mindestens ein Gericht hinzufügen!');
+                return;
+            }
+
+            const data = {
+                name: document.getElementById('mk_name').value,
+                typ: document.getElementById('mk_typ').value,
+                aktiv: document.getElementById('mk_aktiv').checked,
+                bemerkungen: document.getElementById('mk_bemerkungen').value,
+                datum_erstellt: new Date().toISOString(),
+                gerichte: currentMenuekarteGerichte
+            };
+
+            try {
+                if (currentEditId) {
+                    await updateMenuekarte(currentEditId, data);
+                    alert('✅ Menükarte aktualisiert!');
+                } else {
+                    await addMenuekarte(data);
+                    alert('✅ Menükarte erstellt!');
+                }
+
+                closeMenuekarteModal();
+                await loadMenuekartenTab();
+            } catch (error) {
+                alert('❌ Fehler beim Speichern: ' + error);
+                console.error(error);
+            }
+        }
+
+        function filterMenuekarten() {
+            const filterTyp = document.getElementById('filterMenuekartenTyp').value;
+
+            if (!filterTyp) {
+                renderMenuekartenTable(menuekartenData);
+                return;
+            }
+
+            const filtered = menuekartenData.filter(mk => mk.typ === filterTyp);
+            renderMenuekartenTable(filtered);
+        }
+
+        async function deleteMenuekarteConfirm(id) {
+            const mk = menuekartenData.find(m => m.id === id);
+            if (!confirm(`Menükarte "${mk.name}" wirklich löschen?`)) return;
+
+            try {
+                await deleteMenuekarte(id);
+                alert('✅ Menükarte gelöscht!');
+                await loadMenuekartenTab();
+            } catch (error) {
+                alert('❌ Fehler beim Löschen: ' + error);
+            }
+        }
+
+        function viewMenuekarte(id) {
+            const mk = menuekartenData.find(m => m.id === id);
+
+            let html = `
+                <div style="max-width: 800px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 12px;">
+                    <h2 style="text-align: center; color: var(--dakota-gold); margin-bottom: 1rem;">${mk.name}</h2>
+                    <p style="text-align: center; color: #666; margin-bottom: 2rem;">${mk.typ === 'abendkarte' ? '🌙 Abendkarte' : '☀️ Mittagsmenü'}</p>
+            `;
+
+            // Gruppiert nach Kategorie
+            const byKategorie = {};
+            mk.gerichte.forEach(gericht => {
+                if (!byKategorie[gericht.kategorie]) byKategorie[gericht.kategorie] = [];
+                byKategorie[gericht.kategorie].push(gericht);
+            });
+
+            const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+
+            kategorieOrder.forEach(kategorie => {
+                if (!byKategorie[kategorie]) return;
+
+                html += `<h3 style="margin-top: 2rem; color: var(--dakota-dark);">${kategorie}</h3>`;
+
+                byKategorie[kategorie].forEach(gericht => {
+                    const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                    if (!rezept) return;
+
+                    html += `
+                        <div style="margin: 1rem 0; padding: 1rem; border-left: 3px solid var(--dakota-gold);">
+                            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                <strong style="font-size: 1.1rem;">${rezept.name}</strong>
+                                <span style="color: var(--dakota-gold); font-weight: 700;">CHF ${rezept.verkaufspreis.toFixed(2)}</span>
+                            </div>
+                            ${rezept.beschreibung ? `<p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">${rezept.beschreibung}</p>` : ''}
+                        </div>
+                    `;
+                });
+            });
+
+            html += '</div>';
+
+            // Create modal for view
+            const viewModal = document.createElement('div');
+            viewModal.className = 'modal active';
+            viewModal.innerHTML = `<div class="modal-content" style="max-width: 900px;">${html}<button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Schließen</button></div>`;
+            document.body.appendChild(viewModal);
+        }
+
+        // ===== MENÜKARTEN-GERICHT DETAIL-VIEWS =====
+
+        // Zeigt Kalkulations-Details für ein Gericht
+        function viewGerichtKalkulation(rezept_id) {
+            const rezept = rezepteData.find(r => r.id === rezept_id);
+            if (!rezept) {
+                alert('Rezept nicht gefunden!');
+                return;
+            }
+
+            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+            const marge = (rezept.verkaufspreis - wareneinsatz).toFixed(2);
+
+            // Zutaten mit Preisen
+            let zutatenHtml = '<ul style="margin: 1rem 0; list-style: none; padding: 0;">';
+            if (rezept.zutaten && rezept.zutaten.length > 0) {
+                rezept.zutaten.forEach(zutat => {
+                    const lm = lebensmittelData.find(l => l.gastro_id === zutat.produkt_id);
+                    if (lm) {
+                        // FIX: Korrekte Preisberechnung mit Einheiten-Umrechnung
+                        // lm.preis ist pro kg/L, zutat.menge in g/ml (außer bei Stück)
+                        const faktor = lm.einheit === 'Stk' ? 1 : 1000;
+                        const einzelpreis = ((zutat.menge / faktor) * lm.preis).toFixed(2);
+                        zutatenHtml += `
+                            <li style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #eee;">
+                                <span>${lm.name} <span style="color: #666;">(${zutat.menge} ${zutat.einheit})</span></span>
+                                <strong>CHF ${einzelpreis}</strong>
+                            </li>
+                        `;
+                    } else {
+                        zutatenHtml += `
+                            <li style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #eee; color: #999;">
+                                <span>⚠️ Produkt ID ${zutat.produkt_id} <span style="color: #666;">(${zutat.menge} ${zutat.einheit})</span></span>
+                                <strong>-</strong>
+                            </li>
+                        `;
+                    }
+                });
+            } else {
+                zutatenHtml += '<li style="color: #999; font-style: italic; padding: 0.5rem;">Keine Zutaten hinterlegt</li>';
+            }
+            zutatenHtml += '</ul>';
+
+            const html = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--dakota-dark);">🧮 Kalkulation: ${rezept.name}</h2>
+
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: var(--dakota-dark);">CHF ${wareneinsatz.toFixed(2)}</div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Wareneinsatz</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-size: 1.8rem; font-weight: bold;">
+                            <span class="badge badge-${foodCostClass}" style="font-size: 1.5rem; padding: 0.5rem 1rem;">${foodCost}%</span>
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Food Cost</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: var(--success-color);">CHF ${marge}</div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Marge</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: var(--dakota-gold);">CHF ${rezept.verkaufspreis.toFixed(2)}</div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Verkaufspreis</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem; color: var(--dakota-dark);">Zutaten mit Einzelpreisen</h3>
+                ${zutatenHtml}
+
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--dakota-gold); display: flex; justify-content: space-between; align-items: center;">
+                    <button class="btn btn-primary" onclick="this.closest('.modal').remove(); editRezept(${rezept.id})">✏️ Rezept bearbeiten</button>
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Schließen</button>
+                </div>
+            `;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `<div class="modal-content" style="max-width: 800px;">${html}</div>`;
+            document.body.appendChild(modal);
+        }
+
+        // Zeigt Rezeptanleitung für ein Gericht
+        function viewGerichtRezept(rezept_id) {
+            const rezept = rezepteData.find(r => r.id === rezept_id);
+            if (!rezept) {
+                alert('Rezept nicht gefunden!');
+                return;
+            }
+
+            let zubereitungHtml = '';
+            if (rezept.zubereitung && rezept.zubereitung.length > 0) {
+                zubereitungHtml = '<ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8;">';
+                rezept.zubereitung.forEach(schritt => {
+                    zubereitungHtml += `<li style="margin-bottom: 1rem; padding-left: 0.5rem;">${schritt}</li>`;
+                });
+                zubereitungHtml += '</ol>';
+            } else {
+                zubereitungHtml = '<p style="color: #999; font-style: italic; margin: 1rem 0;">Keine Zubereitungsschritte hinterlegt.</p>';
+            }
+
+            const html = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--dakota-dark);">📝 Rezept: ${rezept.name}</h2>
+
+                <div style="display: flex; gap: 2rem; margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <div style="color: #666;"><strong>⏱️ Zubereitungszeit:</strong> ${rezept.zubereitungszeit || 'Nicht angegeben'}</div>
+                    <div style="color: #666;"><strong>📊 Schwierigkeit:</strong> ${rezept.schwierigkeit || 'Nicht angegeben'}</div>
+                    <div style="color: #666;"><strong>👥 Portionen:</strong> ${rezept.portionen || '1'}</div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem; color: var(--dakota-dark);">Zubereitung</h3>
+                ${zubereitungHtml}
+
+                ${rezept.bemerkung ? `
+                    <div style="margin-top: 2rem; padding: 1rem; background: #fff9e6; border-left: 4px solid var(--dakota-gold); border-radius: 4px;">
+                        <strong>💡 Tipp:</strong> ${rezept.bemerkung}
+                    </div>
+                ` : ''}
+
+                ${rezept.quelle ? `
+                    <div style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                        <strong>📚 Quelle:</strong> ${rezept.quelle.startsWith('http') ? `<a href="${rezept.quelle}" target="_blank" rel="noopener">${rezept.quelle}</a>` : rezept.quelle}
+                    </div>
+                ` : ''}
+
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--dakota-gold); display: flex; justify-content: space-between; align-items: center;">
+                    <button class="btn btn-primary" onclick="this.closest('.modal').remove(); editRezept(${rezept.id})">✏️ Zubereitungsschritte bearbeiten</button>
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Schließen</button>
+                </div>
+            `;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `<div class="modal-content" style="max-width: 800px;">${html}</div>`;
+            document.body.appendChild(modal);
+        }
+
+        // Zeigt Allergene für ein Gericht
+        function viewGerichtAllergene(rezept_id) {
+            const rezept = rezepteData.find(r => r.id === rezept_id);
+            if (!rezept) {
+                alert('Rezept nicht gefunden!');
+                return;
+            }
+
+            let allergeneHtml = '';
+            if (rezept.allergene && rezept.allergene.length > 0) {
+                allergeneHtml = '<div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0;">';
+                rezept.allergene.forEach(allergen => {
+                    const icon = getAllergenIcon(allergen);
+                    allergeneHtml += `
+                        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: #fff3cd; border: 2px solid #ffc107; border-radius: 25px; font-weight: 600; font-size: 1.05rem;">
+                            <span style="font-size: 1.3rem;">${icon}</span> ${allergen}
+                        </span>
+                    `;
+                });
+                allergeneHtml += '</div>';
+            } else {
+                allergeneHtml = '<p style="color: #999; font-style: italic; margin: 1.5rem 0; font-size: 1.1rem;">✅ Keine Allergene hinterlegt.</p>';
+            }
+
+            const html = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--dakota-dark);">⚠️ Allergene: ${rezept.name}</h2>
+
+                <div style="padding: 1.25rem; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; margin-bottom: 1.5rem;">
+                    <strong style="color: #856404;">⚠️ Hinweis:</strong>
+                    <span style="color: #856404;">Bitte beachten Sie die folgenden Allergene in diesem Gericht.</span>
+                </div>
+
+                ${allergeneHtml}
+
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--dakota-gold); display: flex; justify-content: space-between; align-items: center;">
+                    <button class="btn btn-primary" onclick="this.closest('.modal').remove(); editRezept(${rezept.id})">✏️ Allergene bearbeiten</button>
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Schließen</button>
+                </div>
+            `;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `<div class="modal-content" style="max-width: 700px;">${html}</div>`;
+            document.body.appendChild(modal);
+        }
+
+        // Helper: Allergen-Icons
+        function getAllergenIcon(allergen) {
+            const icons = {
+                'Gluten': '🌾',
+                'Milch': '🥛',
+                'Eier': '🥚',
+                'Fisch': '🐟',
+                'Nüsse': '🥜',
+                'Erdnüsse': '🥜',
+                'Soja': '🫘',
+                'Sellerie': '🌿',
+                'Senf': '🌭',
+                'Sesam': '🌰',
+                'Sulfite': '🍷',
+                'Lupinen': '🌱',
+                'Weichtiere': '🦑',
+                'Krebstiere': '🦞',
+                'Laktose': '🥛',
+                'Schalenfrüchte': '🌰'
+            };
+            return icons[allergen] || '⚠️';
+        }
+
+        // ===== INIT APP =====
+        async function initApp() {
+            try {
+                await initDB();
+                await loadLebensmittel();
+                await loadRezepte();
+                await loadMenuekarten(); // FIX: Menükarten VOR Firebase-Migration laden!
+                updateStats();
+
+                // Auto-Import NUR beim allerersten Start (EINMALIG!)
+                const autoImportDone = localStorage.getItem('dakota_auto_import_done');
+                const firestoreMigrated = localStorage.getItem('firestore_migrated');
+
+                // NEU: Auto-Import von Firebase (statt embedded Datenbank)
+                // Nur importieren wenn ALLE Bedingungen erfüllt:
+                // 1. Noch nie importiert (!autoImportDone)
+                // 2. IndexedDB ist leer (lebensmittelData.length === 0)
+                if (!autoImportDone && lebensmittelData.length === 0) {
+                    console.log('🎉 Erste Installation erkannt - starte Auto-Import von Firebase...');
+
+                    // NEU: Von Firebase laden (statt embedded Datenbank)
+                    const success = await autoImportFromFirestore();
+
+                    if (success) {
+                        localStorage.setItem('dakota_auto_import_done', 'true');
+                        console.log('✅ Firebase Auto-Import abgeschlossen und als durchgeführt markiert');
+                    } else {
+                        console.log('⚠️ Firebase Auto-Import fehlgeschlagen - nutze JSON-Import als Fallback');
+                        // Bei Fehler wird der User in autoImportFromFirestore() bereits informiert
+                        // und die Import-Buttons werden sichtbar gelassen
+                    }
+                } else {
+                    if (autoImportDone) {
+                        console.log('✓ Auto-Import bereits durchgeführt (dakota_auto_import_done = true)');
+                    }
+                    if (firestoreMigrated) {
+                        console.log('✓ Firestore-Daten vorhanden, kein Auto-Import nötig');
+                    }
+                    if (lebensmittelData.length > 0) {
+                        console.log(`✓ ${lebensmittelData.length} Lebensmittel in IndexedDB vorhanden`);
+                    }
+                }
+
+                // FIX 3: Migration - Repariere Lebensmittel ohne gastro_id
+                // Läuft nach jedem Start, aber nur wenn nötig
+                await migrateLebensmittelGastroIds();
+
+                // 🔥 FIREBASE/FIRESTORE SYNC INITIALISIEREN
+                // Startet Echtzeit-Synchronisation mit Cloud-Datenbank
+                // Migriert alle 3 Collections: lebensmittel, rezepte, menuekarten
+                await initFirestoreSync();
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                alert('Fehler beim Laden der Datenbank: ' + error.message);
+            }
+        }
+
+        // Start app when DOM is ready
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+
+    <!-- REZEPT DETAIL MODAL -->
+    <div id="rezeptModal" class="rezept-modal">
+        <div class="rezept-modal-content">
+            <div class="rezept-modal-header">
+                <button class="rezept-modal-close" onclick="closeRezeptDetailModal()">&times;</button>
+                <h2 class="rezept-modal-title" id="modalRezeptName"></h2>
+                <div class="rezept-modal-meta" id="modalRezeptMeta"></div>
+            </div>
+            <div class="rezept-modal-body">
+                <!-- Kosten-Zusammenfassung -->
+                <div class="rezept-cost-summary" id="modalCostSummary"></div>
+
+                <!-- Zutaten -->
+                <div class="rezept-modal-section">
+                    <h3 class="rezept-modal-section-title">🥘 Zutaten</h3>
+                    <div class="rezept-zutaten-list" id="modalZutatenList"></div>
+                </div>
+
+                <!-- Zubereitung -->
+                <div class="rezept-modal-section" id="modalZubereitungSection">
+                    <h3 class="rezept-modal-section-title">👨‍🍳 Zubereitung</h3>
+                    <ol class="rezept-zubereitung-list" id="modalZubereitungList"></ol>
+                </div>
+
+                <!-- Bemerkung -->
+                <div class="rezept-modal-section" id="modalBemerkungSection" style="display: none;">
+                    <div class="rezept-bemerkung" id="modalBemerkung"></div>
+                </div>
+
+                <!-- Quelle -->
+                <div class="rezept-quelle" id="modalQuelle"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
