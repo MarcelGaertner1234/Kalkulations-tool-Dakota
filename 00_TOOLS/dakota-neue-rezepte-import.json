@@ -1775,5 +1775,90 @@
             "Petersilie"
         ],
         "bemerkung": "Müllerin Art"
+    },
+    {
+        "name": "Rindsbraten mit Kartoffelstock",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 36.00,
+        "zubereitungszeit": 120,
+        "schwierigkeit": "Mittel",
+        "quelle": "Klassiker",
+        "zutaten": [
+            {
+                "produkt_id": 265,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 132,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 145,
+                "menge": 10,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 110,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 48,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 41,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 36,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 112,
+                "menge": 1,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 61,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 5,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Rindsbraten anbraten",
+            "Mirepoix rösten, tomatisieren",
+            "Ablöschen, schmoren (90 Min)",
+            "Stock kochen und passieren",
+            "Gemüse glasieren",
+            "Anrichten"
+        ],
+        "bemerkung": "Sonntagsbraten"
     }
 ]
