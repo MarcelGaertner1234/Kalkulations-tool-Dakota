@@ -1,0 +1,979 @@
+[
+  {
+    "name": "Avocado Hass",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 13.00,
+    "einheit": "kg",
+    "ruestverlust": 30,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Spanien"
+  },
+  {
+    "name": "Avocado Bacon Bio",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 16.20,
+    "einheit": "kg",
+    "ruestverlust": 30,
+    "garverlust": 0,
+    "lieferant": "Bio-Lieferanten",
+    "herkunft": "Spanien",
+    "qualitaet": "Bio"
+  },
+  {
+    "name": "Mango Kent",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 16.00,
+    "einheit": "kg",
+    "ruestverlust": 35,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Mexiko"
+  },
+  {
+    "name": "Mango Ataulfo Bio",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 23.50,
+    "einheit": "kg",
+    "ruestverlust": 30,
+    "garverlust": 0,
+    "lieferant": "Bio-Lieferanten",
+    "herkunft": "Ecuador",
+    "qualitaet": "Bio"
+  },
+  {
+    "name": "Ananas frisch",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 12.00,
+    "einheit": "kg",
+    "ruestverlust": 40,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Costa Rica"
+  },
+  {
+    "name": "Papaya",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 14.00,
+    "einheit": "kg",
+    "ruestverlust": 35,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Brasilien"
+  },
+  {
+    "name": "Passionsfrucht",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 45.00,
+    "einheit": "kg",
+    "ruestverlust": 50,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Kolumbien"
+  },
+  {
+    "name": "Feigen frisch",
+    "kategorie": "Früchte",
+    "preis": 28.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Türkei",
+    "saisonal": "Juli-Oktober"
+  },
+  {
+    "name": "Granatapfel",
+    "kategorie": "Früchte (exotisch)",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 55,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Basilikum frisch",
+    "kategorie": "Kräuter",
+    "preis": 6.50,
+    "einheit": "100g",
+    "ruestverlust": 5,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Petersilie glatt",
+    "kategorie": "Kräuter",
+    "preis": 6.00,
+    "einheit": "100g",
+    "ruestverlust": 10,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Schnittlauch frisch",
+    "kategorie": "Kräuter",
+    "preis": 5.50,
+    "einheit": "100g",
+    "ruestverlust": 5,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Bärlauch frisch",
+    "kategorie": "Kräuter",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 15,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Berner Oberland",
+    "saisonal": "März-Mai"
+  },
+  {
+    "name": "Rosmarin frisch",
+    "kategorie": "Kräuter",
+    "preis": 8.00,
+    "einheit": "100g",
+    "ruestverlust": 5,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Thymian frisch",
+    "kategorie": "Kräuter",
+    "preis": 9.00,
+    "einheit": "100g",
+    "ruestverlust": 5,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Estragon frisch",
+    "kategorie": "Kräuter",
+    "preis": 12.00,
+    "einheit": "100g",
+    "ruestverlust": 10,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Koriander frisch",
+    "kategorie": "Kräuter",
+    "preis": 10.00,
+    "einheit": "100g",
+    "ruestverlust": 10,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Import"
+  },
+  {
+    "name": "Zitronengras frisch",
+    "kategorie": "Kräuter",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 40,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Thailand"
+  },
+  {
+    "name": "Ingwer frisch",
+    "kategorie": "Gewürze",
+    "preis": 12.00,
+    "einheit": "kg",
+    "ruestverlust": 20,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "China"
+  },
+  {
+    "name": "Kurkuma frisch",
+    "kategorie": "Gewürze",
+    "preis": 35.00,
+    "einheit": "kg",
+    "ruestverlust": 15,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Thailand"
+  },
+  {
+    "name": "Safran Fäden",
+    "kategorie": "Gewürze",
+    "preis": 3500.00,
+    "einheit": "100g",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "J.C. Fridlin",
+    "herkunft": "Iran",
+    "qualitaet": "Premium"
+  },
+  {
+    "name": "Vanilleschoten Bourbon",
+    "kategorie": "Gewürze",
+    "preis": 250.00,
+    "einheit": "100g",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Madagaskar",
+    "qualitaet": "Premium"
+  },
+  {
+    "name": "Szechuanpfeffer",
+    "kategorie": "Gewürze",
+    "preis": 85.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Chefkoch-Gewürze",
+    "herkunft": "China"
+  },
+  {
+    "name": "Kardamom gemahlen",
+    "kategorie": "Gewürze",
+    "preis": 109.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Guatemala"
+  },
+  {
+    "name": "Sumach gemahlen",
+    "kategorie": "Gewürze",
+    "preis": 75.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Tonkabohnen",
+    "kategorie": "Gewürze",
+    "preis": 180.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Venezuela"
+  },
+  {
+    "name": "Zimt Ceylon gemahlen",
+    "kategorie": "Gewürze",
+    "preis": 55.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Sri Lanka"
+  },
+  {
+    "name": "Nelken ganz",
+    "kategorie": "Gewürze",
+    "preis": 65.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Madagaskar"
+  },
+  {
+    "name": "Sternanis ganz",
+    "kategorie": "Gewürze",
+    "preis": 42.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "China"
+  },
+  {
+    "name": "Kreuzkümmel gemahlen",
+    "kategorie": "Gewürze",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Iran"
+  },
+  {
+    "name": "Lammkeule Alp-Lamm",
+    "kategorie": "Fleisch",
+    "preis": 42.00,
+    "einheit": "kg",
+    "ruestverlust": 15,
+    "garverlust": 25,
+    "lieferant": "H&R Metzgerei",
+    "herkunft": "Berner Oberland"
+  },
+  {
+    "name": "Lammrücken Carré",
+    "kategorie": "Fleisch",
+    "preis": 58.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 20,
+    "lieferant": "H&R Metzgerei",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Bison-Filet",
+    "kategorie": "Fleisch (Wild)",
+    "preis": 95.00,
+    "einheit": "kg",
+    "ruestverlust": 5,
+    "garverlust": 20,
+    "lieferant": "Wild-Lieferanten",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Hirschfilet",
+    "kategorie": "Fleisch (Wild)",
+    "preis": 72.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 20,
+    "lieferant": "Wild-Lieferanten",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Wachtel küchenfertig",
+    "kategorie": "Geflügel",
+    "preis": 38.00,
+    "einheit": "kg",
+    "ruestverlust": 5,
+    "garverlust": 15,
+    "lieferant": "Specialty",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Thunfisch Yellowfin Saku",
+    "kategorie": "Fisch & Meeresfrüchte",
+    "preis": 68.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 5,
+    "lieferant": "Fisch-Spezialisten",
+    "herkunft": "Import (MSC)"
+  },
+  {
+    "name": "Seeteufel Medaillons",
+    "kategorie": "Fisch & Meeresfrüchte",
+    "preis": 52.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 15,
+    "lieferant": "Fisch-Spezialisten",
+    "herkunft": "Atlantik"
+  },
+  {
+    "name": "Austern Gillardeau No.3",
+    "kategorie": "Fisch & Meeresfrüchte",
+    "preis": 4.80,
+    "einheit": "Stk",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Premium Fisch",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Büffelmozzarella frisch",
+    "kategorie": "Käse",
+    "preis": 32.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Stracciatella di Bufala",
+    "kategorie": "Käse",
+    "preis": 38.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Comté 24 Monate",
+    "kategorie": "Käse",
+    "preis": 45.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Käse-Spezialisten",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Ziegenkäse Crottin",
+    "kategorie": "Käse",
+    "preis": 42.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Crème Fraîche",
+    "kategorie": "Milchprodukte",
+    "preis": 12.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Mascarpone",
+    "kategorie": "Milchprodukte",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Artischocken frisch",
+    "kategorie": "Gemüse",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 60,
+    "garverlust": 5,
+    "lieferant": "Transgourmet",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Schwarzwurzeln",
+    "kategorie": "Gemüse",
+    "preis": 12.00,
+    "einheit": "kg",
+    "ruestverlust": 25,
+    "garverlust": 5,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Romanesco",
+    "kategorie": "Gemüse",
+    "preis": 8.50,
+    "einheit": "kg",
+    "ruestverlust": 30,
+    "garverlust": 10,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Pak Choi",
+    "kategorie": "Gemüse",
+    "preis": 9.00,
+    "einheit": "kg",
+    "ruestverlust": 15,
+    "garverlust": 20,
+    "lieferant": "Transgourmet",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Edamame TK",
+    "kategorie": "Gemüse",
+    "preis": 14.00,
+    "einheit": "kg",
+    "ruestverlust": 50,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "China"
+  },
+  {
+    "name": "Shiitake-Pilze frisch",
+    "kategorie": "Pilze",
+    "preis": 38.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 15,
+    "lieferant": "Specialty",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Austernpilze",
+    "kategorie": "Pilze",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 20,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Risotto-Reis Carnaroli",
+    "kategorie": "Getreide & Reis",
+    "preis": 12.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Quinoa Bio",
+    "kategorie": "Getreide",
+    "preis": 16.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Bio-Lieferanten",
+    "herkunft": "Peru"
+  },
+  {
+    "name": "Schwarzer Reis Venere",
+    "kategorie": "Getreide & Reis",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Perlgraupen",
+    "kategorie": "Getreide",
+    "preis": 8.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Ravioli frisch Ricotta-Spinat",
+    "kategorie": "Teigwaren",
+    "preis": 28.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 5,
+    "lieferant": "Frische Pasta",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Olivenöl Extra Vergine Premium",
+    "kategorie": "Öle & Fette",
+    "preis": 45.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Olivenöl Extra Vergine Standard",
+    "kategorie": "Öle & Fette",
+    "preis": 20.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Spanien"
+  },
+  {
+    "name": "Trüffelöl weißer Trüffel",
+    "kategorie": "Öle & Fette",
+    "preis": 140.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Tuberium",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Rapsöl kaltgepresst",
+    "kategorie": "Öle & Fette",
+    "preis": 8.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Regional",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Sesamöl geröstet",
+    "kategorie": "Öle & Fette",
+    "preis": 22.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "China"
+  },
+  {
+    "name": "Walnussöl",
+    "kategorie": "Öle & Fette",
+    "preis": 38.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Kürbiskernöl",
+    "kategorie": "Öle & Fette",
+    "preis": 35.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Österreich"
+  },
+  {
+    "name": "Mandeln blanchiert",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 24.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Spanien"
+  },
+  {
+    "name": "Mandeln gemahlen",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Schwarzenbach",
+    "herkunft": "Spanien"
+  },
+  {
+    "name": "Haselnüsse gemahlen",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 26.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Schwarzenbach",
+    "herkunft": "Piemont"
+  },
+  {
+    "name": "Haselnüsse geröstet",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 28.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Nobs",
+    "herkunft": "Piemont"
+  },
+  {
+    "name": "Walnusskerne",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 20.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Gebana",
+    "herkunft": "Chile"
+  },
+  {
+    "name": "Walnusskerne Schweiz Bio",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 32.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Swiss Nuss",
+    "herkunft": "Schweiz",
+    "qualitaet": "Bio"
+  },
+  {
+    "name": "Pinienkerne",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 48.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Italien"
+  },
+  {
+    "name": "Cashewkerne geröstet",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Vietnam"
+  },
+  {
+    "name": "Pistazien geschält",
+    "kategorie": "Nüsse & Kerne",
+    "preis": 42.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Iran"
+  },
+  {
+    "name": "Balsamico Reserve",
+    "kategorie": "Essig",
+    "preis": 30.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Chef Store",
+    "herkunft": "Modena"
+  },
+  {
+    "name": "Balsamico Tradizionale 8J",
+    "kategorie": "Essig",
+    "preis": 110.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Giusti",
+    "herkunft": "Modena"
+  },
+  {
+    "name": "Balsamico Modena g.g.A.",
+    "kategorie": "Essig",
+    "preis": 15.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Modena"
+  },
+  {
+    "name": "Sherry-Essig Reserva",
+    "kategorie": "Essig",
+    "preis": 32.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Chef Store",
+    "herkunft": "Spanien"
+  },
+  {
+    "name": "Sherry-Essig Gran Reserva 10J",
+    "kategorie": "Essig",
+    "preis": 65.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Jerez"
+  },
+  {
+    "name": "Apfelessig 3 Jahre gereift",
+    "kategorie": "Essig",
+    "preis": 21.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Wiberg",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Apfelessig Schweiz",
+    "kategorie": "Essig",
+    "preis": 8.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Hugo Reitzel",
+    "herkunft": "Schweiz"
+  },
+  {
+    "name": "Weissweinessig",
+    "kategorie": "Essig",
+    "preis": 6.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Rotweinessig",
+    "kategorie": "Essig",
+    "preis": 7.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Frankreich"
+  },
+  {
+    "name": "Reisessig",
+    "kategorie": "Essig",
+    "preis": 12.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Japan"
+  },
+  {
+    "name": "Datteln Medjool",
+    "kategorie": "Trockenfrüchte",
+    "preis": 24.00,
+    "einheit": "kg",
+    "ruestverlust": 10,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Israel"
+  },
+  {
+    "name": "Feigen getrocknet",
+    "kategorie": "Trockenfrüchte",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 5,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Aprikosen getrocknet",
+    "kategorie": "Trockenfrüchte",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Cranberries getrocknet",
+    "kategorie": "Trockenfrüchte",
+    "preis": 16.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "USA"
+  },
+  {
+    "name": "Kokosmilch",
+    "kategorie": "Saucen & Würzmittel",
+    "preis": 6.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Thailand"
+  },
+  {
+    "name": "Sojasauce natürlich gebraut",
+    "kategorie": "Saucen & Würzmittel",
+    "preis": 12.00,
+    "einheit": "L",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Transgourmet",
+    "herkunft": "Japan"
+  },
+  {
+    "name": "Miso-Paste weiß",
+    "kategorie": "Saucen & Würzmittel",
+    "preis": 28.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Japan"
+  },
+  {
+    "name": "Tahini Sesampaste",
+    "kategorie": "Saucen & Würzmittel",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Libanon"
+  },
+  {
+    "name": "Harissa Paste",
+    "kategorie": "Saucen & Würzmittel",
+    "preis": 22.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Tunesien"
+  },
+  {
+    "name": "Chiliflocken Aleppo",
+    "kategorie": "Gewürze",
+    "preis": 45.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Specialty",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Kümmel ganz",
+    "kategorie": "Gewürze",
+    "preis": 18.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Deutschland"
+  },
+  {
+    "name": "Lorbeerblätter",
+    "kategorie": "Gewürze",
+    "preis": 32.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Türkei"
+  },
+  {
+    "name": "Piment Nelkenpfeffer",
+    "kategorie": "Gewürze",
+    "preis": 38.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Jamaika"
+  },
+  {
+    "name": "Koriandersaat ganz",
+    "kategorie": "Gewürze",
+    "preis": 16.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Marokko"
+  },
+  {
+    "name": "Fenchelsaat",
+    "kategorie": "Gewürze",
+    "preis": 14.00,
+    "einheit": "kg",
+    "ruestverlust": 0,
+    "garverlust": 0,
+    "lieferant": "Fridlin",
+    "herkunft": "Indien"
+  }
+]

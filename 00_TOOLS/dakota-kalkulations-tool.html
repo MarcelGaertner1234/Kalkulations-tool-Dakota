@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dakota Kalkulations-Tool | Professional Food Cost Management</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
     <!-- jsPDF for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -73,7 +76,10 @@
             min-height: 100vh;
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: 'Playfair Display', serif;
             color: var(--dakota-dark);
         }
@@ -83,7 +89,7 @@
             background: linear-gradient(135deg, var(--dakota-dark) 0%, #1a1d20 100%);
             color: var(--dakota-gold);
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -128,7 +134,7 @@
         /* ===== NAVIGATION TABS ===== */
         .nav-tabs {
             background: var(--dakota-white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 100px;
             z-index: 999;
@@ -190,8 +196,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ===== CARDS ===== */
@@ -200,13 +213,13 @@
             border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
         }
 
         .card-header {
@@ -385,7 +398,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 10000;
             justify-content: center;
             align-items: center;
@@ -403,13 +416,20 @@
             max-width: 800px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -494,7 +514,7 @@
             background: white;
             border: 2px solid var(--dakota-gold);
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             z-index: 1000;
             margin-top: 0.25rem;
             display: none;
@@ -575,7 +595,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ===== RESPONSIVE ===== */
@@ -708,7 +730,7 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             position: relative;
         }
 
@@ -724,7 +746,7 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             width: 40px;
@@ -739,7 +761,7 @@
         }
 
         .rezept-modal-close:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: rotate(90deg);
         }
 
@@ -899,6 +921,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- HEADER -->
     <header class="header">
@@ -968,13 +991,17 @@
                     </div>
                     <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
-                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                            <label class="btn btn-secondary"
+                                style="display: block; text-align: center; margin: 0; cursor: pointer;">
                                 📥 Lebensmittel importieren (.json)
-                                <input type="file" id="importLebensmittelFile" accept=".json" style="display: none;" onchange="importLebensmittelJSON(event)">
+                                <input type="file" id="importLebensmittelFile" accept=".json" style="display: none;"
+                                    onchange="importLebensmittelJSON(event)">
                             </label>
                         </div>
                         <div style="flex: 1; min-width: 200px;">
-                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportLebensmittelJSON()">
+                            <button class="btn btn-primary"
+                                style="display: block; width: 100%; text-align: center; margin: 0;"
+                                onclick="exportLebensmittelJSON()">
                                 📤 Lebensmittel exportieren (.json)
                             </button>
                         </div>
@@ -984,8 +1011,8 @@
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchLebensmittel"
-                           placeholder="Lebensmittel suchen... (Name, Kategorie, Lieferant)"
-                           onkeyup="searchLebensmittel()">
+                        placeholder="Lebensmittel suchen... (Name, Kategorie, Lieferant)"
+                        onkeyup="searchLebensmittel()">
                 </div>
 
                 <div class="form-group">
@@ -1035,13 +1062,17 @@
                     </div>
                     <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
-                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                            <label class="btn btn-secondary"
+                                style="display: block; text-align: center; margin: 0; cursor: pointer;">
                                 📥 Rezepte importieren (.json)
-                                <input type="file" id="importRezepteFile" accept=".json" style="display: none;" onchange="importRezepteJSON(event)">
+                                <input type="file" id="importRezepteFile" accept=".json" style="display: none;"
+                                    onchange="importRezepteJSON(event)">
                             </label>
                         </div>
                         <div style="flex: 1; min-width: 200px;">
-                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportRezepteJSON()">
+                            <button class="btn btn-primary"
+                                style="display: block; width: 100%; text-align: center; margin: 0;"
+                                onclick="exportRezepteJSON()">
                                 📤 Rezepte exportieren (.json)
                             </button>
                         </div>
@@ -1051,8 +1082,7 @@
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchRezepte"
-                           placeholder="Rezepte suchen... (Name, Kategorie)"
-                           onkeyup="searchRezepte()">
+                        placeholder="Rezepte suchen... (Name, Kategorie)" onkeyup="searchRezepte()">
                 </div>
 
                 <div class="form-group">
@@ -1092,12 +1122,12 @@
                     <div class="form-group">
                         <label class="form-label">Anzahl Personen:</label>
                         <input type="number" class="form-input" id="calcPersonen" value="1" min="1" max="1000"
-                               onchange="recalculate()">
+                            onchange="recalculate()">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Verkaufspreis (CHF/Person):</label>
                         <input type="number" class="form-input" id="calcVerkaufspreis" step="0.01"
-                               onchange="recalculate()">
+                            onchange="recalculate()">
                     </div>
                 </div>
 
@@ -1129,7 +1159,8 @@
 
                 <div class="form-group">
                     <label class="form-label">Rezepte auswählen (mehrere möglich):</label>
-                    <div id="einkaufslisteRezepte" style="max-height: 300px; overflow-y: auto; border: 2px solid #ddd; border-radius: 8px; padding: 1rem;">
+                    <div id="einkaufslisteRezepte"
+                        style="max-height: 300px; overflow-y: auto; border: 2px solid #ddd; border-radius: 8px; padding: 1rem;">
                         <!-- Wird dynamisch gefüllt -->
                     </div>
                 </div>
@@ -1168,13 +1199,17 @@
                     </div>
                     <div style="padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
-                            <label class="btn btn-secondary" style="display: block; text-align: center; margin: 0; cursor: pointer;">
+                            <label class="btn btn-secondary"
+                                style="display: block; text-align: center; margin: 0; cursor: pointer;">
                                 📥 Menükarten importieren (.json)
-                                <input type="file" id="importMenuekartenFile" accept=".json" style="display: none;" onchange="importMenuekartenJSON(event)">
+                                <input type="file" id="importMenuekartenFile" accept=".json" style="display: none;"
+                                    onchange="importMenuekartenJSON(event)">
                             </label>
                         </div>
                         <div style="flex: 1; min-width: 200px;">
-                            <button class="btn btn-primary" style="display: block; width: 100%; text-align: center; margin: 0;" onclick="exportMenuekartenJSON()">
+                            <button class="btn btn-primary"
+                                style="display: block; width: 100%; text-align: center; margin: 0;"
+                                onclick="exportMenuekartenJSON()">
                                 📤 Menükarten exportieren (.json)
                             </button>
                         </div>
@@ -1183,7 +1218,8 @@
 
                 <div class="form-group">
                     <label class="form-label">Filter nach Typ:</label>
-                    <select class="form-select" id="filterMenuekartenTyp" onchange="filterMenuekarten()" style="max-width: 400px;">
+                    <select class="form-select" id="filterMenuekartenTyp" onchange="filterMenuekarten()"
+                        style="max-width: 400px;">
                         <option value="">Alle Typen</option>
                         <option value="abendkarte">🌙 Aktuelle à la carte Karte (Abendkarte)</option>
                         <option value="mittagsmenu">☀️ Mittagsmenü (Mittagskarte)</option>
@@ -1270,7 +1306,8 @@
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                     <button type="submit" class="btn btn-success">💾 Speichern</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeLebensmittelModal()">Abbrechen</button>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeLebensmittelModal()">Abbrechen</button>
                 </div>
             </form>
         </div>
@@ -1329,7 +1366,8 @@
                     <!-- Wird dynamisch gefüllt -->
                 </div>
 
-                <button type="button" class="btn btn-primary btn-sm" onclick="addRezeptZutat()" style="margin-top: 1rem;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="addRezeptZutat()"
+                    style="margin-top: 1rem;">
                     ➕ Zutat hinzufügen
                 </button>
 
@@ -1339,7 +1377,8 @@
                 <div id="rzZubereitungContainer">
                     <!-- Wird dynamisch gefüllt -->
                 </div>
-                <button type="button" class="btn btn-primary btn-sm" onclick="addZubereitungsSchritt()" style="margin-top: 1rem;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="addZubereitungsSchritt()"
+                    style="margin-top: 1rem;">
                     ➕ Zubereitungsschritt hinzufügen
                 </button>
 
@@ -1350,17 +1389,17 @@
                 <div class="form-group">
                     <label class="form-label">Allergene (kommagetrennt)</label>
                     <input type="text" class="form-input" id="rz_allergene"
-                           placeholder="z.B. Gluten, Milch, Eier, Nüsse">
+                        placeholder="z.B. Gluten, Milch, Eier, Nüsse">
                     <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.25rem;">
-                        Verfügbar: Gluten, Milch, Eier, Fisch, Nüsse, Erdnüsse, Soja, Sellerie, Senf, Sesam, Sulfite, Lupinen, Weichtiere, Krebstiere
+                        Verfügbar: Gluten, Milch, Eier, Fisch, Nüsse, Erdnüsse, Soja, Sellerie, Senf, Sesam, Sulfite,
+                        Lupinen, Weichtiere, Krebstiere
                     </small>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Zubereitungszeit</label>
-                        <input type="text" class="form-input" id="rz_zubereitungszeit"
-                               placeholder="z.B. 45 Minuten">
+                        <input type="text" class="form-input" id="rz_zubereitungszeit" placeholder="z.B. 45 Minuten">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Schwierigkeit</label>
@@ -1377,13 +1416,13 @@
                 <div class="form-group">
                     <label class="form-label">Quelle</label>
                     <input type="text" class="form-input" id="rz_quelle"
-                           placeholder="z.B. Betty Bossi, Eigenes Rezept, https://...">
+                        placeholder="z.B. Betty Bossi, Eigenes Rezept, https://...">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Bemerkung / Tipp</label>
                     <textarea class="form-textarea" id="rz_bemerkung" rows="2"
-                              placeholder="Tipp für die Zubereitung oder Anrichtung..."></textarea>
+                        placeholder="Tipp für die Zubereitung oder Anrichtung..."></textarea>
                 </div>
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
@@ -1408,12 +1447,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Kartenname *</label>
-                        <input type="text" class="form-input" id="mk_name"
-                               placeholder="z.B. Abendkarte Dezember 2025" required>
+                        <input type="text" class="form-input" id="mk_name" placeholder="z.B. Abendkarte Dezember 2025"
+                            required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Typ *</label>
-                        <select class="form-select" id="mk_typ" required>
+                        <select class="form-select" id="mk_typ" required
+                            onchange="renderGerichteListe(); toggleWochentagVisibility()">
                             <option value="">-- Wählen --</option>
                             <option value="abendkarte">🌙 Aktuelle à la carte Karte (Abendkarte)</option>
                             <option value="mittagsmenu">☀️ Mittagsmenü (Mittagskarte)</option>
@@ -1431,7 +1471,7 @@
                 <div class="form-group">
                     <label class="form-label">Bemerkungen</label>
                     <textarea class="form-textarea" id="mk_bemerkungen" rows="2"
-                              placeholder="z.B. Saison: Winter 2025, Gültig bis..."></textarea>
+                        placeholder="z.B. Saison: Winter 2025, Gültig bis..."></textarea>
                 </div>
 
                 <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
@@ -1457,7 +1497,7 @@
                                 <option value="Beilage">Beilage</option>
                             </select>
                         </div>
-                        <div class="form-group" style="flex: 1;">
+                        <div class="form-group" style="flex: 1;" id="mk_wochentag_container">
                             <select class="form-select" id="mk_rezept_wochentag">
                                 <option value="">Kein Wochentag</option>
                                 <option value="Montag">Montag</option>
@@ -1483,23 +1523,28 @@
                 <hr style="margin: 2rem 0; border: none; border-top: 2px solid var(--dakota-gold);">
 
                 <!-- Kalkulation Preview -->
-                <div id="mk_kalkulation_preview" style="background: var(--dakota-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <div id="mk_kalkulation_preview"
+                    style="background: var(--dakota-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
                     <h3 style="margin-bottom: 1rem;">Karten-Kalkulation</h3>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center;">
                         <div>
-                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_anzahl_gerichte">0</div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);"
+                                id="mk_anzahl_gerichte">0</div>
                             <div style="font-size: 0.85rem; opacity: 0.7;">Gerichte</div>
                         </div>
                         <div>
-                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_avg_foodcost">0%</div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);"
+                                id="mk_avg_foodcost">0%</div>
                             <div style="font-size: 0.85rem; opacity: 0.7;">Ø Food Cost</div>
                         </div>
                         <div>
-                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_avg_preis">0.-</div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);"
+                                id="mk_avg_preis">0.-</div>
                             <div style="font-size: 0.85rem; opacity: 0.7;">Ø Verkaufspreis</div>
                         </div>
                         <div>
-                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);" id="mk_total_wareneinsatz">0.-</div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: var(--dakota-dark);"
+                                id="mk_total_wareneinsatz">0.-</div>
                             <div style="font-size: 0.85rem; opacity: 0.7;">Total Wareneinsatz</div>
                         </div>
                     </div>
@@ -1961,7 +2006,7 @@
 
         // Manuelle Migration nur für Menükarten (für Console)
         // Aufruf: window.manualMigrateMenuekarten()
-        window.manualMigrateMenuekarten = async function() {
+        window.manualMigrateMenuekarten = async function () {
             if (!firestoreSyncEnabled) {
                 console.error('❌ Firestore ist nicht aktiviert!');
                 return;
@@ -1980,7 +2025,7 @@
 
         // Repariere korrupte Menükarten in Firestore (für Console)
         // Aufruf: window.repairMenuekartenInFirestore()
-        window.repairMenuekartenInFirestore = async function() {
+        window.repairMenuekartenInFirestore = async function () {
             if (!firestoreSyncEnabled) {
                 console.error('❌ Firestore ist nicht aktiviert!');
                 return;
@@ -3251,7 +3296,7 @@
             deleteBtn.style.right = '-40px';
             deleteBtn.style.top = '50%';
             deleteBtn.style.transform = 'translateY(-50%)';
-            deleteBtn.onclick = function() {
+            deleteBtn.onclick = function () {
                 this.parentElement.remove();
             };
 
@@ -3890,6 +3935,7 @@
                 updateKalkulationPreview();
             }
 
+            toggleWochentagVisibility(); // Initial visibility check
             modal.classList.add('active');
         }
 
@@ -3940,6 +3986,20 @@
             updateKalkulationPreview();
         }
 
+        // Toggle Wochentag Visibility based on Menu Type
+        function toggleWochentagVisibility() {
+            const typ = document.getElementById('mk_typ').value;
+            const container = document.getElementById('mk_wochentag_container');
+            if (container) {
+                if (typ === 'mittagsmenu') {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                    document.getElementById('mk_rezept_wochentag').value = '';
+                }
+            }
+        }
+
         function renderGerichteListe() {
             const container = document.getElementById('mk_gerichte_container');
             if (!container) return;
@@ -3950,7 +4010,9 @@
             }
 
             // Check: Verwenden Gerichte Wochentage?
-            const hasWochentage = currentMenuekarteGerichte.some(g => g.wochentag);
+            // FIX: Bei Mittagskarten IMMER die Wochentags-Ansicht erzwingen
+            const mkTyp = document.getElementById('mk_typ') ? document.getElementById('mk_typ').value : '';
+            const hasWochentage = currentMenuekarteGerichte.some(g => g.wochentag) || mkTyp === 'mittagsmenu';
 
             if (hasWochentage) {
                 // === NEUE LOGIK: Gruppierung nach Wochentag → Kategorie ===
@@ -4550,4 +4612,5 @@
     </div>
 
 </body>
+
 </html>

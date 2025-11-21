@@ -1,0 +1,1779 @@
+[
+    {
+        "name": "Poulet-Curry mit Reis",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 25,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 323,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 156,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 209,
+                "menge": 8,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 93,
+                "menge": 10,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Pouletbrust würfeln",
+            "Anbraten",
+            "Gemüse und Curry dazu",
+            "Mit Kokosmilch ablöschen",
+            "Köcheln lassen",
+            "Mit Reis servieren"
+        ],
+        "bemerkung": "Klassiker"
+    },
+    {
+        "name": "Hackfleisch-Bolognese mit Spaghetti",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 24.00,
+        "zubereitungszeit": 30,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 183,
+                "menge": 120,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 48,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 199,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 145,
+                "menge": 10,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 76,
+                "menge": 120,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Hackfleisch anbraten",
+            "Gemüse dazu",
+            "Tomatenmark und Rotwein",
+            "Tomaten dazu",
+            "Köcheln",
+            "Pasta kochen"
+        ],
+        "bemerkung": "Beliebt"
+    },
+    {
+        "name": "Lachsfilet mit Dill-Sauce",
+        "kategorie": "Hauptgericht Fisch",
+        "portionen": 1,
+        "verkaufspreis": 34.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 21,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 105,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 80,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 71,
+                "menge": 0.5,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 15,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Lachs braten",
+            "Sauce aus Rahm und Dill",
+            "Reis kochen"
+        ],
+        "bemerkung": "Leicht"
+    },
+    {
+        "name": "Ravioli Ricotta-Spinat an Rahmsauce",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 22.00,
+        "zubereitungszeit": 15,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 470,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 52,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 24,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 112,
+                "menge": 1,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Ravioli kochen",
+            "Spinat und Zwiebel andünsten",
+            "Rahm dazu",
+            "Mischen"
+        ],
+        "bemerkung": "Vegetarisch"
+    },
+    {
+        "name": "Egli-Knusperli hausgemacht",
+        "kategorie": "Hauptgericht Fisch",
+        "portionen": 1,
+        "verkaufspreis": 28.00,
+        "zubereitungszeit": 25,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 18,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 86,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 87,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 38,
+                "menge": 40,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Egli panieren",
+            "Frittieren",
+            "Salzkartoffeln dazu",
+            "Tartarsauce"
+        ],
+        "bemerkung": "Klassiker vom See"
+    },
+    {
+        "name": "Chili con Carne",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 183,
+                "menge": 120,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 166,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 375,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 199,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 352,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Hackfleisch braten",
+            "Gemüse und Bohnen dazu",
+            "Würzen",
+            "Köcheln",
+            "Reis dazu"
+        ],
+        "bemerkung": "Scharf"
+    },
+    {
+        "name": "Schweinssteak mit Pfeffersauce",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 32.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 239,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 101,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 80,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 126,
+                "menge": 20,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 279,
+                "menge": 200,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Steak braten",
+            "Pfeffer und Cognac in Pfanne",
+            "Rahm dazu",
+            "Pommes frittieren"
+        ],
+        "bemerkung": "Deftig"
+    },
+    {
+        "name": "Risotto Primavera",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 24.00,
+        "zubereitungszeit": 30,
+        "schwierigkeit": "Mittel",
+        "zutaten": [
+            {
+                "produkt_id": 466,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 61,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 259,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 130,
+                "menge": 250,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 24,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 20,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Gemüse würfeln",
+            "Risotto kochen",
+            "Gemüse kurz mitgaren",
+            "Montieren"
+        ],
+        "bemerkung": "Frisch"
+    },
+    {
+        "name": "Rösti-Auflauf mit Speck",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 35,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 40,
+                "menge": 250,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 148,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 187,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            }
+        ],
+        "zubereitung": [
+            "Kartoffeln raffeln",
+            "Speck und Zwiebeln braten",
+            "Mischen",
+            "Guss darüber",
+            "Backen"
+        ],
+        "bemerkung": "Schweizerisch"
+    },
+    {
+        "name": "Seeteufel mit Tomaten-Olivensauce",
+        "kategorie": "Hauptgericht Fisch",
+        "portionen": 1,
+        "verkaufspreis": 36.00,
+        "zubereitungszeit": 25,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 19,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 64,
+                "menge": 120,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 205,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 47,
+                "menge": 2,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 108,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Fisch braten",
+            "Tomaten und Kapern dünsten",
+            "Würzen",
+            "Reis dazu"
+        ],
+        "bemerkung": "Edel"
+    },
+    {
+        "name": "Schweizer Wurstsalat",
+        "kategorie": "Vorspeise",
+        "portionen": 1,
+        "verkaufspreis": 18.00,
+        "zubereitungszeit": 15,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 234,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 187,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 200,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 97,
+                "menge": 30,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 90,
+                "menge": 50,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Wurst und Käse schneiden",
+            "Garnitur schneiden",
+            "Dressing",
+            "Mischen"
+        ],
+        "bemerkung": "Kalt"
+    },
+    {
+        "name": "Kalbsragout mit Kartoffelstock",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 36.00,
+        "zubereitungszeit": 120,
+        "schwierigkeit": "Mittel",
+        "zutaten": [
+            {
+                "produkt_id": 240,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 123,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 131,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 41,
+                "menge": 250,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 36,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 20,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Fleisch schmoren",
+            "Stock kochen und stampfen",
+            "Servieren"
+        ],
+        "bemerkung": "Sonntagsessen"
+    },
+    {
+        "name": "Pizza Margherita",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 22.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 86,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 199,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 151,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 108,
+                "menge": 5,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 92,
+                "menge": 10,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Teig machen",
+            "Belegen",
+            "Backen"
+        ],
+        "bemerkung": "Basic"
+    },
+    {
+        "name": "Rindstopf mit Rotwein",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 34.00,
+        "zubereitungszeit": 150,
+        "schwierigkeit": "Mittel",
+        "zutaten": [
+            {
+                "produkt_id": 265,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 132,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 82,
+                "menge": 150,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Rind schmoren",
+            "Spätzli kochen",
+            "Servieren"
+        ],
+        "bemerkung": "Wintergericht"
+    },
+    {
+        "name": "Gemüsepfanne asiatisch",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 24.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "zutaten": [
+            {
+                "produkt_id": 462,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 61,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 464,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 157,
+                "menge": 20,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 84,
+                "menge": 80,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Gemüse schneiden",
+            "Wokken",
+            "Würzen",
+            "Reis dazu"
+        ],
+        "bemerkung": "Vegan"
+    },
+    {
+        "name": "Quarkpizokkel mit Morcheln",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 28.00,
+        "zubereitungszeit": 45,
+        "schwierigkeit": "Mittel",
+        "quelle": "Gault Millau",
+        "zutaten": [
+            {
+                "produkt_id": 188,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 86,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 59,
+                "menge": 10,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 100,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Teig herstellen",
+            "Pizokel formen und kochen",
+            "Morchelsauce machen",
+            "Mischen"
+        ],
+        "bemerkung": "Bündner Spezialität"
+    },
+    {
+        "name": "Rösti überbacken Berner Art",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 30,
+        "schwierigkeit": "Einfach",
+        "quelle": "Pauli",
+        "zutaten": [
+            {
+                "produkt_id": 40,
+                "menge": 300,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 148,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 187,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 20,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Rösti braten",
+            "Speck dazu",
+            "Käse darüber",
+            "Spiegelei darauf"
+        ],
+        "bemerkung": "Deftig"
+    },
+    {
+        "name": "Berner Zwiebelsuppe",
+        "kategorie": "Vorspeise",
+        "portionen": 1,
+        "verkaufspreis": 14.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Einfach",
+        "quelle": "Traditionell",
+        "zutaten": [
+            {
+                "produkt_id": 45,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 132,
+                "menge": 300,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 123,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 90,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 32,
+                "menge": 40,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Zwiebeln dünsten",
+            "Ablöschen",
+            "Köcheln",
+            "Überbacken mit Brot und Käse"
+        ],
+        "bemerkung": "Wärmend"
+    },
+    {
+        "name": "Suure Mocke (Rindsbraten)",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 38.00,
+        "zubereitungszeit": 180,
+        "schwierigkeit": "Schwer",
+        "quelle": "Berner Küche",
+        "zutaten": [
+            {
+                "produkt_id": 265,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 97,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 41,
+                "menge": 200,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Fleisch marinieren (Tage vorher)",
+            "Anbraten",
+            "Schmoren",
+            "Stock dazu"
+        ],
+        "bemerkung": "Signature Dish"
+    },
+    {
+        "name": "Meitschibei (Nussgebäck)",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 8.00,
+        "zubereitungszeit": 60,
+        "schwierigkeit": "Mittel",
+        "quelle": "Bäckerei",
+        "zutaten": [
+            {
+                "produkt_id": 138,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 86,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 136,
+                "menge": 10,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Teig machen",
+            "Füllung machen",
+            "Formen",
+            "Backen"
+        ],
+        "bemerkung": "Zum Kaffee"
+    },
+    {
+        "name": "Berner Platte (Mini)",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 42.00,
+        "zubereitungszeit": 60,
+        "schwierigkeit": "Mittel",
+        "quelle": "Traditionell",
+        "zutaten": [
+            {
+                "produkt_id": 148,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 265,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 13,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 194,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 150,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Fleisch kochen",
+            "Bohnen kochen",
+            "Kartoffeln kochen",
+            "Anrichten"
+        ],
+        "bemerkung": "Der Klassiker schlechthin"
+    },
+    {
+        "name": "Hobelkäse-Salat",
+        "kategorie": "Vorspeise",
+        "portionen": 1,
+        "verkaufspreis": 19.00,
+        "zubereitungszeit": 10,
+        "schwierigkeit": "Einfach",
+        "quelle": "Alp",
+        "zutaten": [
+            {
+                "produkt_id": 23,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 96,
+                "menge": 10,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 93,
+                "menge": 10,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 90,
+                "menge": 50,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Käse hobeln",
+            "Zwiebeln schneiden",
+            "Marinieren",
+            "Brot dazu"
+        ],
+        "bemerkung": "Einfach und gut"
+    },
+    {
+        "name": "Ofetöpfli (Hackfleisch-Kartoffel)",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 24.00,
+        "zubereitungszeit": 45,
+        "schwierigkeit": "Einfach",
+        "quelle": "Hausmannskost",
+        "zutaten": [
+            {
+                "produkt_id": 183,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 41,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 187,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Hackfleisch anbraten",
+            "Stock machen",
+            "Schichten",
+            "Überbacken"
+        ],
+        "bemerkung": "Comfort Food"
+    },
+    {
+        "name": "Emmentaler Chäschüechli",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 18.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Mittel",
+        "quelle": "Regional",
+        "zutaten": [
+            {
+                "produkt_id": 187,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 88,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 20,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Teig in Förmchen",
+            "Füllung mischen",
+            "Backen"
+        ],
+        "bemerkung": "Mit Salat servieren"
+    },
+    {
+        "name": "Langethaler Rahmkuchen",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 9.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Mittel",
+        "quelle": "Regional",
+        "zutaten": [
+            {
+                "produkt_id": 89,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 0.5,
+                "einheit": "Stk"
+            }
+        ],
+        "zubereitung": [
+            "Teig auslegen",
+            "Guss mischen",
+            "Backen"
+        ],
+        "bemerkung": "Süss und cremig"
+    },
+    {
+        "name": "Hirschragout mit Spätzli",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 44.00,
+        "zubereitungszeit": 120,
+        "schwierigkeit": "Mittel",
+        "quelle": "Wildsaison",
+        "zutaten": [
+            {
+                "produkt_id": 417,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 132,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 82,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 202,
+                "menge": 20,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 216,
+                "menge": 50,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Hirsch anbraten",
+            "Schmoren",
+            "Spätzli und Marroni dazu"
+        ],
+        "bemerkung": "Herbstklassiker"
+    },
+    {
+        "name": "Rehrücken mit Marronisauce",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 52.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Schwer",
+        "quelle": "Gault Millau",
+        "zutaten": [
+            {
+                "produkt_id": 8,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 216,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 82,
+                "menge": 100,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Rehrücken rosa braten",
+            "Sauce aus Marroni und Rahm",
+            "Anrichten"
+        ],
+        "bemerkung": "Festtagsessen"
+    },
+    {
+        "name": "Wildschweinbraten mit Äpfeln",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 42.00,
+        "zubereitungszeit": 150,
+        "schwierigkeit": "Mittel",
+        "quelle": "Wildsaison",
+        "zutaten": [
+            {
+                "produkt_id": 9,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 66,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 132,
+                "menge": 150,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 82,
+                "menge": 150,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Braten schmoren",
+            "Äpfel karamellisieren",
+            "Servieren"
+        ],
+        "bemerkung": "Deftig"
+    },
+    {
+        "name": "Buchweizen-Pizokel",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 26.00,
+        "zubereitungszeit": 45,
+        "schwierigkeit": "Mittel",
+        "quelle": "Caminada",
+        "zutaten": [
+            {
+                "produkt_id": 196,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 191,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 187,
+                "menge": 40,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Pizokel kochen",
+            "Wirsing dünsten",
+            "Mischen mit Käse"
+        ],
+        "bemerkung": "Bündner Klassiker"
+    },
+    {
+        "name": "Bramata mit Salsiz",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 32.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Einfach",
+        "quelle": "Caminada",
+        "zutaten": [
+            {
+                "produkt_id": 85,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 184,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 24,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 130,
+                "menge": 300,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Polenta kochen (cremig)",
+            "Salsiz würfeln",
+            "Untermischen"
+        ],
+        "bemerkung": "Einfach aber genial"
+    },
+    {
+        "name": "Spinat-Ricotta-Gnocchi",
+        "kategorie": "Hauptgericht Vegetarisch",
+        "portionen": 1,
+        "verkaufspreis": 28.00,
+        "zubereitungszeit": 40,
+        "schwierigkeit": "Mittel",
+        "quelle": "Caminada",
+        "zutaten": [
+            {
+                "produkt_id": 150,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 52,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 86,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 0.5,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 24,
+                "menge": 30,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Masse herstellen",
+            "Nocken formen",
+            "Pochieren",
+            "In Salbeibutter schwenken"
+        ],
+        "bemerkung": "Leicht"
+    },
+    {
+        "name": "Rindsvoressen Grossmutterart",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 36.00,
+        "zubereitungszeit": 120,
+        "schwierigkeit": "Einfach",
+        "quelle": "Pauli",
+        "zutaten": [
+            {
+                "produkt_id": 265,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 49,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 40,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 124,
+                "menge": 100,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 41,
+                "menge": 200,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Fleisch schmoren",
+            "Gemüse dazu",
+            "Kartoffelstock dazu"
+        ],
+        "bemerkung": "Klassiker"
+    },
+    {
+        "name": "Kalbsleber mit Rösti",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 34.00,
+        "zubereitungszeit": 25,
+        "schwierigkeit": "Mittel",
+        "quelle": "Pauli",
+        "zutaten": [
+            {
+                "produkt_id": 5,
+                "menge": 160,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 250,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 110,
+                "menge": 2,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Rösti machen",
+            "Leber kurz braten",
+            "Zwiebeln dünsten",
+            "Anrichten"
+        ],
+        "bemerkung": "Zart rosa braten"
+    },
+    {
+        "name": "Gumpesel mit Kartoffelsalat",
+        "kategorie": "Hauptgericht Fleisch",
+        "portionen": 1,
+        "verkaufspreis": 28.00,
+        "zubereitungszeit": 30,
+        "schwierigkeit": "Einfach",
+        "quelle": "Haslital",
+        "zutaten": [
+            {
+                "produkt_id": 14,
+                "menge": 1,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 45,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 130,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 97,
+                "menge": 20,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Wurst sieden",
+            "Kartoffelsalat machen",
+            "Servieren"
+        ],
+        "bemerkung": "Regionale Spezialität"
+    },
+    {
+        "name": "Haslikuchen",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 12.00,
+        "zubereitungszeit": 50,
+        "schwierigkeit": "Mittel",
+        "quelle": "Haslital",
+        "zutaten": [
+            {
+                "produkt_id": 138,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 86,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 50,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 1,
+                "einheit": "Stk"
+            }
+        ],
+        "zubereitung": [
+            "Mürbeteig",
+            "Nussfüllung",
+            "Backen"
+        ],
+        "bemerkung": "Nussig"
+    },
+    {
+        "name": "Haslitaler Meringue",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 13.00,
+        "zubereitungszeit": 10,
+        "schwierigkeit": "Einfach",
+        "quelle": "Haslital",
+        "zutaten": [
+            {
+                "produkt_id": 134,
+                "menge": 60,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 37,
+                "menge": 2,
+                "einheit": "Stk"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 100,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Meringue kaufen oder backen (Eiweiss+Zucker)",
+            "Viel Rahm dazu"
+        ],
+        "bemerkung": "Der Klassiker aus Meiringen"
+    },
+    {
+        "name": "Brienzer Krapfen",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 10.00,
+        "zubereitungszeit": 60,
+        "schwierigkeit": "Schwer",
+        "quelle": "Haslital",
+        "zutaten": [
+            {
+                "produkt_id": 86,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 68,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 113,
+                "menge": 2,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 137,
+                "menge": 20,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Teig machen",
+            "Birnenfüllung",
+            "Frittieren/Backen"
+        ],
+        "bemerkung": "Tradition"
+    },
+    {
+        "name": "Engadiner Nusstorte",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 14.00,
+        "zubereitungszeit": 60,
+        "schwierigkeit": "Mittel",
+        "quelle": "Schweiz",
+        "zutaten": [
+            {
+                "produkt_id": 137,
+                "menge": 100,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 80,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 50,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 89,
+                "menge": 150,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Karamell machen",
+            "Nüsse dazu",
+            "In Mürbeteig füllen",
+            "Backen"
+        ],
+        "bemerkung": "Haltbar"
+    },
+    {
+        "name": "Vermicelles Tessiner Art",
+        "kategorie": "Dessert",
+        "portionen": 1,
+        "verkaufspreis": 14.00,
+        "zubereitungszeit": 15,
+        "schwierigkeit": "Einfach",
+        "quelle": "Schweiz",
+        "zutaten": [
+            {
+                "produkt_id": 216,
+                "menge": 150,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 134,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 33,
+                "menge": 80,
+                "einheit": "ml"
+            },
+            {
+                "produkt_id": 128,
+                "menge": 10,
+                "einheit": "ml"
+            }
+        ],
+        "zubereitung": [
+            "Marroni pürieren",
+            "Durch Presse drücken",
+            "Rahm und Kirsch dazu"
+        ],
+        "bemerkung": "Herbst"
+    },
+    {
+        "name": "Eglifilet Brienzersee",
+        "kategorie": "Hauptgericht Fisch",
+        "portionen": 1,
+        "verkaufspreis": 36.00,
+        "zubereitungszeit": 20,
+        "schwierigkeit": "Einfach",
+        "quelle": "Regional",
+        "zutaten": [
+            {
+                "produkt_id": 18,
+                "menge": 180,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 139,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 34,
+                "menge": 30,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 40,
+                "menge": 200,
+                "einheit": "g"
+            },
+            {
+                "produkt_id": 104,
+                "menge": 5,
+                "einheit": "g"
+            }
+        ],
+        "zubereitung": [
+            "Egli in Mandelbutter braten",
+            "Salzkartoffeln",
+            "Petersilie"
+        ],
+        "bemerkung": "Müllerin Art"
+    }
+]
