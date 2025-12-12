@@ -583,6 +583,86 @@
             color: #721c24;
         }
 
+        /* ===== SAISON KALENDER ===== */
+        .saison-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .saison-badge.in-saison {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+
+        .saison-badge.bald-saison {
+            background: rgba(255, 193, 7, 0.15);
+            color: #d39e00;
+        }
+
+        .saison-badge.off-saison {
+            background: rgba(108, 117, 125, 0.15);
+            color: #6c757d;
+        }
+
+        .saison-filter-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .saison-filter-btn {
+            padding: 0.4rem 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .saison-filter-btn:hover {
+            border-color: var(--dakota-gold);
+            background: rgba(219, 167, 101, 0.1);
+        }
+
+        .saison-filter-btn.active {
+            border-color: var(--dakota-gold);
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .saison-checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+        }
+
+        .saison-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            background: #f5f5f5;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .saison-checkbox:hover {
+            background: rgba(219, 167, 101, 0.2);
+        }
+
+        .saison-checkbox input[type="checkbox"] {
+            accent-color: var(--dakota-gold);
+        }
+
         /* ===== LOADING SPINNER ===== */
         .spinner {
             display: inline-block;
@@ -1035,6 +1115,14 @@
                     </select>
                 </div>
 
+                <div class="saison-filter-container" style="margin-top: 1rem;">
+                    <span style="font-weight: 600; color: #666; margin-right: 0.5rem;">🌿 Saison:</span>
+                    <button class="saison-filter-btn active" onclick="filterBySaison('alle')" data-filter="alle">Alle</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('in-saison')" data-filter="in-saison">Jetzt in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('bald-saison')" data-filter="bald-saison">Bald in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('off-saison')" data-filter="off-saison">Nicht in Saison</button>
+                </div>
+
                 <div id="lebensmittelTable"></div>
             </div>
         </div>
@@ -1297,6 +1385,25 @@
                 <div class="form-group">
                     <label class="form-label">Lieferant</label>
                     <input type="text" class="form-input" id="lm_lieferant">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🌿 Saison (Monate)</label>
+                    <div class="saison-checkbox-grid">
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jan" value="1"> Jan</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_feb" value="2"> Feb</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mar" value="3"> Mär</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_apr" value="4"> Apr</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mai" value="5"> Mai</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jun" value="6"> Jun</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jul" value="7"> Jul</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_aug" value="8"> Aug</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_sep" value="9"> Sep</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_okt" value="10"> Okt</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_nov" value="11"> Nov</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_dez" value="12"> Dez</label>
+                    </div>
+                    <small style="color: #888; margin-top: 0.5rem; display: block;">Wähle die Monate, in denen dieses Produkt in Saison ist (leer = ganzjährig verfügbar)</small>
                 </div>
 
                 <div class="form-group">
@@ -2736,6 +2843,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Kategorie</th>
+                            <th>Saison</th>
                             <th>Preis/Einheit</th>
                             <th>Einheit</th>
                             <th>Rüstverlust</th>
@@ -2748,10 +2856,12 @@
             `;
 
             data.forEach(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
                 html += `
                     <tr>
                         <td><strong>${lm.name}</strong></td>
                         <td><span class="badge badge-gold">${lm.kategorie}</span></td>
+                        <td><span class="saison-badge ${saisonStatus.class}">🌿 ${saisonStatus.label}</span></td>
                         <td>CHF ${lm.preis.toFixed(2)}</td>
                         <td>${lm.einheit}</td>
                         <td>${lm.ruestverlust || 0}%</td>
@@ -2789,10 +2899,72 @@
             renderLebensmittelTable(filtered);
         }
 
+        // Saison-Status berechnen
+        function getSaisonStatus(saison) {
+            if (!saison || !Array.isArray(saison) || saison.length === 0) {
+                return { status: 'ganzjaehrig', label: 'Ganzjährig', class: 'in-saison' };
+            }
+
+            const currentMonth = new Date().getMonth() + 1; // 1-12
+            const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+
+            if (saison.includes(currentMonth)) {
+                return { status: 'in-saison', label: 'In Saison', class: 'in-saison' };
+            } else if (saison.includes(nextMonth)) {
+                return { status: 'bald-saison', label: 'Bald in Saison', class: 'bald-saison' };
+            } else {
+                return { status: 'off-saison', label: 'Nicht in Saison', class: 'off-saison' };
+            }
+        }
+
+        // Saison-Filter
+        let currentSaisonFilter = 'alle';
+
+        function filterBySaison(filter) {
+            currentSaisonFilter = filter;
+
+            // Button-Status aktualisieren
+            document.querySelectorAll('.saison-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter anwenden
+            if (filter === 'alle') {
+                renderLebensmittelTable(lebensmittelData);
+                return;
+            }
+
+            const filtered = lebensmittelData.filter(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
+                if (filter === 'in-saison') {
+                    return saisonStatus.status === 'in-saison' || saisonStatus.status === 'ganzjaehrig';
+                } else if (filter === 'bald-saison') {
+                    return saisonStatus.status === 'bald-saison';
+                } else if (filter === 'off-saison') {
+                    return saisonStatus.status === 'off-saison';
+                }
+                return true;
+            });
+
+            renderLebensmittelTable(filtered);
+        }
+
         function openLebensmittelModal(id = null) {
             currentEditId = id;
             const modal = document.getElementById('lebensmittelModal');
             const title = document.getElementById('lebensmittelModalTitle');
+
+            // Saison-Monate Mapping
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+
+            // Reset alle Saison-Checkboxen
+            saisonMonths.forEach(m => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb) cb.checked = false;
+            });
 
             if (id) {
                 title.textContent = 'Lebensmittel bearbeiten';
@@ -2806,6 +2978,15 @@
                 document.getElementById('lm_garverlust').value = lm.garverlust || 0;
                 document.getElementById('lm_lieferant').value = lm.lieferant || '';
                 document.getElementById('lm_bemerkungen').value = lm.bemerkungen || '';
+
+                // Saison-Daten laden
+                if (lm.saison && Array.isArray(lm.saison)) {
+                    lm.saison.forEach(month => {
+                        const monthId = saisonMonths[month - 1]; // month ist 1-12
+                        const cb = document.getElementById('lm_saison_' + monthId);
+                        if (cb) cb.checked = true;
+                    });
+                }
             } else {
                 title.textContent = 'Neues Lebensmittel';
                 document.getElementById('lebensmittelForm').reset();
@@ -2822,6 +3003,16 @@
         async function saveLebensmittel(event) {
             event.preventDefault();
 
+            // Saison-Daten sammeln
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+            const selectedSaison = [];
+            saisonMonths.forEach((m, index) => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb && cb.checked) {
+                    selectedSaison.push(index + 1); // Monate 1-12
+                }
+            });
+
             const data = {
                 name: document.getElementById('lm_name').value,
                 kategorie: document.getElementById('lm_kategorie').value,
@@ -2830,7 +3021,8 @@
                 ruestverlust: parseFloat(document.getElementById('lm_ruestverlust').value) || 0,
                 garverlust: parseFloat(document.getElementById('lm_garverlust').value) || 0,
                 lieferant: document.getElementById('lm_lieferant').value,
-                bemerkungen: document.getElementById('lm_bemerkungen').value
+                bemerkungen: document.getElementById('lm_bemerkungen').value,
+                saison: selectedSaison.length > 0 ? selectedSaison : null // null = ganzjährig
             };
 
             // FIX: Auto-Vergabe gastro_id für korrekte Rezept-Zuordnung
