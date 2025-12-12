@@ -131,6 +131,244 @@
             font-size: 0.85rem;
         }
 
+        /* ===== GLOBAL SEARCH ===== */
+        .global-search-container {
+            position: relative;
+            margin-left: 2rem;
+        }
+
+        .global-search-input {
+            width: 300px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid rgba(219, 167, 101, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .global-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .global-search-input:focus {
+            outline: none;
+            border-color: var(--dakota-gold);
+            background: rgba(255, 255, 255, 0.15);
+            width: 350px;
+        }
+
+        .global-search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+        }
+
+        .global-search-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--dakota-white);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 2000;
+            display: none;
+        }
+
+        .global-search-results.active {
+            display: block;
+        }
+
+        .search-result-group {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-result-group:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-group-title {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #999;
+            background: #f8f8f8;
+        }
+
+        .search-result-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: background 0.2s;
+            color: var(--dakota-dark);
+        }
+
+        .search-result-item:hover {
+            background: rgba(219, 167, 101, 0.1);
+        }
+
+        .search-result-icon {
+            font-size: 1.2rem;
+        }
+
+        .search-result-info {
+            flex: 1;
+        }
+
+        .search-result-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .search-result-detail {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .search-result-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .search-no-results {
+            padding: 1.5rem;
+            text-align: center;
+            color: #999;
+        }
+
+        .search-shortcut {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ===== DRAG & DROP ===== */
+        .draggable-row {
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+
+        .draggable-row:active {
+            cursor: grabbing;
+        }
+
+        .draggable-row.dragging {
+            opacity: 0.5;
+            background: rgba(219, 167, 101, 0.2) !important;
+        }
+
+        .draggable-row.drag-over {
+            border-top: 3px solid var(--dakota-gold) !important;
+        }
+
+        .drag-handle {
+            cursor: grab;
+            padding: 0.5rem;
+            color: #999;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+
+        .drag-handle:hover {
+            color: var(--dakota-gold);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* ===== SAISONKALENDER ===== */
+        .saison-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .saison-badge.in-saison {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+
+        .saison-badge.off-saison {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+        }
+
+        .saison-badge.bald-saison {
+            background: rgba(255, 193, 7, 0.15);
+            color: #856404;
+        }
+
+        .saison-filter-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .saison-filter-btn {
+            padding: 0.4rem 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .saison-filter-btn:hover {
+            border-color: var(--dakota-gold);
+        }
+
+        .saison-filter-btn.active {
+            background: var(--dakota-gold);
+            border-color: var(--dakota-gold);
+            color: white;
+        }
+
+        .saison-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .saison-checkbox:hover {
+            background: rgba(219, 167, 101, 0.2);
+        }
+
+        .saison-checkbox input:checked + span,
+        .saison-checkbox:has(input:checked) {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
         /* ===== NAVIGATION TABS ===== */
         .nav-tabs {
             background: var(--dakota-white);
@@ -927,6 +1165,18 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">DAKOTA KALKULATIONS-TOOL</div>
+            <!-- Global Search -->
+            <div class="global-search-container">
+                <span class="global-search-icon">🔍</span>
+                <input type="text"
+                       class="global-search-input"
+                       id="globalSearchInput"
+                       placeholder="Suchen... (Ctrl+K)"
+                       autocomplete="off">
+                <span class="search-shortcut">Ctrl+K</span>
+                <div class="global-search-results" id="globalSearchResults"></div>
+            </div>
+
             <div class="header-stats">
                 <div class="stat-item">
                     <div class="stat-value" id="totalLebensmittel">0</div>
@@ -1033,6 +1283,15 @@
                         <option value="Alkohol (Kochen)">Alkohol (Kochen)</option>
                         <option value="Sonstige">Sonstige</option>
                     </select>
+                </div>
+
+                <!-- SAISON-FILTER -->
+                <div class="saison-filter-container" style="margin-top: 1rem;">
+                    <span style="font-weight: 600; color: #666; margin-right: 0.5rem;">🌿 Saison:</span>
+                    <button class="saison-filter-btn active" onclick="filterBySaison('alle')">Alle</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('in-saison')">Jetzt in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('bald-saison')">Bald in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('off-saison')">Nicht in Saison</button>
                 </div>
 
                 <div id="lebensmittelTable"></div>
@@ -1297,6 +1556,25 @@
                 <div class="form-group">
                     <label class="form-label">Lieferant</label>
                     <input type="text" class="form-input" id="lm_lieferant">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🌿 Saison (Monate)</label>
+                    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem;">
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jan" value="1"> Jan</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_feb" value="2"> Feb</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mar" value="3"> Mär</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_apr" value="4"> Apr</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mai" value="5"> Mai</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jun" value="6"> Jun</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jul" value="7"> Jul</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_aug" value="8"> Aug</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_sep" value="9"> Sep</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_okt" value="10"> Okt</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_nov" value="11"> Nov</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_dez" value="12"> Dez</label>
+                    </div>
+                    <small style="color: #888; margin-top: 0.25rem; display: block;">Wähle die Monate, in denen das Produkt Saison hat (leer = ganzjährig verfügbar)</small>
                 </div>
 
                 <div class="form-group">
@@ -2776,6 +3054,191 @@
             });
         }
 
+        // ===== GLOBAL SEARCH =====
+        function initGlobalSearch() {
+            const searchInput = document.getElementById('globalSearchInput');
+            const searchResults = document.getElementById('globalSearchResults');
+
+            if (!searchInput || !searchResults) return;
+
+            // Keyboard shortcut Ctrl+K
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                // ESC to close
+                if (e.key === 'Escape') {
+                    searchResults.classList.remove('active');
+                    searchInput.blur();
+                }
+            });
+
+            // Search on input
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performGlobalSearch(searchInput.value.trim());
+                }, 150);
+            });
+
+            // Focus/Blur handlers
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim().length >= 2) {
+                    performGlobalSearch(searchInput.value.trim());
+                }
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.global-search-container')) {
+                    searchResults.classList.remove('active');
+                }
+            });
+        }
+
+        function performGlobalSearch(query) {
+            const searchResults = document.getElementById('globalSearchResults');
+
+            if (query.length < 2) {
+                searchResults.classList.remove('active');
+                return;
+            }
+
+            const queryLower = query.toLowerCase();
+            let html = '';
+            let totalResults = 0;
+
+            // Search in Lebensmittel
+            const matchingLebensmittel = lebensmittelData.filter(item =>
+                item.name.toLowerCase().includes(queryLower) ||
+                (item.kategorie && item.kategorie.toLowerCase().includes(queryLower)) ||
+                (item.lieferant && item.lieferant.toLowerCase().includes(queryLower))
+            ).slice(0, 5);
+
+            if (matchingLebensmittel.length > 0) {
+                totalResults += matchingLebensmittel.length;
+                html += `
+                    <div class="search-result-group">
+                        <div class="search-result-group-title">🥕 Lebensmittel (${matchingLebensmittel.length})</div>
+                        ${matchingLebensmittel.map(item => `
+                            <div class="search-result-item" onclick="navigateToLebensmittel(${item.id})">
+                                <span class="search-result-icon">🥕</span>
+                                <div class="search-result-info">
+                                    <div class="search-result-name">${highlightMatch(item.name, query)}</div>
+                                    <div class="search-result-detail">${item.kategorie || 'Keine Kategorie'} • CHF ${item.preis?.toFixed(2) || '0.00'}/${item.einheit || 'Stk'}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Search in Rezepte
+            const matchingRezepte = rezepteData.filter(item =>
+                item.name.toLowerCase().includes(queryLower) ||
+                (item.kategorie && item.kategorie.toLowerCase().includes(queryLower)) ||
+                (item.beschreibung && item.beschreibung.toLowerCase().includes(queryLower))
+            ).slice(0, 5);
+
+            if (matchingRezepte.length > 0) {
+                totalResults += matchingRezepte.length;
+                html += `
+                    <div class="search-result-group">
+                        <div class="search-result-group-title">📖 Rezepte (${matchingRezepte.length})</div>
+                        ${matchingRezepte.map(item => `
+                            <div class="search-result-item" onclick="navigateToRezept(${item.id})">
+                                <span class="search-result-icon">📖</span>
+                                <div class="search-result-info">
+                                    <div class="search-result-name">${highlightMatch(item.name, query)}</div>
+                                    <div class="search-result-detail">${item.kategorie || 'Keine Kategorie'} • CHF ${item.verkaufspreis?.toFixed(2) || '0.00'}</div>
+                                </div>
+                                ${item.verkaufspreis ? `<span class="search-result-badge">${calculateRezeptFoodCostPercent(item)}%</span>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Search in Menükarten
+            const matchingMenuekarten = menuekartenData.filter(item =>
+                item.name.toLowerCase().includes(queryLower) ||
+                (item.typ && item.typ.toLowerCase().includes(queryLower))
+            ).slice(0, 3);
+
+            if (matchingMenuekarten.length > 0) {
+                totalResults += matchingMenuekarten.length;
+                html += `
+                    <div class="search-result-group">
+                        <div class="search-result-group-title">🍽️ Menükarten (${matchingMenuekarten.length})</div>
+                        ${matchingMenuekarten.map(item => `
+                            <div class="search-result-item" onclick="navigateToMenuekarte(${item.id})">
+                                <span class="search-result-icon">🍽️</span>
+                                <div class="search-result-info">
+                                    <div class="search-result-name">${highlightMatch(item.name, query)}</div>
+                                    <div class="search-result-detail">${item.typ || 'Menükarte'} • ${item.gerichte?.length || 0} Gerichte</div>
+                                </div>
+                                ${item.aktiv ? '<span class="search-result-badge">Aktiv</span>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (totalResults === 0) {
+                html = `
+                    <div class="search-no-results">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+                        <div>Keine Ergebnisse für "<strong>${query}</strong>"</div>
+                    </div>
+                `;
+            }
+
+            searchResults.innerHTML = html;
+            searchResults.classList.add('active');
+        }
+
+        function highlightMatch(text, query) {
+            if (!text || !query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark style="background: rgba(219, 167, 101, 0.3); padding: 0 2px; border-radius: 2px;">$1</mark>');
+        }
+
+        function calculateRezeptFoodCostPercent(rezept) {
+            if (!rezept.verkaufspreis) return 0;
+            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+            return (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+        }
+
+        function navigateToLebensmittel(id) {
+            document.getElementById('globalSearchResults').classList.remove('active');
+            document.getElementById('globalSearchInput').value = '';
+            switchTab('lebensmittel');
+            setTimeout(() => {
+                openLebensmittelModal(id);
+            }, 200);
+        }
+
+        function navigateToRezept(id) {
+            document.getElementById('globalSearchResults').classList.remove('active');
+            document.getElementById('globalSearchInput').value = '';
+            switchTab('rezepte');
+            setTimeout(() => {
+                openRezeptModal(id);
+            }, 200);
+        }
+
+        function navigateToMenuekarte(id) {
+            document.getElementById('globalSearchResults').classList.remove('active');
+            document.getElementById('globalSearchInput').value = '';
+            switchTab('menuekarten');
+            setTimeout(() => {
+                openMenuekarteModal(id);
+            }, 200);
+        }
+
         // ===== TAB SWITCHING =====
         function switchTab(tabName) {
             // Remove active from all tabs
@@ -2889,6 +3352,13 @@
             const modal = document.getElementById('lebensmittelModal');
             const title = document.getElementById('lebensmittelModalTitle');
 
+            // Reset all saison checkboxes
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+            saisonMonths.forEach(m => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb) cb.checked = false;
+            });
+
             if (id) {
                 title.textContent = 'Lebensmittel bearbeiten';
                 const lm = lebensmittelData.find(l => l.id === id);
@@ -2901,6 +3371,15 @@
                 document.getElementById('lm_garverlust').value = lm.garverlust || 0;
                 document.getElementById('lm_lieferant').value = lm.lieferant || '';
                 document.getElementById('lm_bemerkungen').value = lm.bemerkungen || '';
+
+                // Set saison checkboxes
+                if (lm.saison && Array.isArray(lm.saison)) {
+                    lm.saison.forEach(month => {
+                        const monthId = saisonMonths[month - 1];
+                        const cb = document.getElementById('lm_saison_' + monthId);
+                        if (cb) cb.checked = true;
+                    });
+                }
             } else {
                 title.textContent = 'Neues Lebensmittel';
                 document.getElementById('lebensmittelForm').reset();
@@ -2917,6 +3396,16 @@
         async function saveLebensmittel(event) {
             event.preventDefault();
 
+            // Collect saison months
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+            const selectedSaison = [];
+            saisonMonths.forEach((m, index) => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb && cb.checked) {
+                    selectedSaison.push(index + 1); // 1-12
+                }
+            });
+
             const data = {
                 name: document.getElementById('lm_name').value,
                 kategorie: document.getElementById('lm_kategorie').value,
@@ -2925,7 +3414,8 @@
                 ruestverlust: parseFloat(document.getElementById('lm_ruestverlust').value) || 0,
                 garverlust: parseFloat(document.getElementById('lm_garverlust').value) || 0,
                 lieferant: document.getElementById('lm_lieferant').value,
-                bemerkungen: document.getElementById('lm_bemerkungen').value
+                bemerkungen: document.getElementById('lm_bemerkungen').value,
+                saison: selectedSaison.length > 0 ? selectedSaison : null // null = ganzjährig
             };
 
             // FIX: Auto-Vergabe gastro_id für korrekte Rezept-Zuordnung
@@ -4315,20 +4805,21 @@
 
             } else {
                 // === ALTE LOGIK: Nur nach Kategorie gruppieren (für Abendkarten ohne Wochentage) ===
+                // MIT DRAG & DROP für Reihenfolge!
                 const byKategorie = {};
                 currentMenuekarteGerichte.forEach(gericht => {
                     if (!byKategorie[gericht.kategorie]) byKategorie[gericht.kategorie] = [];
                     byKategorie[gericht.kategorie].push(gericht);
                 });
 
-                let html = '';
+                let html = '<p style="color: #888; font-size: 0.85rem; margin-bottom: 1rem;">💡 Ziehe Gerichte per Drag & Drop um die Reihenfolge zu ändern</p>';
                 const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
 
                 kategorieOrder.forEach(kategorie => {
                     if (!byKategorie[kategorie]) return;
 
                     html += `<h4 style="margin-top: 1rem; color: var(--dakota-gold);">${kategorie}</h4>`;
-                    html += '<table class="data-table"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+                    html += `<table class="data-table" data-kategorie="${kategorie}"><thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody class="drag-container">`;
 
                     byKategorie[kategorie].forEach((gericht, index) => {
                         const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
@@ -4341,7 +4832,8 @@
                         const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
 
                         html += `
-                            <tr>
+                            <tr class="draggable-row" draggable="true" data-index="${globalIndex}" data-kategorie="${kategorie}">
+                                <td class="drag-handle" title="Ziehen zum Sortieren">⋮⋮</td>
                                 <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
                                 <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
                                 <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
@@ -4359,7 +4851,97 @@
                 });
 
                 container.innerHTML = html;
+
+                // Initialize Drag & Drop events
+                initDragAndDrop();
             }
+        }
+
+        // ===== DRAG & DROP FUNCTIONS =====
+        function initDragAndDrop() {
+            const rows = document.querySelectorAll('.draggable-row');
+
+            rows.forEach(row => {
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragend', handleDragEnd);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('dragenter', handleDragEnter);
+                row.addEventListener('dragleave', handleDragLeave);
+                row.addEventListener('drop', handleDrop);
+            });
+        }
+
+        let draggedRow = null;
+
+        function handleDragStart(e) {
+            draggedRow = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.index);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.draggable-row').forEach(row => {
+                row.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            // Nur innerhalb derselben Kategorie erlauben
+            if (this.dataset.kategorie === draggedRow.dataset.kategorie && this !== draggedRow) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (this === draggedRow) return;
+
+            // Nur innerhalb derselben Kategorie erlauben
+            if (this.dataset.kategorie !== draggedRow.dataset.kategorie) {
+                alert('Gerichte können nur innerhalb derselben Kategorie verschoben werden.');
+                return;
+            }
+
+            const fromIndex = parseInt(draggedRow.dataset.index);
+            const toIndex = parseInt(this.dataset.index);
+
+            // Reorder the array
+            reorderGerichte(fromIndex, toIndex);
+
+            this.classList.remove('drag-over');
+        }
+
+        function reorderGerichte(fromIndex, toIndex) {
+            // Remove item from original position
+            const [movedItem] = currentMenuekarteGerichte.splice(fromIndex, 1);
+
+            // Insert at new position
+            if (toIndex > fromIndex) {
+                currentMenuekarteGerichte.splice(toIndex, 0, movedItem);
+            } else {
+                currentMenuekarteGerichte.splice(toIndex, 0, movedItem);
+            }
+
+            // Update reihenfolge
+            currentMenuekarteGerichte.forEach((g, i) => g.reihenfolge = i + 1);
+
+            // Re-render
+            renderGerichteListe();
+            updateKalkulationPreview();
         }
 
         function updateKalkulationPreview() {
@@ -4764,6 +5346,9 @@
                 // Startet Echtzeit-Synchronisation mit Cloud-Datenbank
                 // Migriert alle 3 Collections: lebensmittel, rezepte, menuekarten
                 await initFirestoreSync();
+
+                // 🔍 GLOBAL SEARCH INITIALISIEREN
+                initGlobalSearch();
             } catch (error) {
                 console.error('Error initializing app:', error);
                 alert('Fehler beim Laden der Datenbank: ' + error.message);
