@@ -4100,13 +4100,34 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                     throw new Error('Keine Produkte erkannt');
                 }
 
-                // Ergebnisse mit Datenbank abgleichen
+                // Ergebnisse mit Datenbank abgleichen (verbessertes Matching)
                 scannerResults = products.map(p => {
-                    const match = findMatchingLebensmittel(p.name);
+                    const matchResult = findMatchingLebensmittel(p.name);
+                    const similarItems = findSimilarLebensmittel(p.name, 10);
+
+                    let status = 'new';
+                    let matchedLm = null;
+
+                    if (matchResult) {
+                        matchedLm = matchResult.match;
+                        if (matchResult.type === 'exact') {
+                            status = matchedLm.preis !== p.preis_pro_einheit ? 'update' : 'match';
+                        } else {
+                            // Partial match - Warnung anzeigen
+                            status = 'similar';
+                        }
+                    }
+
                     return {
                         ...p,
-                        match: match,
-                        status: match ? (match.preis !== p.preis_pro_einheit ? 'update' : 'match') : 'new'
+                        matchedLm: matchedLm,
+                        matchType: matchResult?.type || null,
+                        matchScore: matchResult?.score || 0,
+                        similarItems: similarItems,
+                        status: status,
+                        selectedAction: status === 'match' ? 'skip' : (status === 'update' ? 'update' : 'new'),
+                        selectedLmId: matchedLm?.id || null,
+                        selectedKategorie: p.kategorie || 'Sonstige'
                     };
                 });
 
@@ -4120,27 +4141,80 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             }
         }
 
-        // Passenden Eintrag in Datenbank finden
+        // Passenden Eintrag in Datenbank finden (verbessertes Fuzzy-Matching)
         function findMatchingLebensmittel(name) {
             const searchName = name.toLowerCase().trim();
+            const searchWords = searchName.split(/\s+/);
 
-            // Exakte Übereinstimmung
+            // 1. Exakte Übereinstimmung
             let match = lebensmittelData.find(lm =>
                 lm.name.toLowerCase() === searchName
             );
+            if (match) return { match, score: 100, type: 'exact' };
 
-            if (match) return match;
-
-            // Teilweise Übereinstimmung
+            // 2. Name enthält Suchbegriff oder umgekehrt
             match = lebensmittelData.find(lm =>
                 lm.name.toLowerCase().includes(searchName) ||
                 searchName.includes(lm.name.toLowerCase())
             );
+            if (match) return { match, score: 80, type: 'contains' };
 
-            return match || null;
+            // 3. Wortbasiertes Matching (mindestens 2 Wörter übereinstimmend)
+            for (const lm of lebensmittelData) {
+                const lmWords = lm.name.toLowerCase().split(/\s+/);
+                const matchingWords = searchWords.filter(sw =>
+                    lmWords.some(lw => lw.includes(sw) || sw.includes(lw))
+                );
+                if (matchingWords.length >= 2 || (matchingWords.length === 1 && matchingWords[0].length > 4)) {
+                    return { match: lm, score: 60, type: 'partial' };
+                }
+            }
+
+            return null;
         }
 
-        // Scanner-Ergebnisse anzeigen
+        // Alle ähnlichen Lebensmittel finden (für Dropdown)
+        function findSimilarLebensmittel(name, limit = 10) {
+            const searchName = name.toLowerCase().trim();
+            const searchWords = searchName.split(/\s+/);
+
+            const scored = lebensmittelData.map(lm => {
+                const lmName = lm.name.toLowerCase();
+                const lmWords = lmName.split(/\s+/);
+                let score = 0;
+
+                // Exakt
+                if (lmName === searchName) score = 100;
+                // Enthält
+                else if (lmName.includes(searchName) || searchName.includes(lmName)) score = 80;
+                // Wort-Matching
+                else {
+                    const matchingWords = searchWords.filter(sw =>
+                        lmWords.some(lw => lw.includes(sw) || sw.includes(lw))
+                    );
+                    score = matchingWords.length * 20;
+                }
+
+                return { lm, score };
+            });
+
+            return scored
+                .filter(s => s.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, limit)
+                .map(s => s.lm);
+        }
+
+        // Verfügbare Kategorien
+        const lebensmittelKategorien = [
+            'Fleisch', 'Fisch & Meeresfrüchte', 'Gemüse', 'Obst', 'Käse',
+            'Milchprodukte', 'Eier', 'Brot & Backwaren', 'Teigwaren & Reis',
+            'Gewürze & Kräuter', 'Öle & Fette', 'Saucen & Fonds', 'Nüsse & Samen',
+            'Hülsenfrüchte', 'Konserven', 'Tiefkühl', 'Getränke', 'Spirituosen',
+            'Wein', 'Süsswaren', 'Sonstige'
+        ];
+
+        // Scanner-Ergebnisse anzeigen (mit Zuordnungs- und Kategorie-Auswahl)
         function displayScannerResults() {
             const container = document.getElementById('scannerProductList');
             const resultsDiv = document.getElementById('scannerResults');
@@ -4149,26 +4223,98 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const newCount = scannerResults.filter(r => r.status === 'new').length;
             const updateCount = scannerResults.filter(r => r.status === 'update').length;
             const matchCount = scannerResults.filter(r => r.status === 'match').length;
+            const similarCount = scannerResults.filter(r => r.status === 'similar').length;
 
-            title.textContent = `${scannerResults.length} Produkte erkannt (${newCount} neu, ${updateCount} Preis-Updates, ${matchCount} unverändert)`;
+            title.textContent = `${scannerResults.length} Produkte erkannt`;
+
+            // Kategorie-Optionen generieren
+            const kategorieOptions = lebensmittelKategorien.map(k =>
+                `<option value="${k}">${k}</option>`
+            ).join('');
 
             let html = '';
             scannerResults.forEach((item, index) => {
-                const statusClass = item.status;
-                const statusText = item.status === 'new' ? 'Neu' :
-                    item.status === 'update' ? 'Preis-Update' : 'Vorhanden';
+                // Status-Badge
+                let statusBadge = '';
+                let statusClass = item.status;
+                if (item.status === 'match') {
+                    statusBadge = '<span class="scanner-product-status match">✓ Identisch</span>';
+                } else if (item.status === 'update') {
+                    statusBadge = '<span class="scanner-product-status update">↑ Preis-Update</span>';
+                } else if (item.status === 'similar') {
+                    statusBadge = '<span class="scanner-product-status similar" style="background: rgba(255,193,7,0.15); color: #856404;">⚠️ Ähnlich gefunden</span>';
+                } else {
+                    statusBadge = '<span class="scanner-product-status new">★ Neu</span>';
+                }
+
+                // Ähnliche Produkte für Dropdown
+                const similarOptions = item.similarItems.map(lm =>
+                    `<option value="${lm.id}" ${item.selectedLmId === lm.id ? 'selected' : ''}>${lm.name} (${lm.kategorie})</option>`
+                ).join('');
+
+                // Warnung bei ähnlichem Produkt
+                const warningHtml = item.status === 'similar' ? `
+                    <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem;">
+                        ⚠️ <strong>Mögliche Dopplung!</strong> "${item.matchedLm?.name}" existiert bereits.
+                        Bitte prüfen und unten zuordnen oder als neu anlegen.
+                    </div>
+                ` : '';
 
                 html += `
-                    <li class="scanner-product-item">
-                        <div>
-                            <input type="checkbox" id="scanner_item_${index}" checked style="margin-right: 0.5rem;">
-                            <span class="scanner-product-name">${item.name}</span>
-                            ${item.match ? `<span style="color: #999; font-size: 0.8rem;"> → ${item.match.name}</span>` : ''}
+                    <li class="scanner-product-item" style="flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem;">
+                        <!-- Zeile 1: Produktinfo -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="scanner_item_${index}" ${item.status !== 'match' ? 'checked' : ''}>
+                                <strong style="font-size: 1.05rem;">${item.name}</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <span style="font-weight: 600; color: var(--dakota-gold);">
+                                    CHF ${item.preis_pro_einheit?.toFixed(2) || '?'}/${item.einheit || '?'}
+                                </span>
+                                ${statusBadge}
+                            </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <span class="scanner-product-price">CHF ${item.preis_pro_einheit?.toFixed(2) || '?'}/${item.einheit || '?'}</span>
-                            ${item.status === 'update' && item.match ? `<span style="color: #999; text-decoration: line-through; font-size: 0.85rem;">CHF ${item.match.preis?.toFixed(2)}</span>` : ''}
-                            <span class="scanner-product-status ${statusClass}">${statusText}</span>
+
+                        ${warningHtml}
+
+                        <!-- Zeile 2: Aktions-Auswahl -->
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; background: #f8f9fa; padding: 0.75rem; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <label style="font-size: 0.85rem; font-weight: 500;">Aktion:</label>
+                                <select id="scanner_action_${index}" onchange="updateScannerItemAction(${index})"
+                                    style="padding: 0.4rem; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem;">
+                                    <option value="new" ${item.selectedAction === 'new' ? 'selected' : ''}>➕ Neu anlegen</option>
+                                    <option value="update" ${item.selectedAction === 'update' ? 'selected' : ''}>🔄 Bestehendes aktualisieren</option>
+                                    <option value="skip" ${item.selectedAction === 'skip' ? 'selected' : ''}>⏭️ Überspringen</option>
+                                </select>
+                            </div>
+
+                            <!-- Zuordnung zu bestehendem Produkt -->
+                            <div id="scanner_mapping_${index}" style="display: ${item.selectedAction === 'update' ? 'flex' : 'none'}; align-items: center; gap: 0.5rem;">
+                                <label style="font-size: 0.85rem; font-weight: 500;">Zuordnen zu:</label>
+                                <select id="scanner_lm_${index}" onchange="updateScannerItemLm(${index})"
+                                    style="padding: 0.4rem; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem; max-width: 250px;">
+                                    <option value="">-- Lebensmittel wählen --</option>
+                                    ${similarOptions}
+                                    <option value="__all__">📋 Alle anzeigen...</option>
+                                </select>
+                            </div>
+
+                            <!-- Kategorie für neue Produkte -->
+                            <div id="scanner_kategorie_${index}" style="display: ${item.selectedAction === 'new' ? 'flex' : 'none'}; align-items: center; gap: 0.5rem;">
+                                <label style="font-size: 0.85rem; font-weight: 500;">Kategorie:</label>
+                                <select id="scanner_kat_${index}" onchange="updateScannerItemKategorie(${index})"
+                                    style="padding: 0.4rem; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem;">
+                                    ${kategorieOptions.replace(`value="${item.selectedKategorie}"`, `value="${item.selectedKategorie}" selected`)}
+                                </select>
+                            </div>
+
+                            ${item.status === 'update' && item.matchedLm ? `
+                                <div style="font-size: 0.85rem; color: #666;">
+                                    Alter Preis: <span style="text-decoration: line-through;">CHF ${item.matchedLm.preis?.toFixed(2)}</span>
+                                </div>
+                            ` : ''}
                         </div>
                     </li>
                 `;
@@ -4178,30 +4324,95 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             resultsDiv.style.display = 'block';
         }
 
-        // Scanner-Ergebnisse importieren
-        async function importScannerResults() {
-            const selectedItems = scannerResults.filter((_, index) => {
-                const checkbox = document.getElementById(`scanner_item_${index}`);
-                return checkbox && checkbox.checked;
-            });
+        // Aktion für Scanner-Item ändern
+        function updateScannerItemAction(index) {
+            const action = document.getElementById(`scanner_action_${index}`).value;
+            scannerResults[index].selectedAction = action;
 
-            if (selectedItems.length === 0) {
-                alert('⚠️ Keine Produkte ausgewählt!');
+            // UI aktualisieren
+            const mappingDiv = document.getElementById(`scanner_mapping_${index}`);
+            const kategorieDiv = document.getElementById(`scanner_kategorie_${index}`);
+
+            if (action === 'update') {
+                mappingDiv.style.display = 'flex';
+                kategorieDiv.style.display = 'none';
+            } else if (action === 'new') {
+                mappingDiv.style.display = 'none';
+                kategorieDiv.style.display = 'flex';
+            } else {
+                mappingDiv.style.display = 'none';
+                kategorieDiv.style.display = 'none';
+            }
+
+            // Checkbox entsprechend setzen
+            document.getElementById(`scanner_item_${index}`).checked = (action !== 'skip');
+        }
+
+        // Lebensmittel-Zuordnung ändern
+        function updateScannerItemLm(index) {
+            const select = document.getElementById(`scanner_lm_${index}`);
+            const value = select.value;
+
+            if (value === '__all__') {
+                // Alle Lebensmittel anzeigen
+                const allOptions = lebensmittelData
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(lm => `<option value="${lm.id}">${lm.name} (${lm.kategorie})</option>`)
+                    .join('');
+                select.innerHTML = `<option value="">-- Lebensmittel wählen --</option>${allOptions}`;
+                select.value = '';
+            } else {
+                scannerResults[index].selectedLmId = value ? parseInt(value) : null;
+            }
+        }
+
+        // Kategorie ändern
+        function updateScannerItemKategorie(index) {
+            const value = document.getElementById(`scanner_kat_${index}`).value;
+            scannerResults[index].selectedKategorie = value;
+        }
+
+        // Scanner-Ergebnisse importieren (verbessert mit Aktions-Auswahl)
+        async function importScannerResults() {
+            // Aktuelle Auswahl aus UI lesen
+            const itemsToProcess = [];
+            for (let i = 0; i < scannerResults.length; i++) {
+                const checkbox = document.getElementById(`scanner_item_${i}`);
+                if (checkbox && checkbox.checked) {
+                    const item = scannerResults[i];
+                    // Aktuelle Werte aus UI lesen
+                    const actionSelect = document.getElementById(`scanner_action_${i}`);
+                    const lmSelect = document.getElementById(`scanner_lm_${i}`);
+                    const katSelect = document.getElementById(`scanner_kat_${i}`);
+
+                    item.selectedAction = actionSelect ? actionSelect.value : item.selectedAction;
+                    item.selectedLmId = lmSelect && lmSelect.value && lmSelect.value !== '__all__' ? parseInt(lmSelect.value) : item.selectedLmId;
+                    item.selectedKategorie = katSelect ? katSelect.value : item.selectedKategorie;
+
+                    if (item.selectedAction !== 'skip') {
+                        itemsToProcess.push(item);
+                    }
+                }
+            }
+
+            if (itemsToProcess.length === 0) {
+                alert('⚠️ Keine Produkte zum Importieren ausgewählt!');
                 return;
             }
 
             let importedCount = 0;
             let updatedCount = 0;
+            let skippedCount = 0;
             let errorCount = 0;
 
-            for (const item of selectedItems) {
+            for (const item of itemsToProcess) {
                 try {
-                    if (item.status === 'new') {
+                    if (item.selectedAction === 'new') {
                         // Neues Lebensmittel erstellen
                         const maxGastroId = Math.max(0, ...lebensmittelData.map(lm => lm.gastro_id || 0));
                         const newLm = {
                             name: item.name,
-                            kategorie: item.kategorie || 'Sonstige',
+                            kategorie: item.selectedKategorie || 'Sonstige',
                             preis: item.preis_pro_einheit,
                             einheit: item.einheit || 'kg',
                             ruestverlust: 0,
@@ -4212,11 +4423,28 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                         };
                         await saveLebensmittelDirect(newLm);
                         importedCount++;
-                    } else if (item.status === 'update' && item.match) {
-                        // Preis aktualisieren
-                        const updatedLm = { ...item.match, preis: item.preis_pro_einheit };
-                        await updateLebensmittelDirect(updatedLm);
-                        updatedCount++;
+
+                    } else if (item.selectedAction === 'update') {
+                        // Bestehendes Produkt aktualisieren
+                        let targetLm = null;
+
+                        // Zuerst prüfen ob manuell zugeordnet
+                        if (item.selectedLmId) {
+                            targetLm = lebensmittelData.find(lm => lm.id === item.selectedLmId);
+                        }
+                        // Fallback auf automatisches Match
+                        if (!targetLm && item.matchedLm) {
+                            targetLm = item.matchedLm;
+                        }
+
+                        if (targetLm) {
+                            const updatedLm = { ...targetLm, preis: item.preis_pro_einheit };
+                            await updateLebensmittelDirect(updatedLm);
+                            updatedCount++;
+                        } else {
+                            console.warn(`⚠️ Kein Ziel-Lebensmittel für "${item.name}" gefunden`);
+                            skippedCount++;
+                        }
                     }
                 } catch (error) {
                     console.error('❌ Import-Fehler:', error);
@@ -4231,6 +4459,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             let message = '✅ Import abgeschlossen!\n\n';
             if (importedCount > 0) message += `• ${importedCount} neue Produkte hinzugefügt\n`;
             if (updatedCount > 0) message += `• ${updatedCount} Preise aktualisiert\n`;
+            if (skippedCount > 0) message += `• ${skippedCount} übersprungen (kein Ziel gefunden)\n`;
             if (errorCount > 0) message += `• ${errorCount} Fehler\n`;
 
             alert(message);
