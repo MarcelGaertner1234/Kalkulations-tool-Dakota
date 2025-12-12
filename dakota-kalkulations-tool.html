@@ -2451,24 +2451,33 @@
 
                         if (!exists) {
                             // NEU: Wenn gerichte rezept_name statt rezept_id haben, auflösen
+                            // ABER: Behalte rezept_name für spätere Reparatur!
                             if (item.gerichte && item.gerichte.length > 0) {
                                 const resolvedGerichte = [];
                                 for (const gericht of item.gerichte) {
-                                    if (gericht.rezept_name && !gericht.rezept_id) {
+                                    if (gericht.rezept_name) {
                                         // Suche Rezept nach Name
                                         const rezept = rezepteData.find(r => r.name === gericht.rezept_name);
                                         if (rezept) {
                                             resolvedGerichte.push({
                                                 rezept_id: rezept.id,
+                                                rezept_name: gericht.rezept_name, // Behalte für Debug/Reparatur
                                                 kategorie: gericht.kategorie || 'Hauptgang',
                                                 wochentag: gericht.wochentag || ''
                                             });
                                             console.log(`  ✓ Rezept gefunden: ${gericht.rezept_name} -> ID ${rezept.id}`);
                                         } else {
+                                            // Rezept nicht gefunden - speichere trotzdem mit Name für spätere Reparatur
+                                            resolvedGerichte.push({
+                                                rezept_id: -1, // Ungültige ID als Marker
+                                                rezept_name: gericht.rezept_name,
+                                                kategorie: gericht.kategorie || 'Hauptgang',
+                                                wochentag: gericht.wochentag || ''
+                                            });
                                             notFoundRecipes.push(gericht.rezept_name);
-                                            console.warn(`  ⚠️ Rezept nicht gefunden: ${gericht.rezept_name}`);
+                                            console.warn(`  ⚠️ Rezept nicht gefunden: ${gericht.rezept_name} (wird für Reparatur gespeichert)`);
                                         }
-                                    } else {
+                                    } else if (gericht.rezept_id) {
                                         // Hat bereits rezept_id
                                         resolvedGerichte.push(gericht);
                                     }
@@ -2476,10 +2485,12 @@
                                 item.gerichte = resolvedGerichte;
                             }
 
+                            // Importiere auch wenn nicht alle Rezepte gefunden wurden - kann später repariert werden
                             if (item.gerichte && item.gerichte.length > 0) {
                                 await addMenuekarte(item);
                                 imported++;
-                                console.log(`  ➕ Menükarte importiert: ${item.name} (${item.gerichte.length} Gerichte)`);
+                                const validCount = item.gerichte.filter(g => g.rezept_id > 0).length;
+                                console.log(`  ➕ Menükarte importiert: ${item.name} (${validCount}/${item.gerichte.length} Gerichte verknüpft)`);
                             } else {
                                 console.warn(`  ⏭️ Übersprungen (keine Gerichte): ${item.name}`);
                                 skipped++;
@@ -4070,6 +4081,73 @@
             updateKalkulationPreview();
         }
 
+        // Repariert Menükarte-Gerichte indem rezept_name zu echten rezept_ids aufgelöst werden
+        async function repairMenuekarteRezepte() {
+            if (!currentMenuekarteGerichte || currentMenuekarteGerichte.length === 0) {
+                alert('Keine Gerichte zum Reparieren vorhanden.');
+                return;
+            }
+
+            // Stelle sicher dass Rezepte geladen sind
+            if (!rezepteData || rezepteData.length === 0) {
+                await loadRezepte();
+            }
+
+            console.log('🔧 Starte Reparatur der Menükarte...');
+            console.log('📊 Vorhandene Rezepte:', rezepteData.length);
+
+            let repaired = 0;
+            let notFound = [];
+
+            for (let i = 0; i < currentMenuekarteGerichte.length; i++) {
+                const gericht = currentMenuekarteGerichte[i];
+
+                // Versuche das Rezept zu finden
+                let rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+
+                if (!rezept && gericht.rezept_name) {
+                    // Suche nach exaktem Namen
+                    rezept = rezepteData.find(r => r.name === gericht.rezept_name);
+
+                    if (!rezept) {
+                        // Suche nach ähnlichem Namen (enthält)
+                        rezept = rezepteData.find(r =>
+                            r.name.toLowerCase().includes(gericht.rezept_name.toLowerCase()) ||
+                            gericht.rezept_name.toLowerCase().includes(r.name.toLowerCase())
+                        );
+                    }
+                }
+
+                if (rezept) {
+                    console.log(`  ✓ ${gericht.rezept_name || 'ID:' + gericht.rezept_id} → ${rezept.name} (ID: ${rezept.id})`);
+                    currentMenuekarteGerichte[i].rezept_id = rezept.id;
+                    repaired++;
+                } else {
+                    console.warn(`  ✗ Nicht gefunden: ${gericht.rezept_name || 'ID:' + gericht.rezept_id}`);
+                    notFound.push(gericht.rezept_name || `ID: ${gericht.rezept_id}`);
+                }
+            }
+
+            // Entferne nicht gefundene Gerichte
+            if (notFound.length > 0) {
+                currentMenuekarteGerichte = currentMenuekarteGerichte.filter(g => {
+                    const rezept = rezepteData.find(r => r.id === g.rezept_id);
+                    return rezept !== undefined;
+                });
+            }
+
+            renderGerichteListe();
+            updateKalkulationPreview();
+
+            let message = `✅ Reparatur abgeschlossen!\n\n• Repariert: ${repaired} Gerichte`;
+            if (notFound.length > 0) {
+                message += `\n• Nicht gefunden (entfernt): ${notFound.length}\n\n⚠️ Diese Rezepte fehlen:\n${notFound.slice(0, 10).join('\n')}`;
+                if (notFound.length > 10) message += '\n...';
+            }
+            message += '\n\n💾 Klicke auf "Menükarte speichern" um die Änderungen zu übernehmen.';
+            alert(message);
+        }
+
         // Toggle Wochentag Visibility based on Menu Type
         function toggleWochentagVisibility() {
             const typ = document.getElementById('mk_typ').value;
@@ -4090,6 +4168,42 @@
 
             if (currentMenuekarteGerichte.length === 0) {
                 container.innerHTML = '<p style="color: #999; font-style: italic;">Noch keine Gerichte hinzugefügt</p>';
+                return;
+            }
+
+            // DEBUG: Prüfe ob Rezepte gefunden werden
+            let notFoundCount = 0;
+            let notFoundNames = [];
+            currentMenuekarteGerichte.forEach(g => {
+                const rezept = rezepteData.find(r => r.id === g.rezept_id);
+                if (!rezept) {
+                    notFoundCount++;
+                    // Versuche nach Name zu finden falls vorhanden
+                    if (g.rezept_name) {
+                        notFoundNames.push(g.rezept_name);
+                    } else {
+                        notFoundNames.push(`ID: ${g.rezept_id}`);
+                    }
+                }
+            });
+
+            if (notFoundCount > 0 && notFoundCount === currentMenuekarteGerichte.length) {
+                // ALLE Rezepte fehlen - zeige Reparatur-Option
+                container.innerHTML = `
+                    <div style="background: #2a1f1f; border: 2px solid #c9302c; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                        <h4 style="color: #c9302c; margin-bottom: 1rem;">⚠️ ${notFoundCount} Rezepte nicht gefunden!</h4>
+                        <p style="color: #ccc; margin-bottom: 1rem;">Die Menükarte enthält ${notFoundCount} Gerichte, aber die zugehörigen Rezepte wurden nicht in der Datenbank gefunden.</p>
+                        <p style="color: #999; margin-bottom: 1rem;"><strong>Mögliche Ursachen:</strong></p>
+                        <ul style="color: #999; margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Die Rezepte wurden noch nicht importiert</li>
+                            <li>Die Rezept-IDs stimmen nicht überein</li>
+                        </ul>
+                        <p style="color: #999; margin-bottom: 1rem;"><strong>Fehlende Rezepte:</strong> ${notFoundNames.slice(0, 5).join(', ')}${notFoundNames.length > 5 ? '...' : ''}</p>
+                        <button type="button" class="btn btn-warning" onclick="repairMenuekarteRezepte()" style="margin-top: 0.5rem;">
+                            🔧 Rezepte automatisch reparieren
+                        </button>
+                    </div>
+                `;
                 return;
             }
 
