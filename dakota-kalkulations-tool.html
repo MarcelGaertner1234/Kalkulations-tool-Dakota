@@ -2100,6 +2100,11 @@
 
         // ===== DB OPERATIONS =====
         async function getAllLebensmittel() {
+            // FIX: Warte auf DB-Initialisierung falls noch nicht bereit
+            if (!db) {
+                console.log('⏳ Warte auf IndexedDB...');
+                await initDB();
+            }
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction(['lebensmittel'], 'readonly');
                 const store = transaction.objectStore('lebensmittel');
@@ -2341,23 +2346,42 @@
 
         // Import Rezepte aus JSON-Datei
         async function importRezepteJSON(event) {
+            console.log('📥 Import gestartet...');
             const file = event.target.files[0];
-            if (!file) return;
+            if (!file) {
+                console.log('❌ Keine Datei ausgewählt');
+                return;
+            }
+            console.log('📄 Datei ausgewählt:', file.name);
 
             try {
                 const text = await file.text();
+                console.log('📄 Datei gelesen, Länge:', text.length);
                 const data = JSON.parse(text);
+                console.log('✅ JSON geparst, Anzahl Einträge:', data.length);
 
                 if (!Array.isArray(data)) {
                     alert('❌ Fehler: JSON-Datei muss ein Array enthalten!');
                     return;
                 }
 
-                const confirmed = confirm(`📥 Rezepte Import\n\n${data.length} Rezepte gefunden.\n\nMöchten Sie diese importieren?`);
-                if (!confirmed) return;
+                // Automatisch importieren ohne Bestätigung (confirm kann von Browser blockiert werden)
+                console.log(`📥 Starte Import von ${data.length} Rezepten...`);
+
+                // FIX: Stelle sicher, dass DB und rezepteData geladen sind
+                if (!db) {
+                    console.log('⏳ Warte auf IndexedDB...');
+                    await initDB();
+                }
+                if (!rezepteData || rezepteData.length === 0) {
+                    console.log('⏳ Lade bestehende Rezepte...');
+                    await loadRezepte();
+                }
+                console.log('📊 Bestehende Rezepte:', rezepteData.length);
 
                 let imported = 0;
                 let skipped = 0;
+                let errors = 0;
 
                 for (const item of data) {
                     try {
@@ -2365,18 +2389,22 @@
                         const exists = rezepteData.find(rz => rz.name === item.name);
 
                         if (!exists) {
+                            console.log(`  ➕ Importiere: ${item.name}`);
                             await addRezept(item);
                             imported++;
                         } else {
+                            console.log(`  ⏭️ Überspringe (existiert): ${item.name}`);
                             skipped++;
                         }
                     } catch (err) {
-                        console.error('Fehler beim Importieren:', item, err);
+                        console.error('❌ Fehler beim Importieren:', item.name, err);
+                        errors++;
                     }
                 }
 
                 await loadRezepte();
-                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+                console.log(`✅ Import abgeschlossen! Importiert: ${imported}, Übersprungen: ${skipped}, Fehler: ${errors}`);
+                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}${errors > 0 ? '\n• Fehler: ' + errors : ''}`);
 
                 // Input zurücksetzen
                 event.target.value = '';
@@ -2551,6 +2579,11 @@
         // ===== REZEPT-IMPORT =====
 
         async function getAllRezepte() {
+            // FIX: Warte auf DB-Initialisierung falls noch nicht bereit
+            if (!db) {
+                console.log('⏳ Warte auf IndexedDB...');
+                await initDB();
+            }
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction(['rezepte'], 'readonly');
                 const store = transaction.objectStore('rezepte');
@@ -2617,6 +2650,11 @@
 
         // ===== MENüKARTEN DB OPERATIONS =====
         async function getAllMenuekarten() {
+            // FIX: Warte auf DB-Initialisierung falls noch nicht bereit
+            if (!db) {
+                console.log('⏳ Warte auf IndexedDB...');
+                await initDB();
+            }
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction(['menuekarten'], 'readonly');
                 const store = transaction.objectStore('menuekarten');

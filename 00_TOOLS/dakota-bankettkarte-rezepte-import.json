@@ -1,0 +1,750 @@
+[
+  {
+    "name": "Bündner Gerstensuppe",
+    "kategorie": "Suppe",
+    "portionen": 1,
+    "verkaufspreis": 12.00,
+    "zubereitungszeit": "45 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Gerste aus Schweizer Bio-Anbau | Wurzelgemüse | Bündnerfleisch-Streifen | Sauerteigbrot",
+    "zutaten": [
+      { "produkt_id": 195, "menge": 40, "einheit": "g" },
+      { "produkt_id": 49, "menge": 30, "einheit": "g" },
+      { "produkt_id": 48, "menge": 25, "einheit": "g" },
+      { "produkt_id": 50, "menge": 20, "einheit": "g" },
+      { "produkt_id": 45, "menge": 25, "einheit": "g" },
+      { "produkt_id": 214, "menge": 25, "einheit": "g" },
+      { "produkt_id": 132, "menge": 250, "einheit": "ml" },
+      { "produkt_id": 33, "menge": 30, "einheit": "ml" },
+      { "produkt_id": 90, "menge": 30, "einheit": "g" },
+      { "produkt_id": 35, "menge": 10, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Gerste in Wasser 20 Min vorkochen, abtropfen",
+      "Wurzelgemüse (Karotten, Sellerie, Lauch) klein würfeln",
+      "Zwiebeln in Butter anschwitzen",
+      "Gemüse zugeben, kurz mitdünsten",
+      "Gerste und Rindsfond zugeben",
+      "25 Min köcheln bis Gerste weich",
+      "Rahm einrühren, abschmecken",
+      "Mit Bündnerfleisch-Streifen und Sauerteigbrot servieren"
+    ],
+    "allergene": ["Gluten", "Milch"],
+    "quelle": "Traditionelles Bündner Rezept",
+    "bemerkung": "Klassische Alpensuppe, nahrhaft und wärmend"
+  },
+  {
+    "name": "Pastinakencrèmesuppe",
+    "kategorie": "Suppe",
+    "portionen": 1,
+    "verkaufspreis": 11.00,
+    "zubereitungszeit": "30 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Pastinaken samtweich püriert | Muskatnuss | Crème fraîche | Geröstete Brotwürfel",
+    "zutaten": [
+      { "produkt_id": 388, "menge": 150, "einheit": "g" },
+      { "produkt_id": 45, "menge": 30, "einheit": "g" },
+      { "produkt_id": 40, "menge": 50, "einheit": "g" },
+      { "produkt_id": 130, "menge": 200, "einheit": "ml" },
+      { "produkt_id": 33, "menge": 50, "einheit": "ml" },
+      { "produkt_id": 167, "menge": 20, "einheit": "g" },
+      { "produkt_id": 112, "menge": 1, "einheit": "g" },
+      { "produkt_id": 35, "menge": 10, "einheit": "g" },
+      { "produkt_id": 90, "menge": 20, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Pastinaken und Kartoffeln schälen, würfeln",
+      "Zwiebeln in Butter anschwitzen",
+      "Pastinaken und Kartoffeln zugeben",
+      "Mit Gemüsebouillon ablöschen",
+      "20 Min weich kochen",
+      "Fein pürieren, Rahm einrühren",
+      "Mit Muskatnuss würzen",
+      "Crème fraîche und Croutons zum Servieren"
+    ],
+    "allergene": ["Milch", "Gluten"],
+    "bemerkung": "Vegetarisch, cremig, winterlich"
+  },
+  {
+    "name": "Rinderconsommé mit Flädli",
+    "kategorie": "Suppe",
+    "portionen": 1,
+    "verkaufspreis": 13.00,
+    "zubereitungszeit": "15 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Klare Rinderbrühe doppelt geklärt | Gemüsebrunoise | Kräuter | Flädli",
+    "zutaten": [
+      { "produkt_id": 132, "menge": 300, "einheit": "ml" },
+      { "produkt_id": 49, "menge": 15, "einheit": "g" },
+      { "produkt_id": 48, "menge": 15, "einheit": "g" },
+      { "produkt_id": 50, "menge": 10, "einheit": "g" },
+      { "produkt_id": 86, "menge": 25, "einheit": "g" },
+      { "produkt_id": 37, "menge": 25, "einheit": "g" },
+      { "produkt_id": 36, "menge": 40, "einheit": "ml" },
+      { "produkt_id": 111, "menge": 3, "einheit": "g" },
+      { "produkt_id": 104, "menge": 2, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Flädli-Teig: Mehl, Eier, Milch, Salz zu Pfannkuchenteig",
+      "Dünne Omeletten backen, in feine Streifen schneiden",
+      "Gemüse in feine Brunoise schneiden",
+      "Rindsfond erhitzen, Gemüse 3 Min ziehen lassen",
+      "Consommé in vorgewärmte Teller",
+      "Flädli und frische Kräuter einlegen"
+    ],
+    "allergene": ["Gluten", "Ei"],
+    "bemerkung": "Elegante klare Suppe, traditionell"
+  },
+  {
+    "name": "Berner Alpkäse-Teller",
+    "kategorie": "Vorspeise kalt",
+    "portionen": 1,
+    "verkaufspreis": 18.00,
+    "zubereitungszeit": "10 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Drei Alpkäse von der Engstlenalp (jung, mittel, alt) | Baumnüsse | Trockenfleisch | Sauerteigbrot",
+    "zutaten": [
+      { "produkt_id": 22, "menge": 80, "einheit": "g" },
+      { "produkt_id": 214, "menge": 40, "einheit": "g" },
+      { "produkt_id": 137, "menge": 15, "einheit": "g" },
+      { "produkt_id": 90, "menge": 40, "einheit": "g" },
+      { "produkt_id": 35, "menge": 10, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Alpkäse 30 Min vor Service aus der Kühlung nehmen",
+      "Käse in 3 Reifestufen portionieren (ca. 25g pro Sorte)",
+      "Trockenfleisch dünn aufschneiden",
+      "Walnüsse grob hacken",
+      "Sauerteigbrot aufschneiden",
+      "Butter temperieren",
+      "Alles dekorativ auf Holzbrett anrichten"
+    ],
+    "allergene": ["Milch", "Gluten", "Nüsse"],
+    "bemerkung": "Signature Käseplatte, regional"
+  },
+  {
+    "name": "Geräucherte Forelle aus Reichenbach",
+    "kategorie": "Vorspeise kalt",
+    "portionen": 1,
+    "verkaufspreis": 16.00,
+    "zubereitungszeit": "10 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Berner Forelle kalt geräuchert | Meerrettich-Crème | Randen-Salat | Röstbrot",
+    "zutaten": [
+      { "produkt_id": 16, "menge": 80, "einheit": "g" },
+      { "produkt_id": 147, "menge": 15, "einheit": "g" },
+      { "produkt_id": 33, "menge": 30, "einheit": "ml" },
+      { "produkt_id": 42, "menge": 50, "einheit": "g" },
+      { "produkt_id": 97, "menge": 5, "einheit": "ml" },
+      { "produkt_id": 90, "menge": 30, "einheit": "g" },
+      { "produkt_id": 35, "menge": 5, "einheit": "g" },
+      { "produkt_id": 105, "menge": 2, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Meerrettich-Crème: Meerrettich mit Rahm verrühren",
+      "Randen in dünne Scheiben hobeln",
+      "Mit Essig und Öl marinieren",
+      "Röstbrot knusprig toasten",
+      "Forelle in Stücke teilen",
+      "Mit Dill garnieren, anrichten"
+    ],
+    "allergene": ["Fisch", "Milch", "Gluten"],
+    "bemerkung": "Regional aus Reichenbach, nachhaltig"
+  },
+  {
+    "name": "Randen-Carpaccio mit Ziegenfrischkäse",
+    "kategorie": "Vorspeise kalt",
+    "portionen": 1,
+    "verkaufspreis": 14.00,
+    "zubereitungszeit": "15 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Rote Randen mariniert | Ziegenfrischkäse Haslital | Walnüsse karamellisiert | Honig-Vinaigrette",
+    "zutaten": [
+      { "produkt_id": 42, "menge": 120, "einheit": "g" },
+      { "produkt_id": 29, "menge": 50, "einheit": "g" },
+      { "produkt_id": 137, "menge": 15, "einheit": "g" },
+      { "produkt_id": 136, "menge": 10, "einheit": "g" },
+      { "produkt_id": 92, "menge": 15, "einheit": "ml" },
+      { "produkt_id": 96, "menge": 10, "einheit": "ml" },
+      { "produkt_id": 53, "menge": 10, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Randen dünn hobeln (Mandoline)",
+      "Mit Balsamico, Olivenöl, Salz marinieren",
+      "Walnüsse mit Honig karamellisieren",
+      "Ziegenkäse-Quenelle formen",
+      "Randen auf Teller fächern",
+      "Ziegenkäse in Mitte, Nüsse drüber",
+      "Mit Rucola und Vinaigrette finish"
+    ],
+    "allergene": ["Milch", "Nüsse"],
+    "bemerkung": "Vegetarisch, farbenfroh"
+  },
+  {
+    "name": "Gemischter Blattsalat Alpenwiese",
+    "kategorie": "Vorspeise kalt",
+    "portionen": 1,
+    "verkaufspreis": 11.00,
+    "zubereitungszeit": "10 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Saisonale Blattsalate | Hausdressing mit Alpkräutern | Baumnüsse | Apfelstücke",
+    "zutaten": [
+      { "produkt_id": 54, "menge": 60, "einheit": "g" },
+      { "produkt_id": 53, "menge": 15, "einheit": "g" },
+      { "produkt_id": 137, "menge": 10, "einheit": "g" },
+      { "produkt_id": 66, "menge": 40, "einheit": "g" },
+      { "produkt_id": 92, "menge": 20, "einheit": "ml" },
+      { "produkt_id": 97, "menge": 10, "einheit": "ml" },
+      { "produkt_id": 136, "menge": 5, "einheit": "g" },
+      { "produkt_id": 107, "menge": 2, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Blattsalate waschen, trockenschleudern",
+      "Äpfel entkernen, in Spalten schneiden",
+      "Dressing: Olivenöl, Essig, Honig, Kräuter emulgieren",
+      "Walnüsse rösten",
+      "Salat mit Dressing mischen",
+      "Mit Apfelstücken und Nüssen toppen"
+    ],
+    "allergene": ["Nüsse"],
+    "bemerkung": "Vegan auf Wunsch, frisch"
+  },
+  {
+    "name": "Flammkuchen Elsässer Art",
+    "kategorie": "Vorspeise warm",
+    "portionen": 1,
+    "verkaufspreis": 14.00,
+    "zubereitungszeit": "15 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Dünn & knusprig | Crème fraîche | Speck | Zwiebeln",
+    "zutaten": [
+      { "produkt_id": 604, "menge": 100, "einheit": "g" },
+      { "produkt_id": 167, "menge": 50, "einheit": "g" },
+      { "produkt_id": 148, "menge": 40, "einheit": "g" },
+      { "produkt_id": 45, "menge": 60, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Teig dünn ausrollen",
+      "Mit Crème fraîche bestreichen",
+      "Zwiebeln in feine Ringe schneiden",
+      "Speck in Streifen schneiden",
+      "Zwiebeln und Speck verteilen",
+      "Im heissen Ofen (250°C) ca. 10 Min backen",
+      "Sofort servieren"
+    ],
+    "allergene": ["Gluten", "Milch"],
+    "bemerkung": "Elsässer Klassiker, knusprig"
+  },
+  {
+    "name": "Flammkuchen Vegetarisch",
+    "kategorie": "Vorspeise warm",
+    "portionen": 1,
+    "verkaufspreis": 14.00,
+    "zubereitungszeit": "15 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Dünn & knusprig | Crème fraîche | Ziegenkäse | Randen | Rucola",
+    "zutaten": [
+      { "produkt_id": 604, "menge": 100, "einheit": "g" },
+      { "produkt_id": 167, "menge": 50, "einheit": "g" },
+      { "produkt_id": 29, "menge": 40, "einheit": "g" },
+      { "produkt_id": 42, "menge": 40, "einheit": "g" },
+      { "produkt_id": 53, "menge": 15, "einheit": "g" },
+      { "produkt_id": 136, "menge": 5, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Teig dünn ausrollen",
+      "Mit Crème fraîche bestreichen",
+      "Randen dünn hobeln",
+      "Ziegenkäse zerbröckeln",
+      "Randen und Käse verteilen",
+      "10 Min bei 250°C backen",
+      "Frischen Rucola und Honig darauf"
+    ],
+    "allergene": ["Gluten", "Milch"],
+    "bemerkung": "Vegetarisch, farbenfroh"
+  },
+  {
+    "name": "Schweizer Schinkengipfeli",
+    "kategorie": "Vorspeise warm",
+    "portionen": 1,
+    "verkaufspreis": 12.00,
+    "zubereitungszeit": "25 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Blätterteig goldbraun | Schweizer Schinken | Gruyère | Senf | Blattsalat",
+    "zutaten": [
+      { "produkt_id": 88, "menge": 80, "einheit": "g" },
+      { "produkt_id": 182, "menge": 50, "einheit": "g" },
+      { "produkt_id": 32, "menge": 30, "einheit": "g" },
+      { "produkt_id": 146, "menge": 10, "einheit": "g" },
+      { "produkt_id": 37, "menge": 15, "einheit": "g" },
+      { "produkt_id": 54, "menge": 30, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Blätterteig in Dreiecke schneiden",
+      "Mit Senf bestreichen",
+      "Schinken und geriebenen Käse darauf",
+      "Zu Hörnchen aufrollen",
+      "Mit Eigelb bepinseln",
+      "Bei 200°C ca. 15-18 Min goldbraun backen",
+      "Mit kleinem Blattsalat servieren"
+    ],
+    "allergene": ["Gluten", "Milch", "Ei"],
+    "quelle": "Gault Millau Schweiz",
+    "bemerkung": "Schweizer Klassiker, warm servieren"
+  },
+  {
+    "name": "Zürcher Kalbsgeschnetzeltes mit Spätzli",
+    "kategorie": "Hauptgericht Fleisch",
+    "portionen": 1,
+    "verkaufspreis": 42.00,
+    "zubereitungszeit": "30 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Kalbfleisch aus Schweizer Zucht | Champignonrahmsauce | Spätzli hausgemacht | Saisongemüse",
+    "zutaten": [
+      { "produkt_id": 4, "menge": 180, "einheit": "g" },
+      { "produkt_id": 55, "menge": 80, "einheit": "g" },
+      { "produkt_id": 46, "menge": 30, "einheit": "g" },
+      { "produkt_id": 123, "menge": 30, "einheit": "ml" },
+      { "produkt_id": 33, "menge": 100, "einheit": "ml" },
+      { "produkt_id": 82, "menge": 150, "einheit": "g" },
+      { "produkt_id": 35, "menge": 20, "einheit": "g" },
+      { "produkt_id": 49, "menge": 50, "einheit": "g" },
+      { "produkt_id": 104, "menge": 3, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Kalbfleisch in Streifen schneiden",
+      "Champignons in Scheiben schneiden",
+      "Schalotten fein würfeln",
+      "Fleisch portionsweise scharf anbraten",
+      "Fleisch herausnehmen, Champignons anbraten",
+      "Schalotten zugeben, mit Weisswein ablöschen",
+      "Rahm zugeben, einreduzieren",
+      "Fleisch zurück, kurz durchschwenken",
+      "Spätzli in Butter schwenken",
+      "Mit frischer Petersilie servieren"
+    ],
+    "allergene": ["Milch", "Gluten"],
+    "bemerkung": "Schweizer Klassiker, sehr beliebt"
+  },
+  {
+    "name": "Kalbsbäggli geschmort",
+    "kategorie": "Hauptgericht Fleisch",
+    "portionen": 1,
+    "verkaufspreis": 46.00,
+    "zubereitungszeit": "180 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Kalbsbäggli zart geschmort | Kartoffel-Mousseline | Wurzelgemüse | Kräuterjus",
+    "zutaten": [
+      { "produkt_id": 600, "menge": 200, "einheit": "g" },
+      { "produkt_id": 41, "menge": 150, "einheit": "g" },
+      { "produkt_id": 49, "menge": 40, "einheit": "g" },
+      { "produkt_id": 48, "menge": 30, "einheit": "g" },
+      { "produkt_id": 50, "menge": 25, "einheit": "g" },
+      { "produkt_id": 131, "menge": 150, "einheit": "ml" },
+      { "produkt_id": 124, "menge": 50, "einheit": "ml" },
+      { "produkt_id": 35, "menge": 30, "einheit": "g" },
+      { "produkt_id": 33, "menge": 50, "einheit": "ml" },
+      { "produkt_id": 107, "menge": 3, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Kalbsbäggli würzen, scharf anbraten",
+      "In Bräter legen, Wurzelgemüse zugeben",
+      "Mit Rotwein ablöschen, Kalbsfond zugeben",
+      "Zugedeckt 2.5-3h bei 160°C schmoren",
+      "Kartoffeln kochen, mit Butter stampfen",
+      "Rahm unterheben für Mousseline",
+      "Jus passieren, mit Kräutern finish",
+      "Fleisch mit Gemüse und Jus anrichten"
+    ],
+    "allergene": ["Milch"],
+    "bemerkung": "Butterzart, Slow Food Highlight"
+  },
+  {
+    "name": "Rindsgeschnetzeltes Stroganoff",
+    "kategorie": "Hauptgericht Fleisch",
+    "portionen": 1,
+    "verkaufspreis": 44.00,
+    "zubereitungszeit": "25 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Rindfleisch Metzgerei Trachsel | Rahmsauce mit Essiggurken & Senf | Peperonigemüse | Spätzli",
+    "zutaten": [
+      { "produkt_id": 601, "menge": 180, "einheit": "g" },
+      { "produkt_id": 45, "menge": 40, "einheit": "g" },
+      { "produkt_id": 55, "menge": 60, "einheit": "g" },
+      { "produkt_id": 200, "menge": 30, "einheit": "g" },
+      { "produkt_id": 146, "menge": 15, "einheit": "g" },
+      { "produkt_id": 145, "menge": 10, "einheit": "g" },
+      { "produkt_id": 33, "menge": 100, "einheit": "ml" },
+      { "produkt_id": 392, "menge": 80, "einheit": "g" },
+      { "produkt_id": 82, "menge": 150, "einheit": "g" },
+      { "produkt_id": 104, "menge": 3, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Rindfleisch in feine Streifen schneiden",
+      "Zwiebeln und Champignons schneiden",
+      "Essiggurken in Streifen schneiden",
+      "Peperoni in Streifen schneiden, separat anbraten",
+      "Fleisch scharf anbraten, herausnehmen",
+      "Zwiebeln, Champignons anschwitzen",
+      "Tomatenmark und Senf zugeben",
+      "Mit Rahm ablöschen, Gurken zugeben",
+      "Fleisch zurück, kurz durchziehen",
+      "Mit Spätzli und Peperonigemüse servieren"
+    ],
+    "allergene": ["Milch", "Gluten", "Senf"],
+    "bemerkung": "Russischer Klassiker, würzig-cremig"
+  },
+  {
+    "name": "Rindsbraten geschmort",
+    "kategorie": "Hauptgericht Fleisch",
+    "portionen": 1,
+    "verkaufspreis": 48.00,
+    "zubereitungszeit": "180 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Rindsbraten aus Berner Zucht | Rotweinsauce | Kartoffelstock | Wurzelgemüse",
+    "zutaten": [
+      { "produkt_id": 506, "menge": 200, "einheit": "g" },
+      { "produkt_id": 41, "menge": 180, "einheit": "g" },
+      { "produkt_id": 49, "menge": 50, "einheit": "g" },
+      { "produkt_id": 48, "menge": 40, "einheit": "g" },
+      { "produkt_id": 45, "menge": 40, "einheit": "g" },
+      { "produkt_id": 124, "menge": 100, "einheit": "ml" },
+      { "produkt_id": 132, "menge": 200, "einheit": "ml" },
+      { "produkt_id": 145, "menge": 15, "einheit": "g" },
+      { "produkt_id": 35, "menge": 40, "einheit": "g" },
+      { "produkt_id": 36, "menge": 80, "einheit": "ml" }
+    ],
+    "zubereitung": [
+      "Rindsbraten würzen, rundum scharf anbraten",
+      "Zwiebeln, Karotten, Sellerie anrösten",
+      "Tomatenmark zugeben, mitrösten",
+      "Mit Rotwein ablöschen",
+      "Rindsfond zugeben",
+      "Bei 160°C zugedeckt 2.5-3h schmoren",
+      "Kartoffeln kochen, mit Butter und Milch stampfen",
+      "Wurzelgemüse separat glasieren",
+      "Sauce passieren, abschmecken",
+      "Fleisch aufschneiden, mit Sauce servieren"
+    ],
+    "allergene": ["Milch", "Sulfite"],
+    "bemerkung": "Sonntagsbraten, traditionell"
+  },
+  {
+    "name": "Berner Forelle auf der Haut gebraten",
+    "kategorie": "Hauptgericht Fisch",
+    "portionen": 1,
+    "verkaufspreis": 42.00,
+    "zubereitungszeit": "25 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Forelle aus Reichenbach knusprig gebraten | Sellerie-Püree | Beurre Blanc | Bergkräuter",
+    "zutaten": [
+      { "produkt_id": 15, "menge": 180, "einheit": "g" },
+      { "produkt_id": 48, "menge": 120, "einheit": "g" },
+      { "produkt_id": 35, "menge": 40, "einheit": "g" },
+      { "produkt_id": 33, "menge": 80, "einheit": "ml" },
+      { "produkt_id": 123, "menge": 50, "einheit": "ml" },
+      { "produkt_id": 46, "menge": 20, "einheit": "g" },
+      { "produkt_id": 71, "menge": 10, "einheit": "g" },
+      { "produkt_id": 107, "menge": 3, "einheit": "g" },
+      { "produkt_id": 92, "menge": 10, "einheit": "ml" }
+    ],
+    "zubereitung": [
+      "Sellerie schälen, kochen, mit Butter pürieren",
+      "Rahm unterarbeiten, warm halten",
+      "Forelle filetieren, Haut einritzen",
+      "Hautseite salzen, in heisser Pfanne braten",
+      "Auf Hautseite 4-5 Min, wenden, 2 Min",
+      "Beurre Blanc: Schalotten, Weisswein reduzieren",
+      "Kalte Butter einmontieren",
+      "Mit Zitrone und Kräutern abschmecken",
+      "Forelle auf Püree, Sauce drumherum"
+    ],
+    "allergene": ["Fisch", "Milch"],
+    "bemerkung": "Regional aus Reichenbach, Signature Dish"
+  },
+  {
+    "name": "Felchen vom Brienzersee",
+    "kategorie": "Hauptgericht Fisch",
+    "portionen": 1,
+    "verkaufspreis": 44.00,
+    "zubereitungszeit": "20 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Felchen gebraten | Mandelbutter | Petersilienkartoffeln | Saisongemüse",
+    "zutaten": [
+      { "produkt_id": 17, "menge": 180, "einheit": "g" },
+      { "produkt_id": 139, "menge": 20, "einheit": "g" },
+      { "produkt_id": 35, "menge": 40, "einheit": "g" },
+      { "produkt_id": 40, "menge": 150, "einheit": "g" },
+      { "produkt_id": 104, "menge": 5, "einheit": "g" },
+      { "produkt_id": 71, "menge": 10, "einheit": "g" },
+      { "produkt_id": 49, "menge": 50, "einheit": "g" },
+      { "produkt_id": 61, "menge": 50, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Kartoffeln kochen, schälen, mit Petersilie mischen",
+      "Gemüse (Karotten, Zucchini) blanchieren",
+      "Felchen filetieren, würzen",
+      "In Butter beidseitig braten (3-4 Min/Seite)",
+      "Mandeln in Butter rösten",
+      "Zitronensaft zugeben",
+      "Felchen mit Mandelbutter begiessen",
+      "Mit Kartoffeln und Gemüse anrichten"
+    ],
+    "allergene": ["Fisch", "Milch", "Nüsse"],
+    "bemerkung": "Aus dem Brienzersee, saisonal"
+  },
+  {
+    "name": "Älplermagronen",
+    "kategorie": "Hauptgericht vegetarisch",
+    "portionen": 1,
+    "verkaufspreis": 28.00,
+    "zubereitungszeit": "35 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Makkaroni mit Kartoffeln | Alpkäse überbacken | Röstzwiebeln | Apfelmus",
+    "zutaten": [
+      { "produkt_id": 80, "menge": 100, "einheit": "g" },
+      { "produkt_id": 40, "menge": 100, "einheit": "g" },
+      { "produkt_id": 22, "menge": 60, "einheit": "g" },
+      { "produkt_id": 33, "menge": 80, "einheit": "ml" },
+      { "produkt_id": 45, "menge": 50, "einheit": "g" },
+      { "produkt_id": 35, "menge": 20, "einheit": "g" },
+      { "produkt_id": 75, "menge": 50, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Kartoffeln würfeln, in Salzwasser kochen",
+      "Macaroni zugeben, zusammen garen",
+      "Abgiessen, Rahm unterrühren",
+      "Käse reiben, untermischen",
+      "Zwiebeln in Ringe, in Butter goldbraun rösten",
+      "Magronen in Pfanne mit Käse überbacken",
+      "Mit Röstzwiebeln und Apfelmus servieren"
+    ],
+    "allergene": ["Milch", "Gluten"],
+    "bemerkung": "Schweizer Hüttenklassiker"
+  },
+  {
+    "name": "Käsespätzli mit Röstzwiebeln",
+    "kategorie": "Hauptgericht vegetarisch",
+    "portionen": 1,
+    "verkaufspreis": 26.00,
+    "zubereitungszeit": "25 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Spätzli hausgemacht | Emmentaler & Gruyère | Röstzwiebeln knusprig | Blattsalat",
+    "zutaten": [
+      { "produkt_id": 82, "menge": 180, "einheit": "g" },
+      { "produkt_id": 187, "menge": 40, "einheit": "g" },
+      { "produkt_id": 32, "menge": 40, "einheit": "g" },
+      { "produkt_id": 45, "menge": 60, "einheit": "g" },
+      { "produkt_id": 35, "menge": 30, "einheit": "g" },
+      { "produkt_id": 54, "menge": 40, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Spätzli in Salzwasser kochen, abgiessen",
+      "Käse reiben, mischen",
+      "Zwiebeln in feine Ringe schneiden",
+      "In Butter langsam goldbraun rösten (15 Min)",
+      "Spätzli mit Butter und Käse mischen",
+      "Schichtweise in heisse Form geben",
+      "Kurz überbacken",
+      "Mit knusprigen Röstzwiebeln toppen",
+      "Mit Blattsalat servieren"
+    ],
+    "allergene": ["Milch", "Gluten"],
+    "bemerkung": "Vegetarischer Klassiker"
+  },
+  {
+    "name": "Sellerie im Salzteig",
+    "kategorie": "Hauptgericht vegetarisch",
+    "portionen": 1,
+    "verkaufspreis": 36.00,
+    "zubereitungszeit": "90 Minuten",
+    "schwierigkeit": "Schwer",
+    "beschreibung": "Knollensellerie im Salzteig gebacken | Steinpilz-Ragout | Nussbutter | Bergkräuter",
+    "zutaten": [
+      { "produkt_id": 48, "menge": 250, "einheit": "g" },
+      { "produkt_id": 99, "menge": 200, "einheit": "g" },
+      { "produkt_id": 86, "menge": 150, "einheit": "g" },
+      { "produkt_id": 37, "menge": 60, "einheit": "g" },
+      { "produkt_id": 58, "menge": 15, "einheit": "g" },
+      { "produkt_id": 46, "menge": 30, "einheit": "g" },
+      { "produkt_id": 35, "menge": 50, "einheit": "g" },
+      { "produkt_id": 33, "menge": 50, "einheit": "ml" },
+      { "produkt_id": 107, "menge": 3, "einheit": "g" },
+      { "produkt_id": 110, "menge": 2, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Salzteig: Mehl, Salz, Eier, Wasser kneten",
+      "Sellerie schälen, in Salzteig einwickeln",
+      "Bei 180°C 60-75 Min backen",
+      "Steinpilze einweichen, in Streifen schneiden",
+      "Schalotten anschwitzen, Pilze zugeben",
+      "Mit Rahm ablöschen",
+      "Nussbutter: Butter bräunen bis nussig",
+      "Salzteig aufbrechen (am Tisch)",
+      "Sellerie in Scheiben, mit Ragout und Nussbutter"
+    ],
+    "allergene": ["Gluten", "Ei", "Milch"],
+    "bemerkung": "Vegetarisches Fine Dining Highlight"
+  },
+  {
+    "name": "Haslitaler Meringue",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 12.00,
+    "zubereitungszeit": "10 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Knusprige Meringue | Hasliglace Vanille (Molki Meiringen) | Schlagrahm | Beerensauce",
+    "zutaten": [
+      { "produkt_id": 602, "menge": 40, "einheit": "g" },
+      { "produkt_id": 603, "menge": 80, "einheit": "ml" },
+      { "produkt_id": 33, "menge": 80, "einheit": "ml" },
+      { "produkt_id": 245, "menge": 40, "einheit": "g" },
+      { "produkt_id": 134, "menge": 15, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Rahm steif schlagen",
+      "Beeren mit Zucker pürieren für Sauce",
+      "Meringue-Schalen auf Teller",
+      "Vanilleglace-Kugel darauf",
+      "Mit Schlagrahm garnieren",
+      "Beerensauce drumherum"
+    ],
+    "allergene": ["Ei", "Milch"],
+    "bemerkung": "Haslitaler Spezialität, ikonisch"
+  },
+  {
+    "name": "Apfel-Tartelette warm",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 13.00,
+    "zubereitungszeit": "30 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Mürbeteig-Tartelette | Boskop-Äpfel karamellisiert | Zimtzucker | Vanilleglace",
+    "zutaten": [
+      { "produkt_id": 89, "menge": 50, "einheit": "g" },
+      { "produkt_id": 66, "menge": 100, "einheit": "g" },
+      { "produkt_id": 134, "menge": 25, "einheit": "g" },
+      { "produkt_id": 35, "menge": 20, "einheit": "g" },
+      { "produkt_id": 113, "menge": 2, "einheit": "g" },
+      { "produkt_id": 603, "menge": 50, "einheit": "ml" }
+    ],
+    "zubereitung": [
+      "Mürbeteig in Tartelette-Form drücken",
+      "Blind backen (10 Min bei 180°C)",
+      "Äpfel schälen, in Spalten schneiden",
+      "In Butter mit Zucker karamellisieren",
+      "In Tartelette füllen",
+      "Weitere 10 Min backen",
+      "Mit Zimtzucker bestäuben",
+      "Mit Vanilleglace servieren"
+    ],
+    "allergene": ["Gluten", "Milch"],
+    "bemerkung": "Warm-Kalt-Kontrast"
+  },
+  {
+    "name": "Schokoladen-Mousse",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 12.00,
+    "zubereitungszeit": "20 Minuten",
+    "schwierigkeit": "Mittel",
+    "beschreibung": "Mousse aus Schweizer Schokolade 70% | Salzkaramell | Haselnuss-Crumble",
+    "zutaten": [
+      { "produkt_id": 140, "menge": 60, "einheit": "g" },
+      { "produkt_id": 37, "menge": 30, "einheit": "g" },
+      { "produkt_id": 33, "menge": 60, "einheit": "ml" },
+      { "produkt_id": 605, "menge": 20, "einheit": "g" },
+      { "produkt_id": 138, "menge": 15, "einheit": "g" },
+      { "produkt_id": 86, "menge": 15, "einheit": "g" },
+      { "produkt_id": 35, "menge": 10, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Schokolade über Wasserbad schmelzen",
+      "Eigelb einrühren",
+      "Rahm steif schlagen",
+      "Eiweiß steif schlagen",
+      "Alles vorsichtig unterheben",
+      "Kalt stellen (mind. 2h)",
+      "Crumble: Haselnüsse hacken, mit Mehl, Butter backen",
+      "Mit Salzkaramell und Crumble anrichten"
+    ],
+    "allergene": ["Milch", "Ei", "Nüsse", "Gluten"],
+    "bemerkung": "Schokoladenliebhaber-Dessert"
+  },
+  {
+    "name": "Vanille-Panna-Cotta",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 11.00,
+    "zubereitungszeit": "15 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "Cremige Panna Cotta | Saisonale Früchte | Beerencoulis",
+    "zutaten": [
+      { "produkt_id": 33, "menge": 120, "einheit": "ml" },
+      { "produkt_id": 36, "menge": 30, "einheit": "ml" },
+      { "produkt_id": 134, "menge": 25, "einheit": "g" },
+      { "produkt_id": 120, "menge": 2, "einheit": "g" },
+      { "produkt_id": 143, "menge": 3, "einheit": "g" },
+      { "produkt_id": 245, "menge": 50, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Gelatine in kaltem Wasser einweichen",
+      "Rahm, Milch, Zucker, Vanille aufkochen",
+      "Vom Herd nehmen, Gelatine einrühren",
+      "In Förmchen giessen, kalt stellen (4h)",
+      "Beeren pürieren für Coulis",
+      "Panna Cotta stürzen",
+      "Mit Coulis und frischen Früchten"
+    ],
+    "allergene": ["Milch"],
+    "bemerkung": "Italienischer Klassiker, cremig"
+  },
+  {
+    "name": "Hasliglace-Auswahl",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 10.00,
+    "zubereitungszeit": "5 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "3 Kugeln Glace nach Wahl (Molki Meiringen) | Schlagrahm | Waffelgebäck",
+    "zutaten": [
+      { "produkt_id": 603, "menge": 120, "einheit": "ml" },
+      { "produkt_id": 33, "menge": 40, "einheit": "ml" },
+      { "produkt_id": 149, "menge": 15, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "3 Kugeln Glace portionieren",
+      "Rahm steif schlagen",
+      "In Dessertschale anrichten",
+      "Mit Schlagrahm garnieren",
+      "Waffelgebäck dazu"
+    ],
+    "allergene": ["Milch", "Gluten"],
+    "bemerkung": "Einfach, regional von Molki Meiringen"
+  },
+  {
+    "name": "Berner Alpkäse-Auswahl (Dessert)",
+    "kategorie": "Dessert",
+    "portionen": 1,
+    "verkaufspreis": 18.00,
+    "zubereitungszeit": "10 Minuten",
+    "schwierigkeit": "Einfach",
+    "beschreibung": "3 Alpkäse unterschiedlicher Reifung | Quitten-Kompott | Baumnüsse | Sauerteigbrot",
+    "zutaten": [
+      { "produkt_id": 22, "menge": 80, "einheit": "g" },
+      { "produkt_id": 606, "menge": 40, "einheit": "g" },
+      { "produkt_id": 137, "menge": 15, "einheit": "g" },
+      { "produkt_id": 90, "menge": 40, "einheit": "g" }
+    ],
+    "zubereitung": [
+      "Käse 30 Min vor Service temperieren",
+      "3 Reifestufen portionieren",
+      "Walnüsse grob hacken",
+      "Sauerteigbrot aufschneiden",
+      "Quittenkompott in Schälchen",
+      "Alles auf Holzbrett anrichten"
+    ],
+    "allergene": ["Milch", "Gluten", "Nüsse"],
+    "bemerkung": "Käse als Dessert, regional"
+  }
+]
