@@ -1,30 +1,57 @@
 {
   "meta": {
     "titel": "Neue Produkte für Bankettkarte",
-    "version": "2.0",
+    "version": "1.0",
     "datum": "2025-12-12",
-    "bemerkung": "NUR fehlende Produkte - andere existieren bereits in der Datenbank. IDs ab 600 um Konflikte zu vermeiden."
-  },
-  "bereits_vorhanden": {
-    "hinweis": "Diese Produkte existieren bereits in deiner Datenbank mit folgenden IDs:",
-    "produkte": [
-      { "gastro_id": 195, "name": "Gerstengraupen (Rollgerste)" },
-      { "gastro_id": 388, "name": "Pastinaken" },
-      { "gastro_id": 214, "name": "Bündnerfleisch (Trockenfleisch)" },
-      { "gastro_id": 187, "name": "Emmentaler AOP" },
-      { "gastro_id": 200, "name": "Cornichons (Essiggurken)" },
-      { "gastro_id": 202, "name": "Preiselbeeren (Konserve)" },
-      { "gastro_id": 392, "name": "Peperoni gelb" },
-      { "gastro_id": 245, "name": "Beeren-Mix (TK)" },
-      { "gastro_id": 182, "name": "Kochschinken" },
-      { "gastro_id": 70, "name": "Quitten" },
-      { "gastro_id": 506, "name": "Rindsschulter" },
-      { "gastro_id": 7, "name": "Schweinsbäckli (Wange)" }
-    ]
+    "bemerkung": "Diese Produkte fehlen in der Gastro-Datenbank und müssen zuerst importiert werden"
   },
   "produkte": [
     {
-      "gastro_id": 600,
+      "gastro_id": 181,
+      "name": "Gerste (Rollgerste)",
+      "kategorie": "Teigwaren & Getreide",
+      "preis": 4.50,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Transgourmet",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 182,
+      "name": "Pastinaken",
+      "kategorie": "Gemüse",
+      "preis": 5.50,
+      "einheit": "kg",
+      "ruestverlust": 20,
+      "garverlust": 10,
+      "lieferant": "Bio-Hof Hasliberg",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 183,
+      "name": "Bündnerfleisch",
+      "kategorie": "Wurst",
+      "preis": 85.00,
+      "einheit": "kg",
+      "ruestverlust": 5,
+      "garverlust": 0,
+      "lieferant": "Metzgerei Trachsel",
+      "herkunft": "Graubünden"
+    },
+    {
+      "gastro_id": 184,
+      "name": "Trockenfleisch",
+      "kategorie": "Wurst",
+      "preis": 75.00,
+      "einheit": "kg",
+      "ruestverlust": 5,
+      "garverlust": 0,
+      "lieferant": "Metzgerei Trachsel",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 185,
       "name": "Kalbsbäggli (Wange)",
       "kategorie": "Fleisch",
       "preis": 24.00,
@@ -32,11 +59,21 @@
       "ruestverlust": 10,
       "garverlust": 20,
       "lieferant": "H&R Gastro AG",
-      "herkunft": "Schweiz",
-      "bemerkungen": "Kalbswangen für Schmorgerichte"
+      "herkunft": "Schweiz"
     },
     {
-      "gastro_id": 601,
+      "gastro_id": 186,
+      "name": "Rindsbraten (Schulter)",
+      "kategorie": "Fleisch",
+      "preis": 32.00,
+      "einheit": "kg",
+      "ruestverlust": 10,
+      "garverlust": 25,
+      "lieferant": "Metzgerei Trachsel",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 187,
       "name": "Rindsgeschnetzeltes",
       "kategorie": "Fleisch",
       "preis": 42.00,
@@ -44,22 +81,61 @@
       "ruestverlust": 5,
       "garverlust": 20,
       "lieferant": "Metzgerei Trachsel",
-      "herkunft": "Schweiz",
-      "bemerkungen": "Geschnetzeltes vom Rind für Stroganoff"
+      "herkunft": "Schweiz"
     },
     {
-      "gastro_id": 602,
+      "gastro_id": 188,
+      "name": "Essiggurken",
+      "kategorie": "Sonstige",
+      "preis": 8.00,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Transgourmet"
+    },
+    {
+      "gastro_id": 189,
+      "name": "Peperoni (bunt gemischt)",
+      "kategorie": "Gemüse",
+      "preis": 8.50,
+      "einheit": "kg",
+      "ruestverlust": 20,
+      "garverlust": 5,
+      "lieferant": "Transgourmet"
+    },
+    {
+      "gastro_id": 190,
+      "name": "Preiselbeeren (Konfitüre)",
+      "kategorie": "Früchte",
+      "preis": 12.00,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Transgourmet"
+    },
+    {
+      "gastro_id": 191,
+      "name": "Schweizer Schinken (gekocht)",
+      "kategorie": "Wurst",
+      "preis": 28.00,
+      "einheit": "kg",
+      "ruestverlust": 5,
+      "garverlust": 0,
+      "lieferant": "Metzgerei Trachsel",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 192,
       "name": "Meringue-Schalen",
       "kategorie": "Sonstige",
       "preis": 35.00,
       "einheit": "kg",
       "ruestverlust": 5,
       "garverlust": 0,
-      "lieferant": "Transgourmet",
-      "bemerkungen": "Fertige Meringue-Schalen für Haslitaler Meringue"
+      "lieferant": "Transgourmet"
     },
     {
-      "gastro_id": 603,
+      "gastro_id": 193,
       "name": "Vanilleglace",
       "kategorie": "Sonstige",
       "preis": 18.00,
@@ -67,33 +143,31 @@
       "ruestverlust": 0,
       "garverlust": 0,
       "lieferant": "Molki Meiringen",
-      "herkunft": "Meiringen",
-      "bemerkungen": "Hasliglace Vanille"
+      "herkunft": "Meiringen"
     },
     {
-      "gastro_id": 604,
+      "gastro_id": 194,
+      "name": "Emmentaler AOP",
+      "kategorie": "Käse",
+      "preis": 22.00,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Käserei Meiringen",
+      "herkunft": "Schweiz"
+    },
+    {
+      "gastro_id": 195,
       "name": "Flammkuchen-Teig (fertig)",
       "kategorie": "Teigwaren & Getreide",
       "preis": 8.00,
       "einheit": "kg",
       "ruestverlust": 0,
       "garverlust": 0,
-      "lieferant": "Transgourmet",
-      "bemerkungen": "Dünn ausgerollter Flammkuchenteig"
+      "lieferant": "Transgourmet"
     },
     {
-      "gastro_id": 605,
-      "name": "Salzkaramell-Sauce",
-      "kategorie": "Sonstige",
-      "preis": 18.00,
-      "einheit": "kg",
-      "ruestverlust": 0,
-      "garverlust": 0,
-      "lieferant": "Transgourmet",
-      "bemerkungen": "Für Schokoladen-Mousse"
-    },
-    {
-      "gastro_id": 606,
+      "gastro_id": 196,
       "name": "Quittenkompott",
       "kategorie": "Früchte",
       "preis": 15.00,
@@ -101,8 +175,27 @@
       "ruestverlust": 0,
       "garverlust": 0,
       "lieferant": "Obstgarten Brienz",
-      "herkunft": "Brienz",
-      "bemerkungen": "Hausgemachtes Quittenkompott"
+      "herkunft": "Brienz"
+    },
+    {
+      "gastro_id": 197,
+      "name": "Salzkaramell-Sauce",
+      "kategorie": "Sonstige",
+      "preis": 18.00,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Transgourmet"
+    },
+    {
+      "gastro_id": 198,
+      "name": "Beerenmischung (TK)",
+      "kategorie": "Früchte",
+      "preis": 12.00,
+      "einheit": "kg",
+      "ruestverlust": 0,
+      "garverlust": 0,
+      "lieferant": "Transgourmet"
     }
   ]
 }
