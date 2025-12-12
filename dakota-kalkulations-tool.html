@@ -3294,6 +3294,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Kategorie</th>
+                            <th>Saison</th>
                             <th>Preis/Einheit</th>
                             <th>Einheit</th>
                             <th>Rüstverlust</th>
@@ -3306,10 +3307,12 @@
             `;
 
             data.forEach(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
                 html += `
                     <tr>
                         <td><strong>${lm.name}</strong></td>
                         <td><span class="badge badge-gold">${lm.kategorie}</span></td>
+                        <td><span class="saison-badge ${saisonStatus.class}">🌿 ${saisonStatus.label}</span></td>
                         <td>CHF ${lm.preis.toFixed(2)}</td>
                         <td>${lm.einheit}</td>
                         <td>${lm.ruestverlust || 0}%</td>
@@ -3344,6 +3347,59 @@
                 return;
             }
             const filtered = lebensmittelData.filter(lm => lm.kategorie === kategorie);
+            renderLebensmittelTable(filtered);
+        }
+
+        // Saison-Status berechnen
+        function getSaisonStatus(saison) {
+            if (!saison || !Array.isArray(saison) || saison.length === 0) {
+                return { status: 'ganzjaehrig', label: 'Ganzjährig', class: 'in-saison' };
+            }
+
+            const currentMonth = new Date().getMonth() + 1; // 1-12
+            const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+
+            if (saison.includes(currentMonth)) {
+                return { status: 'in-saison', label: 'In Saison', class: 'in-saison' };
+            } else if (saison.includes(nextMonth)) {
+                return { status: 'bald-saison', label: 'Bald in Saison', class: 'bald-saison' };
+            } else {
+                return { status: 'off-saison', label: 'Nicht in Saison', class: 'off-saison' };
+            }
+        }
+
+        // Saison-Filter
+        let currentSaisonFilter = 'alle';
+
+        function filterBySaison(filter) {
+            currentSaisonFilter = filter;
+
+            // Button-Status aktualisieren
+            document.querySelectorAll('.saison-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(filter === 'alle' ? 'alle' : filter === 'in-saison' ? 'jetzt' : filter === 'bald-saison' ? 'bald' : 'nicht')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter anwenden
+            if (filter === 'alle') {
+                renderLebensmittelTable(lebensmittelData);
+                return;
+            }
+
+            const filtered = lebensmittelData.filter(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
+                if (filter === 'in-saison') {
+                    return saisonStatus.status === 'in-saison' || saisonStatus.status === 'ganzjaehrig';
+                } else if (filter === 'bald-saison') {
+                    return saisonStatus.status === 'bald-saison';
+                } else if (filter === 'off-saison') {
+                    return saisonStatus.status === 'off-saison';
+                }
+                return true;
+            });
+
             renderLebensmittelTable(filtered);
         }
 
