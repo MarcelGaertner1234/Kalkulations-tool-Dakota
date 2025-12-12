@@ -2429,11 +2429,18 @@
                     return;
                 }
 
-                const confirmed = confirm(`📥 Menükarten Import\n\n${data.length} Menükarten gefunden.\n\nMöchten Sie diese importieren?`);
-                if (!confirmed) return;
+                // Automatisch importieren ohne Bestätigung
+                console.log(`📥 Starte Import von ${data.length} Menükarten...`);
+
+                // Stelle sicher, dass Rezepte geladen sind
+                if (!rezepteData || rezepteData.length === 0) {
+                    console.log('⏳ Lade Rezepte...');
+                    await loadRezepte();
+                }
 
                 let imported = 0;
                 let skipped = 0;
+                let notFoundRecipes = [];
 
                 for (const item of data) {
                     try {
@@ -2443,9 +2450,42 @@
                         );
 
                         if (!exists) {
-                            await addMenuekarte(item);
-                            imported++;
+                            // NEU: Wenn gerichte rezept_name statt rezept_id haben, auflösen
+                            if (item.gerichte && item.gerichte.length > 0) {
+                                const resolvedGerichte = [];
+                                for (const gericht of item.gerichte) {
+                                    if (gericht.rezept_name && !gericht.rezept_id) {
+                                        // Suche Rezept nach Name
+                                        const rezept = rezepteData.find(r => r.name === gericht.rezept_name);
+                                        if (rezept) {
+                                            resolvedGerichte.push({
+                                                rezept_id: rezept.id,
+                                                kategorie: gericht.kategorie || 'Hauptgang',
+                                                wochentag: gericht.wochentag || ''
+                                            });
+                                            console.log(`  ✓ Rezept gefunden: ${gericht.rezept_name} -> ID ${rezept.id}`);
+                                        } else {
+                                            notFoundRecipes.push(gericht.rezept_name);
+                                            console.warn(`  ⚠️ Rezept nicht gefunden: ${gericht.rezept_name}`);
+                                        }
+                                    } else {
+                                        // Hat bereits rezept_id
+                                        resolvedGerichte.push(gericht);
+                                    }
+                                }
+                                item.gerichte = resolvedGerichte;
+                            }
+
+                            if (item.gerichte && item.gerichte.length > 0) {
+                                await addMenuekarte(item);
+                                imported++;
+                                console.log(`  ➕ Menükarte importiert: ${item.name} (${item.gerichte.length} Gerichte)`);
+                            } else {
+                                console.warn(`  ⏭️ Übersprungen (keine Gerichte): ${item.name}`);
+                                skipped++;
+                            }
                         } else {
+                            console.log(`  ⏭️ Übersprungen (existiert): ${item.name}`);
                             skipped++;
                         }
                     } catch (err) {
@@ -2455,7 +2495,13 @@
 
                 await loadMenuekarten();
                 await loadMenuekartenTab();
-                alert(`✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen (Duplikate): ${skipped}`);
+
+                let message = `✅ Import abgeschlossen!\n\n• Importiert: ${imported}\n• Übersprungen: ${skipped}`;
+                if (notFoundRecipes.length > 0) {
+                    message += `\n\n⚠️ ${notFoundRecipes.length} Rezepte nicht gefunden:\n${notFoundRecipes.slice(0, 5).join('\n')}`;
+                    if (notFoundRecipes.length > 5) message += `\n... und ${notFoundRecipes.length - 5} weitere`;
+                }
+                alert(message);
 
                 // Input zurücksetzen
                 event.target.value = '';

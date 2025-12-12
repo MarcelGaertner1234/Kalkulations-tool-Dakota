@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Bankettkarte Dakota 2025",
+    "typ": "abendkarte",
+    "aktiv": true,
+    "bemerkungen": "Komplette Bankettkarte für Gruppen und Events. Alpine Berner Küche - Regional, Nachvollziehbar, Ehrlich. Stand: Dezember 2025",
+    "datum_erstellt": "2025-12-12T00:00:00.000Z",
+    "gerichte": [
+      { "rezept_name": "Bündner Gerstensuppe", "kategorie": "Suppe" },
+      { "rezept_name": "Pastinakencrèmesuppe", "kategorie": "Suppe" },
+      { "rezept_name": "Rinderconsommé mit Flädli", "kategorie": "Suppe" },
+      { "rezept_name": "Berner Alpkäse-Teller", "kategorie": "Vorspeise" },
+      { "rezept_name": "Geräucherte Forelle aus Reichenbach", "kategorie": "Vorspeise" },
+      { "rezept_name": "Randen-Carpaccio mit Ziegenfrischkäse", "kategorie": "Vorspeise" },
+      { "rezept_name": "Gemischter Blattsalat Alpenwiese", "kategorie": "Vorspeise" },
+      { "rezept_name": "Flammkuchen Elsässer Art", "kategorie": "Vorspeise" },
+      { "rezept_name": "Flammkuchen Vegetarisch", "kategorie": "Vorspeise" },
+      { "rezept_name": "Schweizer Schinkengipfeli", "kategorie": "Vorspeise" },
+      { "rezept_name": "Zürcher Kalbsgeschnetzeltes mit Spätzli", "kategorie": "Hauptgang" },
+      { "rezept_name": "Kalbsbäggli geschmort", "kategorie": "Hauptgang" },
+      { "rezept_name": "Rindsgeschnetzeltes Stroganoff", "kategorie": "Hauptgang" },
+      { "rezept_name": "Rindsbraten geschmort", "kategorie": "Hauptgang" },
+      { "rezept_name": "Berner Forelle auf der Haut gebraten", "kategorie": "Hauptgang" },
+      { "rezept_name": "Felchen vom Brienzersee", "kategorie": "Hauptgang" },
+      { "rezept_name": "Älplermagronen", "kategorie": "Hauptgang" },
+      { "rezept_name": "Käsespätzli mit Röstzwiebeln", "kategorie": "Hauptgang" },
+      { "rezept_name": "Sellerie im Salzteig", "kategorie": "Hauptgang" },
+      { "rezept_name": "Haslitaler Meringue", "kategorie": "Dessert" },
+      { "rezept_name": "Apfel-Tartelette warm", "kategorie": "Dessert" },
+      { "rezept_name": "Schokoladen-Mousse", "kategorie": "Dessert" },
+      { "rezept_name": "Vanille-Panna-Cotta", "kategorie": "Dessert" },
+      { "rezept_name": "Hasliglace-Auswahl", "kategorie": "Dessert" },
+      { "rezept_name": "Berner Alpkäse-Auswahl (Dessert)", "kategorie": "Dessert" }
+    ]
+  }
+]
