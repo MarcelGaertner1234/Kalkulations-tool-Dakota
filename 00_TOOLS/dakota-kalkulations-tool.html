@@ -131,6 +131,31 @@
             font-size: 0.85rem;
         }
 
+        /* Sync Status Button */
+        .sync-status {
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+        }
+        .sync-status:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.1);
+        }
+        .sync-status.syncing .stat-value {
+            animation: spin 1s linear infinite;
+        }
+        .sync-status.synced .stat-value {
+            color: #4CAF50;
+        }
+        .sync-status.error .stat-value {
+            color: #f44336;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* ===== NAVIGATION TABS ===== */
         .nav-tabs {
             background: var(--dakota-white);
@@ -583,6 +608,86 @@
             color: #721c24;
         }
 
+        /* ===== SAISON KALENDER ===== */
+        .saison-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .saison-badge.in-saison {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+
+        .saison-badge.bald-saison {
+            background: rgba(255, 193, 7, 0.15);
+            color: #d39e00;
+        }
+
+        .saison-badge.off-saison {
+            background: rgba(108, 117, 125, 0.15);
+            color: #6c757d;
+        }
+
+        .saison-filter-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .saison-filter-btn {
+            padding: 0.4rem 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .saison-filter-btn:hover {
+            border-color: var(--dakota-gold);
+            background: rgba(219, 167, 101, 0.1);
+        }
+
+        .saison-filter-btn.active {
+            border-color: var(--dakota-gold);
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .saison-checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+        }
+
+        .saison-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            background: #f5f5f5;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .saison-checkbox:hover {
+            background: rgba(219, 167, 101, 0.2);
+        }
+
+        .saison-checkbox input[type="checkbox"] {
+            accent-color: var(--dakota-gold);
+        }
+
         /* ===== LOADING SPINNER ===== */
         .spinner {
             display: inline-block;
@@ -670,6 +775,65 @@
 
         .btn-icon.delete:hover {
             color: var(--danger);
+        }
+
+        /* ===== DRAG & DROP STYLES ===== */
+        .draggable-row {
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+        .draggable-row:active {
+            cursor: grabbing;
+        }
+        .draggable-row.dragging {
+            opacity: 0.5;
+            background: #fff3cd !important;
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .draggable-row.drag-over {
+            border-top: 3px solid var(--dakota-gold) !important;
+            background: rgba(196, 164, 105, 0.1);
+        }
+        .drag-handle {
+            cursor: grab;
+            padding: 0.3rem 0.5rem;
+            color: #999;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+        .drag-handle:hover {
+            color: var(--dakota-gold);
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        .drop-zone {
+            min-height: 40px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .drop-zone.drag-over {
+            border-color: var(--dakota-gold);
+            background: rgba(196, 164, 105, 0.1);
+            color: var(--dakota-gold);
+        }
+        .wochentag-section {
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+        .wochentag-section.drag-over {
+            background: rgba(196, 164, 105, 0.15);
+            box-shadow: inset 0 0 0 2px var(--dakota-gold);
         }
 
         /* ===== CALCULATION RESULT ===== */
@@ -940,6 +1104,10 @@
                     <div class="stat-value" id="avgFoodCost">0%</div>
                     <div class="stat-label">Ø Food Cost</div>
                 </div>
+                <div class="stat-item sync-status" onclick="manualSync()" title="Klicken zum Synchronisieren">
+                    <div class="stat-value" id="syncStatus">🔄</div>
+                    <div class="stat-label" id="syncLabel">Sync</div>
+                </div>
             </div>
         </div>
     </header>
@@ -1033,6 +1201,14 @@
                         <option value="Alkohol (Kochen)">Alkohol (Kochen)</option>
                         <option value="Sonstige">Sonstige</option>
                     </select>
+                </div>
+
+                <div class="saison-filter-container" style="margin-top: 1rem;">
+                    <span style="font-weight: 600; color: #666; margin-right: 0.5rem;">🌿 Saison:</span>
+                    <button class="saison-filter-btn active" onclick="filterBySaison('alle')" data-filter="alle">Alle</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('in-saison')" data-filter="in-saison">Jetzt in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('bald-saison')" data-filter="bald-saison">Bald in Saison</button>
+                    <button class="saison-filter-btn" onclick="filterBySaison('off-saison')" data-filter="off-saison">Nicht in Saison</button>
                 </div>
 
                 <div id="lebensmittelTable"></div>
@@ -1297,6 +1473,25 @@
                 <div class="form-group">
                     <label class="form-label">Lieferant</label>
                     <input type="text" class="form-input" id="lm_lieferant">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🌿 Saison (Monate)</label>
+                    <div class="saison-checkbox-grid">
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jan" value="1"> Jan</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_feb" value="2"> Feb</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mar" value="3"> Mär</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_apr" value="4"> Apr</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_mai" value="5"> Mai</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jun" value="6"> Jun</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_jul" value="7"> Jul</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_aug" value="8"> Aug</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_sep" value="9"> Sep</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_okt" value="10"> Okt</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_nov" value="11"> Nov</label>
+                        <label class="saison-checkbox"><input type="checkbox" id="lm_saison_dez" value="12"> Dez</label>
+                    </div>
+                    <small style="color: #888; margin-top: 0.5rem; display: block;">Wähle die Monate, in denen dieses Produkt in Saison ist (leer = ganzjährig verfügbar)</small>
                 </div>
 
                 <div class="form-group">
@@ -1676,6 +1871,7 @@
         let firestoreSyncEnabled = false;
         let firestoreListeners = [];
         let isSyncing = false; // FIX 3: Flag um Listener während Import/Migration zu ignorieren
+        let listenersInitialized = false; // Verhindert doppelte Listener-Initialisierung
 
         // Wait for Firebase to be initialized
         async function waitForFirebase() {
@@ -1714,8 +1910,14 @@
                         // Migriere lokale Daten zu Firestore (nur beim ersten Mal)
                         await checkAndMigrateToFirestore();
 
-                        // Setup Echtzeit-Listeners NACH der Migration
-                        setupRealtimeListeners();
+                        // Setup Echtzeit-Listeners NACH der Migration (nur einmal!)
+                        if (!listenersInitialized) {
+                            setupRealtimeListeners();
+                            listenersInitialized = true;
+                        }
+
+                        // NEU: Initial-Sync bei jedem Start - Firestore → IndexedDB
+                        await performInitialSync();
                     } else {
                         console.log('🔐 Melde an bei Firebase...');
                         await signInAnonymously(window.firebaseAuth);
@@ -1728,7 +1930,100 @@
             }
         }
 
+        // NEU: Initial Sync beim App-Start - holt neueste Daten von Firestore
+        async function performInitialSync() {
+            if (!firestoreSyncEnabled || isSyncing) return;
+
+            console.log('🔄 Führe Initial-Sync durch (Firestore → Lokal)...');
+            isSyncing = true;
+
+            try {
+                const { collection, getDocs } = window.firebaseModules;
+
+                // Lade alle Collections von Firestore
+                const [lmSnapshot, rzSnapshot, mkSnapshot] = await Promise.all([
+                    getDocs(collection(window.firestoreDB, 'lebensmittel')),
+                    getDocs(collection(window.firestoreDB, 'rezepte')),
+                    getDocs(collection(window.firestoreDB, 'menuekarten'))
+                ]);
+
+                // Sync Lebensmittel
+                let lmCount = 0;
+                for (const doc of lmSnapshot.docs) {
+                    const data = { ...doc.data(), id: parseInt(doc.id, 10) };
+                    await syncFromFirestoreToIndexedDB('lebensmittel', data);
+                    lmCount++;
+                }
+
+                // Sync Rezepte
+                let rzCount = 0;
+                for (const doc of rzSnapshot.docs) {
+                    const data = { ...doc.data(), id: parseInt(doc.id, 10) };
+                    await syncFromFirestoreToIndexedDB('rezepte', data);
+                    rzCount++;
+                }
+
+                // Sync Menükarten
+                let mkCount = 0;
+                for (const doc of mkSnapshot.docs) {
+                    const data = { ...doc.data(), id: parseInt(doc.id, 10) };
+                    await syncFromFirestoreToIndexedDB('menuekarten', data);
+                    mkCount++;
+                }
+
+                console.log(`✅ Initial-Sync abgeschlossen: ${lmCount} Lebensmittel, ${rzCount} Rezepte, ${mkCount} Menükarten`);
+
+                // UI aktualisieren
+                await loadLebensmittel();
+                await loadRezepte();
+                await loadMenuekartenTab();
+                updateStats();
+
+                // Speichere letzten Sync-Zeitpunkt
+                localStorage.setItem('dakota_last_sync', new Date().toISOString());
+
+            } catch (error) {
+                console.error('❌ Initial-Sync fehlgeschlagen:', error);
+                throw error; // Re-throw für manualSync Fehlerbehandlung
+            } finally {
+                isSyncing = false;
+            }
+        }
+
+        // Sync bei Tab-Wechsel / Visibility Change
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && firestoreSyncEnabled && !isSyncing) {
+                console.log('👁️ Tab wieder sichtbar - prüfe auf Updates...');
+                // Kurze Verzögerung um Race Conditions zu vermeiden
+                setTimeout(() => {
+                    if (!isSyncing) {
+                        performInitialSync();
+                    }
+                }, 500);
+            }
+        });
+
+        // Sync bei Fokus (zusätzlich zur Visibility)
+        window.addEventListener('focus', () => {
+            if (firestoreSyncEnabled && !isSyncing) {
+                const lastSync = localStorage.getItem('dakota_last_sync');
+                const now = new Date();
+
+                // Nur sync wenn letzter Sync > 30 Sekunden her
+                if (!lastSync || (now - new Date(lastSync)) > 30000) {
+                    console.log('🔄 Window fokussiert - sync nach 30s Inaktivität...');
+                    setTimeout(() => {
+                        if (!isSyncing) {
+                            performInitialSync();
+                        }
+                    }, 500);
+                }
+            }
+        });
+
         // Setup Realtime Listeners für alle 3 Collections
+        let initialSnapshotDone = { lebensmittel: false, rezepte: false, menuekarten: false };
+
         function setupRealtimeListeners() {
             const { collection, onSnapshot } = window.firebaseModules;
 
@@ -1736,11 +2031,20 @@
             const lmUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'lebensmittel'),
                 (snapshot) => {
+                    // Ignoriere den ersten Snapshot (kommt immer beim Setup)
+                    if (!initialSnapshotDone.lebensmittel) {
+                        initialSnapshotDone.lebensmittel = true;
+                        console.log('📥 Lebensmittel Listener: Initial snapshot übersprungen');
+                        return;
+                    }
+
                     // FIX 3: Ignoriere Änderungen während Import/Migration
                     if (isSyncing) {
                         console.log('⏳ Lebensmittel-Listener pausiert während Import/Migration');
                         return;
                     }
+
+                    console.log(`🔔 Lebensmittel Echtzeit-Update: ${snapshot.docChanges().length} Änderungen`);
 
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
@@ -1757,10 +2061,9 @@
                         }
                     });
 
-                    // UI refresh
-                    if (document.querySelector('#tab-lebensmittel.active')) {
-                        loadLebensmittel();
-                    }
+                    // UI refresh - IMMER, nicht nur wenn Tab aktiv
+                    loadLebensmittel();
+                    updateStats();
                 },
                 (error) => console.error('Lebensmittel Listener Error:', error)
             );
@@ -1769,11 +2072,20 @@
             const rzUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'rezepte'),
                 (snapshot) => {
+                    // Ignoriere den ersten Snapshot
+                    if (!initialSnapshotDone.rezepte) {
+                        initialSnapshotDone.rezepte = true;
+                        console.log('📥 Rezepte Listener: Initial snapshot übersprungen');
+                        return;
+                    }
+
                     // FIX 3: Ignoriere Änderungen während Import/Migration
                     if (isSyncing) {
                         console.log('⏳ Rezepte-Listener pausiert während Import/Migration');
                         return;
                     }
+
+                    console.log(`🔔 Rezepte Echtzeit-Update: ${snapshot.docChanges().length} Änderungen`);
 
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
@@ -1789,9 +2101,9 @@
                         }
                     });
 
-                    if (document.querySelector('#tab-rezepte.active')) {
-                        loadRezepte();
-                    }
+                    // UI refresh - IMMER
+                    loadRezepte();
+                    updateStats();
                 },
                 (error) => console.error('Rezepte Listener Error:', error)
             );
@@ -1800,11 +2112,20 @@
             const mkUnsubscribe = onSnapshot(
                 collection(window.firestoreDB, 'menuekarten'),
                 (snapshot) => {
+                    // Ignoriere den ersten Snapshot
+                    if (!initialSnapshotDone.menuekarten) {
+                        initialSnapshotDone.menuekarten = true;
+                        console.log('📥 Menükarten Listener: Initial snapshot übersprungen');
+                        return;
+                    }
+
                     // FIX 3: Ignoriere Änderungen während Import/Migration
                     if (isSyncing) {
                         console.log('⏳ Menükarten-Listener pausiert während Import/Migration');
                         return;
                     }
+
+                    console.log(`🔔 Menükarten Echtzeit-Update: ${snapshot.docChanges().length} Änderungen`);
 
                     snapshot.docChanges().forEach(async (change) => {
                         // FIX: ID als Number parsen (Firestore IDs sind Strings, IndexedDB braucht Numbers)
@@ -1820,9 +2141,8 @@
                         }
                     });
 
-                    if (document.querySelector('#tab-menuekarten.active')) {
-                        loadMenuekartenTab();
-                    }
+                    // UI refresh - IMMER
+                    loadMenuekartenTab();
                 },
                 (error) => console.error('Menükarten Listener Error:', error)
             );
@@ -2736,6 +3056,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Kategorie</th>
+                            <th>Saison</th>
                             <th>Preis/Einheit</th>
                             <th>Einheit</th>
                             <th>Rüstverlust</th>
@@ -2748,10 +3069,12 @@
             `;
 
             data.forEach(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
                 html += `
                     <tr>
                         <td><strong>${lm.name}</strong></td>
                         <td><span class="badge badge-gold">${lm.kategorie}</span></td>
+                        <td><span class="saison-badge ${saisonStatus.class}">🌿 ${saisonStatus.label}</span></td>
                         <td>CHF ${lm.preis.toFixed(2)}</td>
                         <td>${lm.einheit}</td>
                         <td>${lm.ruestverlust || 0}%</td>
@@ -2789,10 +3112,72 @@
             renderLebensmittelTable(filtered);
         }
 
+        // Saison-Status berechnen
+        function getSaisonStatus(saison) {
+            if (!saison || !Array.isArray(saison) || saison.length === 0) {
+                return { status: 'ganzjaehrig', label: 'Ganzjährig', class: 'in-saison' };
+            }
+
+            const currentMonth = new Date().getMonth() + 1; // 1-12
+            const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+
+            if (saison.includes(currentMonth)) {
+                return { status: 'in-saison', label: 'In Saison', class: 'in-saison' };
+            } else if (saison.includes(nextMonth)) {
+                return { status: 'bald-saison', label: 'Bald in Saison', class: 'bald-saison' };
+            } else {
+                return { status: 'off-saison', label: 'Nicht in Saison', class: 'off-saison' };
+            }
+        }
+
+        // Saison-Filter
+        let currentSaisonFilter = 'alle';
+
+        function filterBySaison(filter) {
+            currentSaisonFilter = filter;
+
+            // Button-Status aktualisieren
+            document.querySelectorAll('.saison-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter anwenden
+            if (filter === 'alle') {
+                renderLebensmittelTable(lebensmittelData);
+                return;
+            }
+
+            const filtered = lebensmittelData.filter(lm => {
+                const saisonStatus = getSaisonStatus(lm.saison);
+                if (filter === 'in-saison') {
+                    return saisonStatus.status === 'in-saison' || saisonStatus.status === 'ganzjaehrig';
+                } else if (filter === 'bald-saison') {
+                    return saisonStatus.status === 'bald-saison';
+                } else if (filter === 'off-saison') {
+                    return saisonStatus.status === 'off-saison';
+                }
+                return true;
+            });
+
+            renderLebensmittelTable(filtered);
+        }
+
         function openLebensmittelModal(id = null) {
             currentEditId = id;
             const modal = document.getElementById('lebensmittelModal');
             const title = document.getElementById('lebensmittelModalTitle');
+
+            // Saison-Monate Mapping
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+
+            // Reset alle Saison-Checkboxen
+            saisonMonths.forEach(m => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb) cb.checked = false;
+            });
 
             if (id) {
                 title.textContent = 'Lebensmittel bearbeiten';
@@ -2806,6 +3191,15 @@
                 document.getElementById('lm_garverlust').value = lm.garverlust || 0;
                 document.getElementById('lm_lieferant').value = lm.lieferant || '';
                 document.getElementById('lm_bemerkungen').value = lm.bemerkungen || '';
+
+                // Saison-Daten laden
+                if (lm.saison && Array.isArray(lm.saison)) {
+                    lm.saison.forEach(month => {
+                        const monthId = saisonMonths[month - 1]; // month ist 1-12
+                        const cb = document.getElementById('lm_saison_' + monthId);
+                        if (cb) cb.checked = true;
+                    });
+                }
             } else {
                 title.textContent = 'Neues Lebensmittel';
                 document.getElementById('lebensmittelForm').reset();
@@ -2822,6 +3216,16 @@
         async function saveLebensmittel(event) {
             event.preventDefault();
 
+            // Saison-Daten sammeln
+            const saisonMonths = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+            const selectedSaison = [];
+            saisonMonths.forEach((m, index) => {
+                const cb = document.getElementById('lm_saison_' + m);
+                if (cb && cb.checked) {
+                    selectedSaison.push(index + 1); // Monate 1-12
+                }
+            });
+
             const data = {
                 name: document.getElementById('lm_name').value,
                 kategorie: document.getElementById('lm_kategorie').value,
@@ -2830,7 +3234,8 @@
                 ruestverlust: parseFloat(document.getElementById('lm_ruestverlust').value) || 0,
                 garverlust: parseFloat(document.getElementById('lm_garverlust').value) || 0,
                 lieferant: document.getElementById('lm_lieferant').value,
-                bemerkungen: document.getElementById('lm_bemerkungen').value
+                bemerkungen: document.getElementById('lm_bemerkungen').value,
+                saison: selectedSaison.length > 0 ? selectedSaison : null // null = ganzjährig
             };
 
             // FIX: Auto-Vergabe gastro_id für korrekte Rezept-Zuordnung
@@ -3752,6 +4157,70 @@
             }
         }
 
+        // ===== SYNC STATUS FUNKTIONEN =====
+        function updateSyncStatus(status, message) {
+            const syncItem = document.querySelector('.sync-status');
+            const syncIcon = document.getElementById('syncStatus');
+            const syncLabel = document.getElementById('syncLabel');
+
+            syncItem.classList.remove('syncing', 'synced', 'error');
+
+            switch (status) {
+                case 'syncing':
+                    syncItem.classList.add('syncing');
+                    syncIcon.textContent = '🔄';
+                    syncLabel.textContent = message || 'Sync läuft...';
+                    break;
+                case 'synced':
+                    syncItem.classList.add('synced');
+                    syncIcon.textContent = '✅';
+                    syncLabel.textContent = message || 'Synchron';
+                    break;
+                case 'error':
+                    syncItem.classList.add('error');
+                    syncIcon.textContent = '❌';
+                    syncLabel.textContent = message || 'Fehler';
+                    break;
+                default:
+                    syncIcon.textContent = '🔄';
+                    syncLabel.textContent = 'Sync';
+            }
+        }
+
+        // Manuelle Synchronisierung (Click auf Sync-Button)
+        async function manualSync() {
+            if (isSyncing) {
+                console.log('⏳ Sync läuft bereits...');
+                return;
+            }
+
+            if (!firestoreSyncEnabled) {
+                alert('❌ Firestore nicht verbunden.\n\nBitte warte bis die Verbindung hergestellt ist oder lade die Seite neu.');
+                return;
+            }
+
+            updateSyncStatus('syncing', 'Sync läuft...');
+            console.log('🔄 Manuelle Synchronisierung gestartet...');
+
+            try {
+                await performInitialSync();
+                updateSyncStatus('synced', 'Synchron');
+
+                // Nach 3 Sekunden zurück zum Standard
+                setTimeout(() => {
+                    updateSyncStatus('default');
+                }, 3000);
+
+            } catch (error) {
+                console.error('❌ Manuelle Sync fehlgeschlagen:', error);
+                updateSyncStatus('error', 'Fehler');
+
+                setTimeout(() => {
+                    updateSyncStatus('default');
+                }, 5000);
+            }
+        }
+
         // ===== BEISPIEL-DATEN HINZUFÜGEN =====
         async function addExampleData() {
             // Beispiel-Lebensmittel
@@ -4000,33 +4469,55 @@
             }
         }
 
+        // ===== DRAG & DROP STATE =====
+        let draggedGerichtIndex = null;
+        let draggedElement = null;
+
         function renderGerichteListe() {
             const container = document.getElementById('mk_gerichte_container');
             if (!container) return;
 
             if (currentMenuekarteGerichte.length === 0) {
-                container.innerHTML = '<p style="color: #999; font-style: italic;">Noch keine Gerichte hinzugefügt</p>';
+                container.innerHTML = '<p style="color: #999; font-style: italic;">Noch keine Gerichte hinzugefügt. Füge Rezepte über die Auswahl oben hinzu.</p>';
                 return;
             }
 
             // Check: Verwenden Gerichte Wochentage?
-            // FIX: Bei Mittagskarten IMMER die Wochentags-Ansicht erzwingen
             const mkTyp = document.getElementById('mk_typ') ? document.getElementById('mk_typ').value : '';
             const hasWochentage = currentMenuekarteGerichte.some(g => g.wochentag) || mkTyp === 'mittagsmenu';
 
             if (hasWochentage) {
-                // === NEUE LOGIK: Gruppierung nach Wochentag → Kategorie ===
-                const wochentagOrder = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-                const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
-                let html = '';
+                renderGerichteWithWochentage(container);
+            } else {
+                renderGerichteWithoutWochentage(container);
+            }
 
-                wochentagOrder.forEach(wochentag => {
-                    const gerichteAmTag = currentMenuekarteGerichte.filter(g => g.wochentag === wochentag);
-                    if (gerichteAmTag.length === 0) return;
+            // Setup Drag & Drop Event Listeners nach dem Rendern
+            setupDragAndDrop();
+        }
 
-                    html += `<h3 style="margin-top: 2rem; color: var(--dakota-gold); border-bottom: 3px solid var(--dakota-gold); padding-bottom: 0.5rem; font-size: 1.4rem;">📅 ${wochentag}</h3>`;
+        function renderGerichteWithWochentage(container) {
+            const wochentagOrder = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+            const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+            let html = '';
 
-                    // Nun nach Kategorie gruppieren
+            wochentagOrder.forEach(wochentag => {
+                const gerichteAmTag = currentMenuekarteGerichte.filter(g => g.wochentag === wochentag);
+
+                // Zeige Wochentag auch wenn leer (als Drop-Zone)
+                html += `<div class="wochentag-section" data-wochentag="${wochentag}"
+                    ondragover="handleWochentagDragOver(event, '${wochentag}')"
+                    ondragleave="handleWochentagDragLeave(event)"
+                    ondrop="handleWochentagDrop(event, '${wochentag}')">`;
+
+                html += `<h3 style="margin-top: 1rem; color: var(--dakota-gold); border-bottom: 3px solid var(--dakota-gold); padding-bottom: 0.5rem; font-size: 1.4rem;">
+                    📅 ${wochentag} <span style="font-size: 0.9rem; color: #999;">(${gerichteAmTag.length} Gerichte)</span>
+                </h3>`;
+
+                if (gerichteAmTag.length === 0) {
+                    html += `<div class="drop-zone" data-wochentag="${wochentag}">Gericht hierher ziehen</div>`;
+                } else {
+                    // Nach Kategorie gruppieren
                     const byKategorie = {};
                     gerichteAmTag.forEach(g => {
                         if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
@@ -4037,131 +4528,255 @@
                         if (!byKategorie[kategorie]) return;
 
                         html += `<h4 style="margin-top: 1.2rem; margin-left: 1rem; color: #666; font-size: 1.1rem;">${kategorie}</h4>`;
-                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+                        html += `<table class="data-table" style="margin-left: 1rem;" data-wochentag="${wochentag}" data-kategorie="${kategorie}">
+                            <thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>`;
 
                         byKategorie[kategorie].forEach(gericht => {
-                            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
-                            if (!rezept) return;
-
-                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
-                            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
-                            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
-                            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
-
-                            html += `
-                                <tr>
-                                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
-                                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
-                                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
-                                    <td style="white-space: nowrap;">
-                                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
-                                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-
-                        html += '</tbody></table>';
-                    });
-                });
-
-                // Gerichte OHNE Wochentag (falls vorhanden)
-                const gerichteOhneTag = currentMenuekarteGerichte.filter(g => !g.wochentag);
-                if (gerichteOhneTag.length > 0) {
-                    html += `<h3 style="margin-top: 2rem; color: #999; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem;">Ohne Wochentag</h3>`;
-
-                    const byKategorie = {};
-                    gerichteOhneTag.forEach(g => {
-                        if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
-                        byKategorie[g.kategorie].push(g);
-                    });
-
-                    const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
-                    kategorieOrder.forEach(kategorie => {
-                        if (!byKategorie[kategorie]) return;
-
-                        html += `<h4 style="margin-top: 1rem; margin-left: 1rem; color: #666;">${kategorie}</h4>`;
-                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
-
-                        byKategorie[kategorie].forEach(gericht => {
-                            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
-                            if (!rezept) return;
-
-                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
-                            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
-                            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
-                            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
-
-                            html += `
-                                <tr>
-                                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
-                                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
-                                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
-                                    <td style="white-space: nowrap;">
-                                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
-                                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
-                                    </td>
-                                </tr>
-                            `;
+                            html += renderGerichtRow(gericht, wochentag, kategorie);
                         });
 
                         html += '</tbody></table>';
                     });
                 }
 
-                container.innerHTML = html;
+                html += '</div>'; // wochentag-section
+            });
 
-            } else {
-                // === ALTE LOGIK: Nur nach Kategorie gruppieren (für Abendkarten ohne Wochentage) ===
+            // Gerichte OHNE Wochentag
+            const gerichteOhneTag = currentMenuekarteGerichte.filter(g => !g.wochentag);
+            if (gerichteOhneTag.length > 0) {
+                html += `<div class="wochentag-section" data-wochentag="">`;
+                html += `<h3 style="margin-top: 2rem; color: #999; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem;">Ohne Wochentag</h3>`;
+
                 const byKategorie = {};
-                currentMenuekarteGerichte.forEach(gericht => {
-                    if (!byKategorie[gericht.kategorie]) byKategorie[gericht.kategorie] = [];
-                    byKategorie[gericht.kategorie].push(gericht);
+                gerichteOhneTag.forEach(g => {
+                    if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
+                    byKategorie[g.kategorie].push(g);
                 });
 
-                let html = '';
                 const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
-
                 kategorieOrder.forEach(kategorie => {
                     if (!byKategorie[kategorie]) return;
 
-                    html += `<h4 style="margin-top: 1rem; color: var(--dakota-gold);">${kategorie}</h4>`;
-                    html += '<table class="data-table"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+                    html += `<h4 style="margin-top: 1rem; margin-left: 1rem; color: #666;">${kategorie}</h4>`;
+                    html += `<table class="data-table" style="margin-left: 1rem;" data-wochentag="" data-kategorie="${kategorie}">
+                        <thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>`;
 
-                    byKategorie[kategorie].forEach((gericht, index) => {
-                        const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
-                        if (!rezept) return;
-
-                        const wareneinsatz = calculateRezeptWareneinsatz(rezept);
-                        const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
-                        const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
-
-                        const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
-
-                        html += `
-                            <tr>
-                                <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
-                                <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
-                                <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
-                                <td style="white-space: nowrap;">
-                                    <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
-                                    <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
-                                    <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
-                                    <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
-                                </td>
-                            </tr>
-                        `;
+                    byKategorie[kategorie].forEach(gericht => {
+                        html += renderGerichtRow(gericht, '', kategorie);
                     });
 
                     html += '</tbody></table>';
                 });
 
-                container.innerHTML = html;
+                html += '</div>';
             }
+
+            container.innerHTML = html;
+        }
+
+        function renderGerichteWithoutWochentage(container) {
+            const byKategorie = {};
+            currentMenuekarteGerichte.forEach(gericht => {
+                if (!byKategorie[gericht.kategorie]) byKategorie[gericht.kategorie] = [];
+                byKategorie[gericht.kategorie].push(gericht);
+            });
+
+            let html = '';
+            const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
+
+            kategorieOrder.forEach(kategorie => {
+                if (!byKategorie[kategorie]) return;
+
+                html += `<h4 style="margin-top: 1rem; color: var(--dakota-gold);">${kategorie}</h4>`;
+                html += `<table class="data-table" data-kategorie="${kategorie}">
+                    <thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>`;
+
+                byKategorie[kategorie].forEach(gericht => {
+                    html += renderGerichtRow(gericht, '', kategorie);
+                });
+
+                html += '</tbody></table>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderGerichtRow(gericht, wochentag, kategorie) {
+            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+            if (!rezept) return '';
+
+            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
+
+            return `
+                <tr class="draggable-row"
+                    draggable="true"
+                    data-index="${globalIndex}"
+                    data-wochentag="${wochentag || ''}"
+                    data-kategorie="${kategorie}"
+                    data-rezept-id="${gericht.rezept_id}">
+                    <td class="drag-handle" title="Ziehen zum Verschieben">⠿</td>
+                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small style="color: #666;">' + rezept.beschreibung.substring(0, 50) + '...</small>' : ''}</td>
+                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
+                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
+                    <td style="white-space: nowrap;">
+                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
+                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
+                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
+                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // ===== DRAG & DROP FUNKTIONEN =====
+        function setupDragAndDrop() {
+            const draggableRows = document.querySelectorAll('.draggable-row');
+
+            draggableRows.forEach(row => {
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragend', handleDragEnd);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('dragleave', handleDragLeave);
+                row.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedGerichtIndex = parseInt(e.target.dataset.index);
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+
+            // Setze Drag-Daten
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', draggedGerichtIndex);
+
+            console.log('🎯 Drag Start: Gericht Index', draggedGerichtIndex);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedGerichtIndex = null;
+            draggedElement = null;
+
+            // Entferne alle drag-over Klassen
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const row = e.target.closest('.draggable-row');
+            if (row && row !== draggedElement) {
+                row.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            const row = e.target.closest('.draggable-row');
+            if (row) {
+                row.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+
+            const targetRow = e.target.closest('.draggable-row');
+            if (!targetRow || targetRow === draggedElement) return;
+
+            const targetIndex = parseInt(targetRow.dataset.index);
+            const targetWochentag = targetRow.dataset.wochentag;
+            const targetKategorie = targetRow.dataset.kategorie;
+
+            console.log(`📦 Drop: Von Index ${draggedGerichtIndex} nach Index ${targetIndex}`);
+            console.log(`   Neuer Wochentag: ${targetWochentag || '(keiner)'}, Kategorie: ${targetKategorie}`);
+
+            // Gericht aktualisieren
+            const gericht = currentMenuekarteGerichte[draggedGerichtIndex];
+            if (gericht) {
+                // Update Wochentag und Kategorie
+                gericht.wochentag = targetWochentag || '';
+                gericht.kategorie = targetKategorie;
+
+                // Verschiebe im Array (für Reihenfolge)
+                currentMenuekarteGerichte.splice(draggedGerichtIndex, 1);
+
+                // Berechne neue Position
+                let newIndex = targetIndex;
+                if (draggedGerichtIndex < targetIndex) {
+                    newIndex = targetIndex - 1;
+                }
+                currentMenuekarteGerichte.splice(newIndex, 0, gericht);
+
+                // Re-render
+                renderGerichteListe();
+                updateKalkulationPreview();
+
+                console.log('✅ Gericht verschoben');
+            }
+
+            targetRow.classList.remove('drag-over');
+        }
+
+        // Wochentag Drop-Zone Handler
+        function handleWochentagDragOver(e, wochentag) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const section = e.target.closest('.wochentag-section');
+            if (section) {
+                section.classList.add('drag-over');
+            }
+
+            const dropZone = e.target.closest('.drop-zone');
+            if (dropZone) {
+                dropZone.classList.add('drag-over');
+            }
+        }
+
+        function handleWochentagDragLeave(e) {
+            const section = e.target.closest('.wochentag-section');
+            if (section && !section.contains(e.relatedTarget)) {
+                section.classList.remove('drag-over');
+            }
+
+            const dropZone = e.target.closest('.drop-zone');
+            if (dropZone) {
+                dropZone.classList.remove('drag-over');
+            }
+        }
+
+        function handleWochentagDrop(e, wochentag) {
+            e.preventDefault();
+
+            // Nur wenn auf leere Drop-Zone gedroppt wird
+            const dropZone = e.target.closest('.drop-zone');
+            const section = e.target.closest('.wochentag-section');
+
+            if (!dropZone && !section) return;
+            if (draggedGerichtIndex === null) return;
+
+            console.log(`📅 Drop auf Wochentag: ${wochentag}`);
+
+            const gericht = currentMenuekarteGerichte[draggedGerichtIndex];
+            if (gericht) {
+                // Nur Wochentag ändern, Kategorie beibehalten
+                gericht.wochentag = wochentag;
+
+                // Re-render
+                renderGerichteListe();
+                updateKalkulationPreview();
+
+                console.log(`✅ Gericht nach ${wochentag} verschoben`);
+            }
+
+            if (section) section.classList.remove('drag-over');
+            if (dropZone) dropZone.classList.remove('drag-over');
         }
 
         function updateKalkulationPreview() {
