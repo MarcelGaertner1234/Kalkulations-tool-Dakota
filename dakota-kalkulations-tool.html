@@ -1257,6 +1257,22 @@
             background: transparent;
         }
 
+        .dienstplan-cell.std-cell {
+            font-size: 0.7rem;
+            color: #27ae60;
+            font-weight: bold;
+            background: #f0fff4;
+            cursor: default;
+        }
+
+        .dienstplan-cell.std-cell:hover {
+            background: #f0fff4;
+        }
+
+        .dienstplan-header-cell.std-col {
+            background: #e8f5e9;
+        }
+
         .dienstplan-cell.weekend {
             background: #f5f5f5;
         }
@@ -7499,6 +7515,47 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             return dienstplanDiensttypen.find(dt => dt.code === code);
         }
 
+        // ===== ARBEITSSTUNDEN-BERECHNUNG =====
+        // Zeit-String parsen (z.B. "6:00-14:30" → 510 Minuten)
+        function parseTimeRange(zeitStr) {
+            if (!zeitStr || !zeitStr.includes('-')) return 0;
+
+            const parts = zeitStr.split('-');
+            if (!parts[0] || !parts[1]) return 0;
+
+            const [startH, startM] = parts[0].split(':').map(Number);
+            const [endH, endM] = parts[1].split(':').map(Number);
+
+            if (isNaN(startH) || isNaN(endH)) return 0;
+
+            const startMin = startH * 60 + (startM || 0);
+            const endMin = endH * 60 + (endM || 0);
+
+            return endMin > startMin ? (endMin - startMin) : 0;
+        }
+
+        // Monatsstunden für einen Mitarbeiter berechnen
+        function calculateMonthlyHours(mitarbeiterId) {
+            let totalMinutes = 0;
+            const daysInMonth = new Date(currentDienstplanYear, currentDienstplanMonth + 1, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const datum = `${currentDienstplanYear}-${String(currentDienstplanMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const key = `${mitarbeiterId}_${datum}`;
+                const schicht = dienstplanSchichten[key];
+
+                if (schicht?.schichtTyp) {
+                    const diensttyp = getDiensttypByCode(schicht.schichtTyp);
+                    if (diensttyp?.zeit) {
+                        totalMinutes += parseTimeRange(diensttyp.zeit);
+                    }
+                }
+            }
+
+            const hours = totalMinutes / 60;
+            return hours.toFixed(1);
+        }
+
         // ===== DRAG & DROP =====
         function handlePaletteDragStart(e) {
             const diensttyp = e.currentTarget.dataset.diensttyp;
@@ -7911,9 +7968,9 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             if (!container) return;
 
             const daysInMonth = new Date(currentDienstplanYear, currentDienstplanMonth + 1, 0).getDate();
-            const totalCols = daysInMonth + 2; // Name + WT + Tage
+            const totalCols = daysInMonth + 3; // Name + WT + Std + Tage
 
-            container.style.gridTemplateColumns = `120px 35px repeat(${daysInMonth}, 40px)`;
+            container.style.gridTemplateColumns = `120px 35px 45px repeat(${daysInMonth}, 40px)`;
 
             let html = '';
 
@@ -7921,6 +7978,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             html += '<div class="dienstplan-header">';
             html += '<div class="dienstplan-header-cell name-col">Name/Datum</div>';
             html += '<div class="dienstplan-header-cell wt-col">WT</div>';
+            html += '<div class="dienstplan-header-cell std-col">Std</div>';
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const date = new Date(currentDienstplanYear, currentDienstplanMonth, day);
@@ -7934,6 +7992,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             html += '<div class="dienstplan-row">';
             html += '<div class="dienstplan-cell day-number name-cell"></div>';
             html += '<div class="dienstplan-cell day-number wt-cell">%</div>';
+            html += '<div class="dienstplan-cell day-number std-cell">h</div>';
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const date = new Date(currentDienstplanYear, currentDienstplanMonth, day);
@@ -7947,6 +8006,8 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 html += '<div class="dienstplan-row">';
                 html += `<div class="dienstplan-cell name-cell">${ma.name}${ma.rolle === 'CHEF' ? ' 👨‍🍳' : ''}</div>`;
                 html += `<div class="dienstplan-cell wt-cell">${ma.prozent || 100}</div>`;
+                const monatsstunden = calculateMonthlyHours(ma.id);
+                html += `<div class="dienstplan-cell std-cell">${monatsstunden}h</div>`;
 
                 for (let day = 1; day <= daysInMonth; day++) {
                     const datum = `${currentDienstplanYear}-${String(currentDienstplanMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
