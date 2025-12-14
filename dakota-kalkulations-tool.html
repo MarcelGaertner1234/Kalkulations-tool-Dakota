@@ -1765,7 +1765,7 @@
         // ===== INDEXEDDB INIT =====
         function initDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open('DakotaKalkulationDB', 2);
+                const request = indexedDB.open('DakotaKalkulationDB', 3);
 
                 request.onerror = () => reject(request.error);
                 request.onsuccess = () => {
