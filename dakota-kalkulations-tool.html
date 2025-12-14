@@ -6018,61 +6018,78 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const hasWochentage = currentMenuekarteGerichte.some(g => g.wochentag) || mkTyp === 'mittagsmenu';
 
             if (hasWochentage) {
-                // === NEUE LOGIK: Gruppierung nach Wochentag → Kategorie ===
+                // === WOCHENTAG-ANSICHT MIT DRAG & DROP ===
                 const wochentagOrder = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
                 const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
-                let html = '';
+                let html = '<p style="color: #888; font-size: 0.85rem; margin-bottom: 1rem;">💡 Ziehe Gerichte per Drag & Drop um sie zwischen Wochentagen zu verschieben</p>';
 
                 wochentagOrder.forEach(wochentag => {
                     const gerichteAmTag = currentMenuekarteGerichte.filter(g => g.wochentag === wochentag);
-                    if (gerichteAmTag.length === 0) return;
 
-                    html += `<h3 style="margin-top: 2rem; color: var(--dakota-gold); border-bottom: 3px solid var(--dakota-gold); padding-bottom: 0.5rem; font-size: 1.4rem;">📅 ${wochentag}</h3>`;
+                    // Zeige Wochentag auch wenn leer (als Drop-Zone)
+                    html += `<div class="wochentag-section" data-wochentag="${wochentag}"
+                        ondragover="handleWochentagDragOver(event, '${wochentag}')"
+                        ondragleave="handleWochentagDragLeave(event)"
+                        ondrop="handleWochentagDrop(event, '${wochentag}')">`;
 
-                    // Nun nach Kategorie gruppieren
-                    const byKategorie = {};
-                    gerichteAmTag.forEach(g => {
-                        if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
-                        byKategorie[g.kategorie].push(g);
-                    });
+                    html += `<h3 style="margin-top: 1rem; color: var(--dakota-gold); border-bottom: 3px solid var(--dakota-gold); padding-bottom: 0.5rem; font-size: 1.4rem;">
+                        📅 ${wochentag} <span style="font-size: 0.9rem; color: #999;">(${gerichteAmTag.length} Gerichte)</span>
+                    </h3>`;
 
-                    kategorieOrder.forEach(kategorie => {
-                        if (!byKategorie[kategorie]) return;
-
-                        html += `<h4 style="margin-top: 1.2rem; margin-left: 1rem; color: #666; font-size: 1.1rem;">${kategorie}</h4>`;
-                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
-
-                        byKategorie[kategorie].forEach(gericht => {
-                            const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
-                            if (!rezept) return;
-
-                            const wareneinsatz = calculateRezeptWareneinsatz(rezept);
-                            const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
-                            const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
-                            const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
-
-                            html += `
-                                <tr>
-                                    <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
-                                    <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
-                                    <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
-                                    <td style="white-space: nowrap;">
-                                        <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
-                                        <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
-                                        <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
-                                    </td>
-                                </tr>
-                            `;
+                    if (gerichteAmTag.length === 0) {
+                        html += `<div class="drop-zone" data-wochentag="${wochentag}">Gericht hierher ziehen</div>`;
+                    } else {
+                        // Nach Kategorie gruppieren
+                        const byKategorie = {};
+                        gerichteAmTag.forEach(g => {
+                            if (!byKategorie[g.kategorie]) byKategorie[g.kategorie] = [];
+                            byKategorie[g.kategorie].push(g);
                         });
 
-                        html += '</tbody></table>';
-                    });
+                        kategorieOrder.forEach(kategorie => {
+                            if (!byKategorie[kategorie]) return;
+
+                            html += `<h4 style="margin-top: 1.2rem; margin-left: 1rem; color: #666; font-size: 1.1rem;">${kategorie}</h4>`;
+                            html += `<table class="data-table" style="margin-left: 1rem;" data-wochentag="${wochentag}" data-kategorie="${kategorie}">
+                                <thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead>
+                                <tbody class="drag-container">`;
+
+                            byKategorie[kategorie].forEach(gericht => {
+                                const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
+                                if (!rezept) return;
+
+                                const wareneinsatz = calculateRezeptWareneinsatz(rezept);
+                                const foodCost = (wareneinsatz / rezept.verkaufspreis * 100).toFixed(1);
+                                const foodCostClass = foodCost < 30 ? 'success' : foodCost < 35 ? 'warning' : 'danger';
+                                const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
+
+                                html += `
+                                    <tr class="draggable-row" draggable="true" data-index="${globalIndex}" data-wochentag="${wochentag}" data-kategorie="${kategorie}">
+                                        <td class="drag-handle" title="Ziehen zum Verschieben">⋮⋮</td>
+                                        <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
+                                        <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
+                                        <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
+                                        <td style="white-space: nowrap;">
+                                            <button type="button" class="btn-icon" onclick="viewGerichtKalkulation(${rezept.id})" title="Kalkulation">🧮</button>
+                                            <button type="button" class="btn-icon" onclick="viewGerichtRezept(${rezept.id})" title="Rezeptanleitung">📝</button>
+                                            <button type="button" class="btn-icon" onclick="viewGerichtAllergene(${rezept.id})" title="Allergene">⚠️</button>
+                                            <button type="button" class="btn-icon delete" onclick="removeGerichtFromKarte(${globalIndex})" title="Entfernen">🗑️</button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+
+                            html += '</tbody></table>';
+                        });
+                    }
+
+                    html += '</div>'; // wochentag-section
                 });
 
                 // Gerichte OHNE Wochentag (falls vorhanden)
                 const gerichteOhneTag = currentMenuekarteGerichte.filter(g => !g.wochentag);
                 if (gerichteOhneTag.length > 0) {
+                    html += `<div class="wochentag-section" data-wochentag="">`;
                     html += `<h3 style="margin-top: 2rem; color: #999; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem;">Ohne Wochentag</h3>`;
 
                     const byKategorie = {};
@@ -6081,12 +6098,13 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                         byKategorie[g.kategorie].push(g);
                     });
 
-                    const kategorieOrder = ['Vorspeise', 'Suppe', 'Hauptgang', 'Dessert', 'Beilage'];
                     kategorieOrder.forEach(kategorie => {
                         if (!byKategorie[kategorie]) return;
 
                         html += `<h4 style="margin-top: 1rem; margin-left: 1rem; color: #666;">${kategorie}</h4>`;
-                        html += '<table class="data-table" style="margin-left: 1rem;"><thead><tr><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead><tbody>';
+                        html += `<table class="data-table" style="margin-left: 1rem;" data-wochentag="" data-kategorie="${kategorie}">
+                            <thead><tr><th style="width: 40px;"></th><th>Rezept</th><th>Preis</th><th>Food Cost</th><th>Aktionen</th></tr></thead>
+                            <tbody class="drag-container">`;
 
                         byKategorie[kategorie].forEach(gericht => {
                             const rezept = rezepteData.find(r => r.id === gericht.rezept_id);
@@ -6098,7 +6116,8 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                             const globalIndex = currentMenuekarteGerichte.indexOf(gericht);
 
                             html += `
-                                <tr>
+                                <tr class="draggable-row" draggable="true" data-index="${globalIndex}" data-wochentag="" data-kategorie="${kategorie}">
+                                    <td class="drag-handle" title="Ziehen zum Verschieben">⋮⋮</td>
                                     <td><strong>${rezept.name}</strong>${rezept.beschreibung ? '<br><small>' + rezept.beschreibung.substring(0, 60) + '...</small>' : ''}</td>
                                     <td>CHF ${rezept.verkaufspreis.toFixed(2)}</td>
                                     <td><span class="badge badge-${foodCostClass}">${foodCost}%</span></td>
@@ -6114,9 +6133,14 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
 
                         html += '</tbody></table>';
                     });
+
+                    html += '</div>'; // wochentag-section
                 }
 
                 container.innerHTML = html;
+
+                // Initialize Drag & Drop für Wochentag-Ansicht
+                initDragAndDropWithWochentag();
 
             } else {
                 // === ALTE LOGIK: Nur nach Kategorie gruppieren (für Abendkarten ohne Wochentage) ===
@@ -6257,6 +6281,137 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             // Re-render
             renderGerichteListe();
             updateKalkulationPreview();
+        }
+
+        // ===== DRAG & DROP MIT WOCHENTAG-SUPPORT =====
+        let draggedRowWithWochentag = null;
+
+        function initDragAndDropWithWochentag() {
+            const rows = document.querySelectorAll('.draggable-row');
+
+            rows.forEach(row => {
+                row.addEventListener('dragstart', handleDragStartWithWochentag);
+                row.addEventListener('dragend', handleDragEndWithWochentag);
+                row.addEventListener('dragover', handleDragOverWithWochentag);
+                row.addEventListener('dragenter', handleDragEnterWithWochentag);
+                row.addEventListener('dragleave', handleDragLeaveWithWochentag);
+                row.addEventListener('drop', handleDropWithWochentag);
+            });
+        }
+
+        function handleDragStartWithWochentag(e) {
+            draggedRowWithWochentag = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.index);
+        }
+
+        function handleDragEndWithWochentag(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.draggable-row').forEach(row => {
+                row.classList.remove('drag-over');
+            });
+            document.querySelectorAll('.wochentag-section').forEach(section => {
+                section.classList.remove('drag-over');
+            });
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOverWithWochentag(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragEnterWithWochentag(e) {
+            e.preventDefault();
+            if (this !== draggedRowWithWochentag) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeaveWithWochentag(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDropWithWochentag(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (this === draggedRowWithWochentag) return;
+
+            const fromIndex = parseInt(draggedRowWithWochentag.dataset.index);
+            const toIndex = parseInt(this.dataset.index);
+            const targetWochentag = this.dataset.wochentag;
+            const targetKategorie = this.dataset.kategorie;
+
+            // Gericht holen und Wochentag/Kategorie aktualisieren
+            const gericht = currentMenuekarteGerichte[fromIndex];
+            if (gericht) {
+                gericht.wochentag = targetWochentag || '';
+                gericht.kategorie = targetKategorie;
+            }
+
+            // Reorder
+            reorderGerichte(fromIndex, toIndex);
+
+            this.classList.remove('drag-over');
+        }
+
+        // Wochentag Drop-Zone Handler (für leere Wochentage)
+        function handleWochentagDragOver(e, wochentag) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const section = e.target.closest('.wochentag-section');
+            if (section) {
+                section.classList.add('drag-over');
+            }
+
+            const dropZone = e.target.closest('.drop-zone');
+            if (dropZone) {
+                dropZone.classList.add('drag-over');
+            }
+        }
+
+        function handleWochentagDragLeave(e) {
+            const section = e.target.closest('.wochentag-section');
+            if (section && !section.contains(e.relatedTarget)) {
+                section.classList.remove('drag-over');
+            }
+
+            const dropZone = e.target.closest('.drop-zone');
+            if (dropZone) {
+                dropZone.classList.remove('drag-over');
+            }
+        }
+
+        function handleWochentagDrop(e, wochentag) {
+            e.preventDefault();
+
+            if (!draggedRowWithWochentag) return;
+
+            const fromIndex = parseInt(draggedRowWithWochentag.dataset.index);
+
+            // Gericht holen und Wochentag aktualisieren
+            const gericht = currentMenuekarteGerichte[fromIndex];
+            if (gericht) {
+                gericht.wochentag = wochentag;
+                console.log(`✅ Gericht nach ${wochentag} verschoben`);
+            }
+
+            // Re-render
+            renderGerichteListe();
+            updateKalkulationPreview();
+
+            // Cleanup
+            document.querySelectorAll('.wochentag-section').forEach(section => {
+                section.classList.remove('drag-over');
+            });
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.remove('drag-over');
+            });
         }
 
         function updateKalkulationPreview() {
