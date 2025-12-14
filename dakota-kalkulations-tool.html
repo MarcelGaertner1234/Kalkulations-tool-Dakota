@@ -1056,6 +1056,252 @@
             }
         }
 
+        /* ===== DIENSTPLAN ===== */
+        .dienstplan-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .dienstplan-kalender {
+            display: grid;
+            min-width: 1200px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dienstplan-header {
+            display: contents;
+        }
+
+        .dienstplan-header-cell {
+            background: var(--dakota-dark);
+            color: var(--dakota-gold);
+            padding: 0.5rem 0.25rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border-right: 1px solid #555;
+        }
+
+        .dienstplan-header-cell.name-col {
+            min-width: 120px;
+            text-align: left;
+            padding-left: 0.75rem;
+        }
+
+        .dienstplan-header-cell.wt-col {
+            min-width: 35px;
+        }
+
+        .dienstplan-header-cell.day-col {
+            min-width: 40px;
+        }
+
+        .dienstplan-header-cell.weekend {
+            background: #4a4f54;
+        }
+
+        .dienstplan-row {
+            display: contents;
+        }
+
+        .dienstplan-cell {
+            padding: 0.4rem 0.25rem;
+            text-align: center;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            font-size: 0.8rem;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dienstplan-cell:hover {
+            background: rgba(219, 167, 101, 0.1);
+        }
+
+        .dienstplan-cell.name-cell {
+            justify-content: flex-start;
+            padding-left: 0.75rem;
+            font-weight: 600;
+            background: #f8f9fa;
+            cursor: default;
+        }
+
+        .dienstplan-cell.name-cell:hover {
+            background: #f8f9fa;
+        }
+
+        .dienstplan-cell.wt-cell {
+            font-size: 0.7rem;
+            color: #888;
+            cursor: default;
+        }
+
+        .dienstplan-cell.wt-cell:hover {
+            background: transparent;
+        }
+
+        .dienstplan-cell.weekend {
+            background: #f5f5f5;
+        }
+
+        .dienstplan-cell.day-number {
+            font-weight: 600;
+            background: #e9ecef;
+            cursor: default;
+        }
+
+        .dienstplan-cell.day-number:hover {
+            background: #e9ecef;
+        }
+
+        /* Schicht-Badges */
+        .schicht-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 24px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .schicht-f {
+            background: #3498db;
+        }
+
+        .schicht-s {
+            background: #e67e22;
+        }
+
+        .schicht-x {
+            background: #95a5a6;
+        }
+
+        .schicht-w {
+            background: #bdc3c7;
+            color: #555;
+        }
+
+        .schicht-k {
+            background: #e74c3c;
+        }
+
+        .schicht-sp {
+            background: #f1c40f;
+            color: #333;
+        }
+
+        .schicht-hp {
+            background: #27ae60;
+        }
+
+        .schicht-fe {
+            background: #9b59b6;
+        }
+
+        .schicht-leer {
+            background: #ecf0f1;
+            color: #999;
+        }
+
+        /* Legende */
+        .dienstplan-legende {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .legende-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .legende-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Mitarbeiter Liste */
+        .mitarbeiter-liste {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .mitarbeiter-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .mitarbeiter-item:hover {
+            background: #f8f9fa;
+        }
+
+        .mitarbeiter-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mitarbeiter-name {
+            font-weight: 600;
+        }
+
+        .mitarbeiter-rolle {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .mitarbeiter-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Schicht-Auswahl Modal */
+        .schicht-auswahl {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            padding: 1rem 0;
+        }
+
+        .schicht-btn {
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            color: white;
+        }
+
+        .schicht-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .schicht-btn small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            margin-top: 0.25rem;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-content {
@@ -1492,6 +1738,9 @@
             <button class="tab-button" onclick="switchTab('einstellungen')">
                 <span class="tab-icon">⚙️</span> Einstellungen
             </button>
+            <button class="tab-button" onclick="switchTab('dienstplan')">
+                <span class="tab-icon">📅</span> Dienstplan
+            </button>
         </div>
     </nav>
 
@@ -1855,6 +2104,149 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: DIENSTPLAN -->
+        <div id="tab-dienstplan" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>📅</span> Dienstplan
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <button class="btn btn-secondary" onclick="prevMonth()">◀</button>
+                        <select id="dienstplanMonat" class="form-select" style="min-width: 150px;" onchange="loadDienstplan()">
+                        </select>
+                        <select id="dienstplanJahr" class="form-select" style="min-width: 100px;" onchange="loadDienstplan()">
+                        </select>
+                        <button class="btn btn-secondary" onclick="nextMonth()">▶</button>
+                        <button class="btn btn-primary" onclick="openMitarbeiterModal()" style="margin-left: 1rem;">
+                            👥 Mitarbeiter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DIENSTPLAN KALENDER -->
+                <div class="dienstplan-container">
+                    <div class="dienstplan-kalender" id="dienstplanKalender">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+                </div>
+
+                <!-- LEGENDE -->
+                <div class="dienstplan-legende">
+                    <h4 style="margin-bottom: 0.75rem;">Legende</h4>
+                    <div class="legende-grid">
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-f">F</span>
+                            <span>Frühstück (6:00-14:30)</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-s">S</span>
+                            <span>Spät (12:00-)</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-x">X</span>
+                            <span>Ruhetag</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-w">W</span>
+                            <span>Wunschfrei</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-k">K</span>
+                            <span>Krank</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-sp">SP</span>
+                            <span>Special</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-hp">HP</span>
+                            <span>Halbpension</span>
+                        </div>
+                        <div class="legende-item">
+                            <span class="schicht-badge schicht-fe">FE</span>
+                            <span>Ferien</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MITARBEITER VERWALTEN -->
+    <div id="mitarbeiterModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>Mitarbeiter verwalten</h2>
+                <button class="modal-close" onclick="closeMitarbeiterModal()">×</button>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <button class="btn btn-primary" onclick="addNewMitarbeiter()">➕ Neuer Mitarbeiter</button>
+            </div>
+            <div id="mitarbeiterListe" class="mitarbeiter-liste">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MITARBEITER BEARBEITEN -->
+    <div id="mitarbeiterEditModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="mitarbeiterEditTitle">Mitarbeiter bearbeiten</h2>
+                <button class="modal-close" onclick="closeMitarbeiterEditModal()">×</button>
+            </div>
+            <form id="mitarbeiterForm" onsubmit="saveMitarbeiter(event)">
+                <input type="hidden" id="ma_id">
+                <div class="form-group">
+                    <label class="form-label">Name *</label>
+                    <input type="text" class="form-input" id="ma_name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rolle</label>
+                    <select class="form-select" id="ma_rolle">
+                        <option value="Koch">Koch</option>
+                        <option value="CHEF">Küchenchef</option>
+                        <option value="Souschef">Souschef</option>
+                        <option value="Commis">Commis</option>
+                        <option value="Aushilfe">Aushilfe</option>
+                        <option value="Praktikant">Praktikant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Arbeitspensum (%)</label>
+                    <input type="number" class="form-input" id="ma_prozent" value="100" min="0" max="100">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success">💾 Speichern</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeMitarbeiterEditModal()">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SCHICHT AUSWÄHLEN -->
+    <div id="schichtModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="schichtModalTitle">Schicht wählen</h2>
+                <button class="modal-close" onclick="closeSchichtModal()">×</button>
+            </div>
+            <input type="hidden" id="schicht_mitarbeiter_id">
+            <input type="hidden" id="schicht_datum">
+            <div class="schicht-auswahl">
+                <button class="schicht-btn schicht-f" onclick="setSchicht('F')">F<br><small>Frühstück</small></button>
+                <button class="schicht-btn schicht-s" onclick="setSchicht('S')">S<br><small>Spät</small></button>
+                <button class="schicht-btn schicht-x" onclick="setSchicht('X')">X<br><small>Ruhetag</small></button>
+                <button class="schicht-btn schicht-w" onclick="setSchicht('W')">W<br><small>Wunschfrei</small></button>
+                <button class="schicht-btn schicht-k" onclick="setSchicht('K')">K<br><small>Krank</small></button>
+                <button class="schicht-btn schicht-sp" onclick="setSchicht('SP')">SP<br><small>Special</small></button>
+                <button class="schicht-btn schicht-hp" onclick="setSchicht('HP')">HP<br><small>Halbpension</small></button>
+                <button class="schicht-btn schicht-fe" onclick="setSchicht('FE')">FE<br><small>Ferien</small></button>
+                <button class="schicht-btn schicht-leer" onclick="setSchicht('')">✕<br><small>Löschen</small></button>
             </div>
         </div>
     </div>
@@ -3734,6 +4126,7 @@
             if (tabName === 'einkaufsliste') loadEinkaufslisteTab();
             if (tabName === 'menuekarten') loadMenuekartenTab();
             if (tabName === 'einstellungen') loadEinstellungenTab();
+            if (tabName === 'dienstplan') initDienstplan();
         }
 
         // ===== LEBENSMITTEL FUNCTIONS =====
@@ -6763,6 +7156,376 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 'Schalenfrüchte': '🌰'
             };
             return icons[allergen] || '⚠️';
+        }
+
+        // ===== DIENSTPLAN FUNKTIONEN =====
+        let dienstplanMitarbeiter = [];
+        let dienstplanSchichten = {};
+        let currentDienstplanMonth = new Date().getMonth();
+        let currentDienstplanYear = new Date().getFullYear();
+
+        const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+                        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+        const WOCHENTAGE = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+        // Dienstplan initialisieren
+        async function initDienstplan() {
+            // Monat/Jahr Dropdowns füllen
+            const monatSelect = document.getElementById('dienstplanMonat');
+            const jahrSelect = document.getElementById('dienstplanJahr');
+
+            if (!monatSelect || !jahrSelect) return;
+
+            // Monate
+            monatSelect.innerHTML = MONATE.map((m, i) =>
+                `<option value="${i}" ${i === currentDienstplanMonth ? 'selected' : ''}>${m}</option>`
+            ).join('');
+
+            // Jahre (2024-2027)
+            jahrSelect.innerHTML = '';
+            for (let y = 2024; y <= 2027; y++) {
+                jahrSelect.innerHTML += `<option value="${y}" ${y === currentDienstplanYear ? 'selected' : ''}>${y}</option>`;
+            }
+
+            await loadDienstplanMitarbeiter();
+            await loadDienstplan();
+        }
+
+        // Mitarbeiter aus Firestore laden
+        async function loadDienstplanMitarbeiter() {
+            try {
+                const { collection, getDocs, query, orderBy } = window.firebaseModules;
+                const mitarbeiterRef = collection(window.firestoreDB, 'dienstplan_mitarbeiter');
+                const q = query(mitarbeiterRef, orderBy('reihenfolge', 'asc'));
+                const snapshot = await getDocs(q);
+
+                dienstplanMitarbeiter = [];
+                snapshot.forEach(doc => {
+                    dienstplanMitarbeiter.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Falls keine Mitarbeiter existieren, Standard-Mitarbeiter anlegen
+                if (dienstplanMitarbeiter.length === 0) {
+                    await createDefaultMitarbeiter();
+                }
+
+                console.log('✅ Dienstplan Mitarbeiter geladen:', dienstplanMitarbeiter.length);
+            } catch (error) {
+                console.error('Fehler beim Laden der Mitarbeiter:', error);
+            }
+        }
+
+        // Standard-Mitarbeiter anlegen
+        async function createDefaultMitarbeiter() {
+            const defaults = [
+                { name: 'Marcel', rolle: 'CHEF', prozent: 100, reihenfolge: 1 },
+                { name: 'Guillem', rolle: 'Souschef', prozent: 100, reihenfolge: 2 },
+                { name: 'Marcelo', rolle: 'Koch', prozent: 80, reihenfolge: 3 },
+                { name: 'Gerard', rolle: 'Koch', prozent: 80, reihenfolge: 4 },
+                { name: 'Melitza', rolle: 'Koch', prozent: 80, reihenfolge: 5 },
+                { name: 'Kevin', rolle: 'Aushilfe', prozent: 40, reihenfolge: 6 }
+            ];
+
+            const { collection, doc, setDoc } = window.firebaseModules;
+
+            for (const ma of defaults) {
+                const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_mitarbeiter'));
+                await setDoc(newDocRef, ma);
+                dienstplanMitarbeiter.push({ id: newDocRef.id, ...ma });
+            }
+
+            console.log('✅ Standard-Mitarbeiter angelegt');
+        }
+
+        // Schichten für aktuellen Monat laden
+        async function loadDienstplan() {
+            currentDienstplanMonth = parseInt(document.getElementById('dienstplanMonat')?.value || currentDienstplanMonth);
+            currentDienstplanYear = parseInt(document.getElementById('dienstplanJahr')?.value || currentDienstplanYear);
+
+            try {
+                const { collection, getDocs, query, where } = window.firebaseModules;
+                const schichtenRef = collection(window.firestoreDB, 'dienstplan_schichten');
+
+                // Alle Schichten für diesen Monat laden
+                const startDatum = `${currentDienstplanYear}-${String(currentDienstplanMonth + 1).padStart(2, '0')}-01`;
+                const endDatum = `${currentDienstplanYear}-${String(currentDienstplanMonth + 1).padStart(2, '0')}-31`;
+
+                const snapshot = await getDocs(schichtenRef);
+
+                dienstplanSchichten = {};
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Nur Schichten des aktuellen Monats
+                    if (data.datum >= startDatum && data.datum <= endDatum) {
+                        const key = `${data.mitarbeiterId}_${data.datum}`;
+                        dienstplanSchichten[key] = { id: doc.id, ...data };
+                    }
+                });
+
+                renderDienstplanKalender();
+                console.log('✅ Dienstplan geladen für', MONATE[currentDienstplanMonth], currentDienstplanYear);
+            } catch (error) {
+                console.error('Fehler beim Laden des Dienstplans:', error);
+            }
+        }
+
+        // Kalender rendern
+        function renderDienstplanKalender() {
+            const container = document.getElementById('dienstplanKalender');
+            if (!container) return;
+
+            const daysInMonth = new Date(currentDienstplanYear, currentDienstplanMonth + 1, 0).getDate();
+            const totalCols = daysInMonth + 2; // Name + WT + Tage
+
+            container.style.gridTemplateColumns = `120px 35px repeat(${daysInMonth}, 40px)`;
+
+            let html = '';
+
+            // Header-Zeile 1: Wochentage
+            html += '<div class="dienstplan-header">';
+            html += '<div class="dienstplan-header-cell name-col">Name/Datum</div>';
+            html += '<div class="dienstplan-header-cell wt-col">WT</div>';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentDienstplanYear, currentDienstplanMonth, day);
+                const weekday = date.getDay();
+                const isWeekend = weekday === 0 || weekday === 6;
+                html += `<div class="dienstplan-header-cell day-col ${isWeekend ? 'weekend' : ''}">${WOCHENTAGE[weekday]}</div>`;
+            }
+            html += '</div>';
+
+            // Header-Zeile 2: Tagesnummern
+            html += '<div class="dienstplan-row">';
+            html += '<div class="dienstplan-cell day-number name-cell"></div>';
+            html += '<div class="dienstplan-cell day-number wt-cell">%</div>';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentDienstplanYear, currentDienstplanMonth, day);
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                html += `<div class="dienstplan-cell day-number ${isWeekend ? 'weekend' : ''}">${day}</div>`;
+            }
+            html += '</div>';
+
+            // Mitarbeiter-Zeilen
+            for (const ma of dienstplanMitarbeiter) {
+                html += '<div class="dienstplan-row">';
+                html += `<div class="dienstplan-cell name-cell">${ma.name}${ma.rolle === 'CHEF' ? ' 👨‍🍳' : ''}</div>`;
+                html += `<div class="dienstplan-cell wt-cell">${ma.prozent || 100}</div>`;
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const datum = `${currentDienstplanYear}-${String(currentDienstplanMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const date = new Date(currentDienstplanYear, currentDienstplanMonth, day);
+                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+                    const key = `${ma.id}_${datum}`;
+                    const schicht = dienstplanSchichten[key];
+                    const schichtTyp = schicht?.schichtTyp || '';
+
+                    const badgeHtml = schichtTyp ?
+                        `<span class="schicht-badge schicht-${schichtTyp.toLowerCase()}">${schichtTyp}</span>` : '';
+
+                    html += `<div class="dienstplan-cell ${isWeekend ? 'weekend' : ''}"
+                                  onclick="openSchichtModal('${ma.id}', '${datum}', '${ma.name}')">${badgeHtml}</div>`;
+                }
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Schicht-Modal öffnen
+        function openSchichtModal(mitarbeiterId, datum, mitarbeiterName) {
+            document.getElementById('schicht_mitarbeiter_id').value = mitarbeiterId;
+            document.getElementById('schicht_datum').value = datum;
+
+            // Titel mit Datum und Name
+            const dateObj = new Date(datum);
+            const formattedDate = `${dateObj.getDate()}. ${MONATE[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+            document.getElementById('schichtModalTitle').textContent = `${mitarbeiterName} - ${formattedDate}`;
+
+            document.getElementById('schichtModal').classList.add('active');
+        }
+
+        function closeSchichtModal() {
+            document.getElementById('schichtModal').classList.remove('active');
+        }
+
+        // Schicht setzen/aktualisieren
+        async function setSchicht(schichtTyp) {
+            const mitarbeiterId = document.getElementById('schicht_mitarbeiter_id').value;
+            const datum = document.getElementById('schicht_datum').value;
+
+            if (!mitarbeiterId || !datum) return;
+
+            const key = `${mitarbeiterId}_${datum}`;
+
+            try {
+                const { collection, doc, setDoc, deleteDoc } = window.firebaseModules;
+
+                if (schichtTyp === '') {
+                    // Schicht löschen
+                    if (dienstplanSchichten[key]?.id) {
+                        await deleteDoc(doc(window.firestoreDB, 'dienstplan_schichten', dienstplanSchichten[key].id));
+                        delete dienstplanSchichten[key];
+                    }
+                } else {
+                    // Schicht setzen/aktualisieren
+                    const schichtData = {
+                        mitarbeiterId,
+                        datum,
+                        schichtTyp
+                    };
+
+                    if (dienstplanSchichten[key]?.id) {
+                        // Update
+                        await setDoc(doc(window.firestoreDB, 'dienstplan_schichten', dienstplanSchichten[key].id), schichtData);
+                        dienstplanSchichten[key] = { id: dienstplanSchichten[key].id, ...schichtData };
+                    } else {
+                        // Neu erstellen
+                        const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_schichten'));
+                        await setDoc(newDocRef, schichtData);
+                        dienstplanSchichten[key] = { id: newDocRef.id, ...schichtData };
+                    }
+                }
+
+                closeSchichtModal();
+                renderDienstplanKalender();
+                console.log('✅ Schicht gespeichert:', key, schichtTyp);
+            } catch (error) {
+                console.error('Fehler beim Speichern der Schicht:', error);
+                alert('Fehler beim Speichern: ' + error.message);
+            }
+        }
+
+        // Monatsnavigation
+        function prevMonth() {
+            currentDienstplanMonth--;
+            if (currentDienstplanMonth < 0) {
+                currentDienstplanMonth = 11;
+                currentDienstplanYear--;
+            }
+            document.getElementById('dienstplanMonat').value = currentDienstplanMonth;
+            document.getElementById('dienstplanJahr').value = currentDienstplanYear;
+            loadDienstplan();
+        }
+
+        function nextMonth() {
+            currentDienstplanMonth++;
+            if (currentDienstplanMonth > 11) {
+                currentDienstplanMonth = 0;
+                currentDienstplanYear++;
+            }
+            document.getElementById('dienstplanMonat').value = currentDienstplanMonth;
+            document.getElementById('dienstplanJahr').value = currentDienstplanYear;
+            loadDienstplan();
+        }
+
+        // Mitarbeiter-Modal
+        function openMitarbeiterModal() {
+            renderMitarbeiterListe();
+            document.getElementById('mitarbeiterModal').classList.add('active');
+        }
+
+        function closeMitarbeiterModal() {
+            document.getElementById('mitarbeiterModal').classList.remove('active');
+        }
+
+        function renderMitarbeiterListe() {
+            const container = document.getElementById('mitarbeiterListe');
+            if (!container) return;
+
+            container.innerHTML = dienstplanMitarbeiter.map(ma => `
+                <div class="mitarbeiter-item">
+                    <div class="mitarbeiter-info">
+                        <span class="mitarbeiter-name">${ma.name}</span>
+                        <span class="mitarbeiter-rolle">${ma.rolle || 'Koch'} - ${ma.prozent || 100}%</span>
+                    </div>
+                    <div class="mitarbeiter-actions">
+                        <button class="btn btn-sm btn-secondary" onclick="editMitarbeiter('${ma.id}')">✏️</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteMitarbeiter('${ma.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addNewMitarbeiter() {
+            document.getElementById('ma_id').value = '';
+            document.getElementById('ma_name').value = '';
+            document.getElementById('ma_rolle').value = 'Koch';
+            document.getElementById('ma_prozent').value = 100;
+            document.getElementById('mitarbeiterEditTitle').textContent = 'Neuer Mitarbeiter';
+            document.getElementById('mitarbeiterEditModal').classList.add('active');
+        }
+
+        function editMitarbeiter(id) {
+            const ma = dienstplanMitarbeiter.find(m => m.id === id);
+            if (!ma) return;
+
+            document.getElementById('ma_id').value = ma.id;
+            document.getElementById('ma_name').value = ma.name;
+            document.getElementById('ma_rolle').value = ma.rolle || 'Koch';
+            document.getElementById('ma_prozent').value = ma.prozent || 100;
+            document.getElementById('mitarbeiterEditTitle').textContent = 'Mitarbeiter bearbeiten';
+            document.getElementById('mitarbeiterEditModal').classList.add('active');
+        }
+
+        function closeMitarbeiterEditModal() {
+            document.getElementById('mitarbeiterEditModal').classList.remove('active');
+        }
+
+        async function saveMitarbeiter(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('ma_id').value;
+            const data = {
+                name: document.getElementById('ma_name').value,
+                rolle: document.getElementById('ma_rolle').value,
+                prozent: parseInt(document.getElementById('ma_prozent').value) || 100,
+                reihenfolge: id ? (dienstplanMitarbeiter.find(m => m.id === id)?.reihenfolge || 99) : dienstplanMitarbeiter.length + 1
+            };
+
+            try {
+                const { collection, doc, setDoc } = window.firebaseModules;
+
+                if (id) {
+                    // Update
+                    await setDoc(doc(window.firestoreDB, 'dienstplan_mitarbeiter', id), data);
+                    const idx = dienstplanMitarbeiter.findIndex(m => m.id === id);
+                    if (idx !== -1) {
+                        dienstplanMitarbeiter[idx] = { id, ...data };
+                    }
+                } else {
+                    // Neu
+                    const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_mitarbeiter'));
+                    await setDoc(newDocRef, data);
+                    dienstplanMitarbeiter.push({ id: newDocRef.id, ...data });
+                }
+
+                closeMitarbeiterEditModal();
+                renderMitarbeiterListe();
+                renderDienstplanKalender();
+                console.log('✅ Mitarbeiter gespeichert');
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+                alert('Fehler: ' + error.message);
+            }
+        }
+
+        async function deleteMitarbeiter(id) {
+            if (!confirm('Mitarbeiter wirklich löschen?')) return;
+
+            try {
+                const { doc, deleteDoc } = window.firebaseModules;
+                await deleteDoc(doc(window.firestoreDB, 'dienstplan_mitarbeiter', id));
+
+                dienstplanMitarbeiter = dienstplanMitarbeiter.filter(m => m.id !== id);
+                renderMitarbeiterListe();
+                renderDienstplanKalender();
+                console.log('✅ Mitarbeiter gelöscht');
+            } catch (error) {
+                console.error('Fehler beim Löschen:', error);
+                alert('Fehler: ' + error.message);
+            }
         }
 
         // ===== INIT APP =====
