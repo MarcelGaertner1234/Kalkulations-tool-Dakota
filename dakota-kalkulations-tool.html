@@ -2387,8 +2387,12 @@
                     <input type="text" class="form-input" id="dt_name" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Arbeitszeit (optional)</label>
+                    <label class="form-label">Arbeitszeit 1 (optional)</label>
                     <input type="text" class="form-input" id="dt_zeit" placeholder="z.B. 6:00-14:30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Arbeitszeit 2 (bei Teildienst)</label>
+                    <input type="text" class="form-input" id="dt_zeit2" placeholder="z.B. 18:00-22:00">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Farbe *</label>
@@ -7391,14 +7395,15 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
         const WOCHENTAGE = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
         const DEFAULT_DIENSTTYPEN = [
-            { code: 'F', name: 'Frühstück', zeit: '6:00-14:30', farbe: '#3498db', reihenfolge: 1 },
-            { code: 'S', name: 'Spät', zeit: '12:00-', farbe: '#e67e22', reihenfolge: 2 },
-            { code: 'X', name: 'Ruhetag', zeit: '', farbe: '#95a5a6', reihenfolge: 3 },
-            { code: 'W', name: 'Wunschfrei', zeit: '', farbe: '#bdc3c7', reihenfolge: 4 },
-            { code: 'K', name: 'Krank', zeit: '', farbe: '#e74c3c', reihenfolge: 5 },
-            { code: 'SP', name: 'Special', zeit: '', farbe: '#f1c40f', reihenfolge: 6 },
-            { code: 'HP', name: 'Halbpension', zeit: '', farbe: '#27ae60', reihenfolge: 7 },
-            { code: 'FE', name: 'Ferien', zeit: '', farbe: '#9b59b6', reihenfolge: 8 }
+            { code: 'F', name: 'Frühstück', zeit: '6:00-14:30', zeit2: '', farbe: '#3498db', reihenfolge: 1 },
+            { code: 'S', name: 'Spät', zeit: '12:00-22:00', zeit2: '', farbe: '#e67e22', reihenfolge: 2 },
+            { code: 'TD', name: 'Teildienst', zeit: '9:00-14:00', zeit2: '18:00-22:00', farbe: '#8e44ad', reihenfolge: 3 },
+            { code: 'X', name: 'Ruhetag', zeit: '', zeit2: '', farbe: '#95a5a6', reihenfolge: 4 },
+            { code: 'W', name: 'Wunschfrei', zeit: '', zeit2: '', farbe: '#bdc3c7', reihenfolge: 5 },
+            { code: 'K', name: 'Krank', zeit: '', zeit2: '', farbe: '#e74c3c', reihenfolge: 6 },
+            { code: 'SP', name: 'Special', zeit: '', zeit2: '', farbe: '#f1c40f', reihenfolge: 7 },
+            { code: 'HP', name: 'Halbpension', zeit: '', zeit2: '', farbe: '#27ae60', reihenfolge: 8 },
+            { code: 'FE', name: 'Ferien', zeit: '', zeit2: '', farbe: '#9b59b6', reihenfolge: 9 }
         ];
 
         // Dienstplan initialisieren
@@ -7495,12 +7500,16 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const container = document.getElementById('dienstplanLegende');
             if (!container) return;
 
-            container.innerHTML = dienstplanDiensttypen.map(dt => `
+            container.innerHTML = dienstplanDiensttypen.map(dt => {
+                const zeitDisplay = dt.zeit2
+                    ? `${dt.zeit} + ${dt.zeit2}`
+                    : (dt.zeit || '');
+                return `
                 <div class="legende-item">
                     <span class="schicht-badge" style="background: ${dt.farbe}; color: ${getContrastColor(dt.farbe)}">${dt.code}</span>
-                    <span>${dt.name}${dt.zeit ? ` (${dt.zeit})` : ''}</span>
+                    <span>${dt.name}${zeitDisplay ? ` (${zeitDisplay})` : ''}</span>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function getContrastColor(hexcolor) {
@@ -7546,8 +7555,15 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
 
                 if (schicht?.schichtTyp) {
                     const diensttyp = getDiensttypByCode(schicht.schichtTyp);
-                    if (diensttyp?.zeit) {
-                        totalMinutes += parseTimeRange(diensttyp.zeit);
+                    if (diensttyp) {
+                        // Zeit 1 addieren
+                        if (diensttyp.zeit) {
+                            totalMinutes += parseTimeRange(diensttyp.zeit);
+                        }
+                        // Zeit 2 addieren (Teildienst)
+                        if (diensttyp.zeit2) {
+                            totalMinutes += parseTimeRange(diensttyp.zeit2);
+                        }
                     }
                 }
             }
@@ -7806,6 +7822,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             document.getElementById('dt_code').value = '';
             document.getElementById('dt_name').value = '';
             document.getElementById('dt_zeit').value = '';
+            document.getElementById('dt_zeit2').value = '';
             document.getElementById('dt_farbe').value = '#3498db';
             document.getElementById('dt_farbe_hex').textContent = '#3498db';
             document.getElementById('diensttypEditTitle').textContent = 'Neuer Diensttyp';
@@ -7820,6 +7837,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             document.getElementById('dt_code').value = dt.code;
             document.getElementById('dt_name').value = dt.name;
             document.getElementById('dt_zeit').value = dt.zeit || '';
+            document.getElementById('dt_zeit2').value = dt.zeit2 || '';
             document.getElementById('dt_farbe').value = dt.farbe;
             document.getElementById('dt_farbe_hex').textContent = dt.farbe;
             document.getElementById('diensttypEditTitle').textContent = 'Diensttyp bearbeiten';
@@ -7838,6 +7856,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 code: document.getElementById('dt_code').value.toUpperCase(),
                 name: document.getElementById('dt_name').value,
                 zeit: document.getElementById('dt_zeit').value,
+                zeit2: document.getElementById('dt_zeit2').value,
                 farbe: document.getElementById('dt_farbe').value,
                 reihenfolge: id ? (dienstplanDiensttypen.find(d => d.id === id)?.reihenfolge || 99) : dienstplanDiensttypen.length + 1
             };
