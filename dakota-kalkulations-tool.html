@@ -1057,9 +1057,92 @@
         }
 
         /* ===== DIENSTPLAN ===== */
+        .dienstplan-layout {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .diensttypen-palette {
+            width: 160px;
+            flex-shrink: 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            position: sticky;
+            top: 180px;
+        }
+
+        .diensttypen-palette h4 {
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+            color: var(--dakota-dark);
+        }
+
+        .palette-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .palette-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s;
+            border: 1px solid #eee;
+        }
+
+        .palette-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .palette-item:active {
+            cursor: grabbing;
+        }
+
+        .palette-item .schicht-badge {
+            flex-shrink: 0;
+        }
+
+        .palette-item-name {
+            font-size: 0.75rem;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Drag States */
+        .dragging {
+            opacity: 0.5;
+        }
+
+        .dienstplan-cell.drag-over {
+            background: rgba(219, 167, 101, 0.3) !important;
+            outline: 2px dashed var(--dakota-gold);
+            outline-offset: -2px;
+        }
+
+        .schicht-badge.draggable {
+            cursor: grab;
+        }
+
+        .schicht-badge.draggable:active {
+            cursor: grabbing;
+        }
+
         .dienstplan-container {
             overflow-x: auto;
             margin: 1rem 0;
+            flex: 1;
         }
 
         .dienstplan-kalender {
@@ -1300,6 +1383,73 @@
             font-size: 0.7rem;
             font-weight: 400;
             margin-top: 0.25rem;
+        }
+
+        /* Diensttypen Liste */
+        .diensttypen-liste {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .diensttyp-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .diensttyp-item:hover {
+            background: #f8f9fa;
+        }
+
+        .diensttyp-preview {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .diensttyp-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diensttyp-name {
+            font-weight: 600;
+        }
+
+        .diensttyp-zeit {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .diensttyp-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Farbpicker */
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-picker-wrapper input[type="color"] {
+            width: 50px;
+            height: 36px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -2127,52 +2277,87 @@
                     </div>
                 </div>
 
-                <!-- DIENSTPLAN KALENDER -->
-                <div class="dienstplan-container">
-                    <div class="dienstplan-kalender" id="dienstplanKalender">
-                        <!-- Wird dynamisch gefüllt -->
+                <!-- DIENSTPLAN LAYOUT: Palette + Kalender -->
+                <div class="dienstplan-layout">
+                    <!-- Linke Spalte: Drag & Drop Palette -->
+                    <div class="diensttypen-palette">
+                        <h4>📋 Diensttypen</h4>
+                        <div class="palette-items" id="diensttypenPalette">
+                            <!-- Wird dynamisch gefüllt -->
+                        </div>
+                        <button class="btn btn-sm btn-secondary" onclick="openDiensttypenModal()" style="width: 100%;">
+                            ⚙️ Verwalten
+                        </button>
+                    </div>
+
+                    <!-- Rechte Spalte: Kalender -->
+                    <div class="dienstplan-container">
+                        <div class="dienstplan-kalender" id="dienstplanKalender">
+                            <!-- Wird dynamisch gefüllt -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- LEGENDE -->
+                <!-- LEGENDE (dynamisch aus Diensttypen) -->
                 <div class="dienstplan-legende">
                     <h4 style="margin-bottom: 0.75rem;">Legende</h4>
-                    <div class="legende-grid">
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-f">F</span>
-                            <span>Frühstück (6:00-14:30)</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-s">S</span>
-                            <span>Spät (12:00-)</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-x">X</span>
-                            <span>Ruhetag</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-w">W</span>
-                            <span>Wunschfrei</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-k">K</span>
-                            <span>Krank</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-sp">SP</span>
-                            <span>Special</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-hp">HP</span>
-                            <span>Halbpension</span>
-                        </div>
-                        <div class="legende-item">
-                            <span class="schicht-badge schicht-fe">FE</span>
-                            <span>Ferien</span>
-                        </div>
+                    <div class="legende-grid" id="dienstplanLegende">
+                        <!-- Wird dynamisch gefüllt -->
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DIENSTTYPEN VERWALTEN -->
+    <div id="diensttypenModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Diensttypen verwalten</h2>
+                <button class="modal-close" onclick="closeDiensttypenModal()">×</button>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <button class="btn btn-primary" onclick="addNewDiensttyp()">➕ Neuer Diensttyp</button>
+            </div>
+            <div id="diensttypenListe" class="diensttypen-liste">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DIENSTTYP BEARBEITEN -->
+    <div id="diensttypEditModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 id="diensttypEditTitle">Diensttyp bearbeiten</h2>
+                <button class="modal-close" onclick="closeDiensttypEditModal()">×</button>
+            </div>
+            <form id="diensttypForm" onsubmit="saveDiensttyp(event)">
+                <input type="hidden" id="dt_id">
+                <div class="form-group">
+                    <label class="form-label">Code (1-3 Zeichen) *</label>
+                    <input type="text" class="form-input" id="dt_code" maxlength="3" required style="text-transform: uppercase; width: 80px;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Name *</label>
+                    <input type="text" class="form-input" id="dt_name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Arbeitszeit (optional)</label>
+                    <input type="text" class="form-input" id="dt_zeit" placeholder="z.B. 6:00-14:30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Farbe *</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="dt_farbe" value="#3498db">
+                        <span id="dt_farbe_hex">#3498db</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success">💾 Speichern</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDiensttypEditModal()">Abbrechen</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -2230,23 +2415,15 @@
 
     <!-- MODAL: SCHICHT AUSWÄHLEN -->
     <div id="schichtModal" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header">
                 <h2 id="schichtModalTitle">Schicht wählen</h2>
                 <button class="modal-close" onclick="closeSchichtModal()">×</button>
             </div>
             <input type="hidden" id="schicht_mitarbeiter_id">
             <input type="hidden" id="schicht_datum">
-            <div class="schicht-auswahl">
-                <button class="schicht-btn schicht-f" onclick="setSchicht('F')">F<br><small>Frühstück</small></button>
-                <button class="schicht-btn schicht-s" onclick="setSchicht('S')">S<br><small>Spät</small></button>
-                <button class="schicht-btn schicht-x" onclick="setSchicht('X')">X<br><small>Ruhetag</small></button>
-                <button class="schicht-btn schicht-w" onclick="setSchicht('W')">W<br><small>Wunschfrei</small></button>
-                <button class="schicht-btn schicht-k" onclick="setSchicht('K')">K<br><small>Krank</small></button>
-                <button class="schicht-btn schicht-sp" onclick="setSchicht('SP')">SP<br><small>Special</small></button>
-                <button class="schicht-btn schicht-hp" onclick="setSchicht('HP')">HP<br><small>Halbpension</small></button>
-                <button class="schicht-btn schicht-fe" onclick="setSchicht('FE')">FE<br><small>Ferien</small></button>
-                <button class="schicht-btn schicht-leer" onclick="setSchicht('')">✕<br><small>Löschen</small></button>
+            <div class="schicht-auswahl" id="schichtAuswahlContainer">
+                <!-- Dynamisch gefüllt -->
             </div>
         </div>
     </div>
@@ -7161,12 +7338,24 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
         // ===== DIENSTPLAN FUNKTIONEN =====
         let dienstplanMitarbeiter = [];
         let dienstplanSchichten = {};
+        let dienstplanDiensttypen = [];
         let currentDienstplanMonth = new Date().getMonth();
         let currentDienstplanYear = new Date().getFullYear();
 
         const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
                         'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
         const WOCHENTAGE = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+        const DEFAULT_DIENSTTYPEN = [
+            { code: 'F', name: 'Frühstück', zeit: '6:00-14:30', farbe: '#3498db', reihenfolge: 1 },
+            { code: 'S', name: 'Spät', zeit: '12:00-', farbe: '#e67e22', reihenfolge: 2 },
+            { code: 'X', name: 'Ruhetag', zeit: '', farbe: '#95a5a6', reihenfolge: 3 },
+            { code: 'W', name: 'Wunschfrei', zeit: '', farbe: '#bdc3c7', reihenfolge: 4 },
+            { code: 'K', name: 'Krank', zeit: '', farbe: '#e74c3c', reihenfolge: 5 },
+            { code: 'SP', name: 'Special', zeit: '', farbe: '#f1c40f', reihenfolge: 6 },
+            { code: 'HP', name: 'Halbpension', zeit: '', farbe: '#27ae60', reihenfolge: 7 },
+            { code: 'FE', name: 'Ferien', zeit: '', farbe: '#9b59b6', reihenfolge: 8 }
+        ];
 
         // Dienstplan initialisieren
         async function initDienstplan() {
@@ -7187,8 +7376,342 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 jahrSelect.innerHTML += `<option value="${y}" ${y === currentDienstplanYear ? 'selected' : ''}>${y}</option>`;
             }
 
+            // Farbpicker Event
+            const farbInput = document.getElementById('dt_farbe');
+            if (farbInput) {
+                farbInput.addEventListener('input', (e) => {
+                    document.getElementById('dt_farbe_hex').textContent = e.target.value;
+                });
+            }
+
+            await loadDiensttypen();
             await loadDienstplanMitarbeiter();
             await loadDienstplan();
+        }
+
+        // ===== DIENSTTYPEN FUNKTIONEN =====
+        async function loadDiensttypen() {
+            try {
+                const { collection, getDocs, query, orderBy } = window.firebaseModules;
+                const ref = collection(window.firestoreDB, 'dienstplan_diensttypen');
+                const q = query(ref, orderBy('reihenfolge', 'asc'));
+                const snapshot = await getDocs(q);
+
+                dienstplanDiensttypen = [];
+                snapshot.forEach(doc => {
+                    dienstplanDiensttypen.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Falls keine Diensttypen existieren, Standard anlegen
+                if (dienstplanDiensttypen.length === 0) {
+                    await createDefaultDiensttypen();
+                }
+
+                renderDiensttypenPalette();
+                renderDienstplanLegende();
+                console.log('✅ Diensttypen geladen:', dienstplanDiensttypen.length);
+            } catch (error) {
+                console.error('Fehler beim Laden der Diensttypen:', error);
+            }
+        }
+
+        async function createDefaultDiensttypen() {
+            const { collection, doc, setDoc } = window.firebaseModules;
+
+            for (const dt of DEFAULT_DIENSTTYPEN) {
+                const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_diensttypen'));
+                await setDoc(newDocRef, dt);
+                dienstplanDiensttypen.push({ id: newDocRef.id, ...dt });
+            }
+            console.log('✅ Standard-Diensttypen angelegt');
+        }
+
+        function renderDiensttypenPalette() {
+            const container = document.getElementById('diensttypenPalette');
+            if (!container) return;
+
+            container.innerHTML = dienstplanDiensttypen.map(dt => `
+                <div class="palette-item"
+                     draggable="true"
+                     data-diensttyp="${dt.code}"
+                     data-farbe="${dt.farbe}">
+                    <span class="schicht-badge" style="background: ${dt.farbe}; color: ${getContrastColor(dt.farbe)}">${dt.code}</span>
+                    <span class="palette-item-name">${dt.name}</span>
+                </div>
+            `).join('');
+
+            // Drag Events für Palette
+            container.querySelectorAll('.palette-item').forEach(item => {
+                item.addEventListener('dragstart', handlePaletteDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        function renderDienstplanLegende() {
+            const container = document.getElementById('dienstplanLegende');
+            if (!container) return;
+
+            container.innerHTML = dienstplanDiensttypen.map(dt => `
+                <div class="legende-item">
+                    <span class="schicht-badge" style="background: ${dt.farbe}; color: ${getContrastColor(dt.farbe)}">${dt.code}</span>
+                    <span>${dt.name}${dt.zeit ? ` (${dt.zeit})` : ''}</span>
+                </div>
+            `).join('');
+        }
+
+        function getContrastColor(hexcolor) {
+            const r = parseInt(hexcolor.slice(1, 3), 16);
+            const g = parseInt(hexcolor.slice(3, 5), 16);
+            const b = parseInt(hexcolor.slice(5, 7), 16);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.5 ? '#333' : '#fff';
+        }
+
+        function getDiensttypByCode(code) {
+            return dienstplanDiensttypen.find(dt => dt.code === code);
+        }
+
+        // ===== DRAG & DROP =====
+        function handlePaletteDragStart(e) {
+            const diensttyp = e.currentTarget.dataset.diensttyp;
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                type: 'new',
+                diensttyp: diensttyp
+            }));
+            e.dataTransfer.effectAllowed = 'copy';
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleSchichtDragStart(e) {
+            const mitarbeiterId = e.currentTarget.dataset.mitarbeiterId;
+            const datum = e.currentTarget.dataset.datum;
+            const diensttyp = e.currentTarget.dataset.diensttyp;
+
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                type: 'move',
+                fromMitarbeiter: mitarbeiterId,
+                fromDatum: datum,
+                diensttyp: diensttyp
+            }));
+            e.dataTransfer.effectAllowed = 'move';
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        function setupDropZone(cell) {
+            cell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                cell.classList.add('drag-over');
+            });
+
+            cell.addEventListener('dragleave', (e) => {
+                if (!cell.contains(e.relatedTarget)) {
+                    cell.classList.remove('drag-over');
+                }
+            });
+
+            cell.addEventListener('drop', handleCellDrop);
+        }
+
+        async function handleCellDrop(e) {
+            e.preventDefault();
+            const cell = e.currentTarget;
+            cell.classList.remove('drag-over');
+
+            const mitarbeiterId = cell.dataset.mitarbeiterId;
+            const datum = cell.dataset.datum;
+
+            if (!mitarbeiterId || !datum) return;
+
+            try {
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                if (data.type === 'new') {
+                    // Neuer Dienst aus Palette
+                    await setSchichtDirect(mitarbeiterId, datum, data.diensttyp);
+                } else if (data.type === 'move') {
+                    // Verschieben innerhalb Kalender
+                    await moveSchicht(data.fromMitarbeiter, data.fromDatum, mitarbeiterId, datum, data.diensttyp);
+                }
+            } catch (error) {
+                console.error('Drop error:', error);
+            }
+        }
+
+        async function setSchichtDirect(mitarbeiterId, datum, schichtTyp) {
+            const key = `${mitarbeiterId}_${datum}`;
+
+            try {
+                const { collection, doc, setDoc } = window.firebaseModules;
+                const schichtData = { mitarbeiterId, datum, schichtTyp };
+
+                if (dienstplanSchichten[key]?.id) {
+                    await setDoc(doc(window.firestoreDB, 'dienstplan_schichten', dienstplanSchichten[key].id), schichtData);
+                    dienstplanSchichten[key] = { id: dienstplanSchichten[key].id, ...schichtData };
+                } else {
+                    const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_schichten'));
+                    await setDoc(newDocRef, schichtData);
+                    dienstplanSchichten[key] = { id: newDocRef.id, ...schichtData };
+                }
+
+                renderDienstplanKalender();
+                console.log('✅ Schicht gesetzt:', key, schichtTyp);
+            } catch (error) {
+                console.error('Fehler:', error);
+            }
+        }
+
+        async function moveSchicht(fromMitarbeiter, fromDatum, toMitarbeiter, toDatum, schichtTyp) {
+            const fromKey = `${fromMitarbeiter}_${fromDatum}`;
+            const toKey = `${toMitarbeiter}_${toDatum}`;
+
+            // Gleiche Zelle = nichts tun
+            if (fromKey === toKey) return;
+
+            try {
+                const { collection, doc, setDoc, deleteDoc } = window.firebaseModules;
+
+                // Alte Schicht löschen
+                if (dienstplanSchichten[fromKey]?.id) {
+                    await deleteDoc(doc(window.firestoreDB, 'dienstplan_schichten', dienstplanSchichten[fromKey].id));
+                    delete dienstplanSchichten[fromKey];
+                }
+
+                // Neue Schicht erstellen
+                const schichtData = { mitarbeiterId: toMitarbeiter, datum: toDatum, schichtTyp };
+                if (dienstplanSchichten[toKey]?.id) {
+                    await setDoc(doc(window.firestoreDB, 'dienstplan_schichten', dienstplanSchichten[toKey].id), schichtData);
+                    dienstplanSchichten[toKey] = { id: dienstplanSchichten[toKey].id, ...schichtData };
+                } else {
+                    const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_schichten'));
+                    await setDoc(newDocRef, schichtData);
+                    dienstplanSchichten[toKey] = { id: newDocRef.id, ...schichtData };
+                }
+
+                renderDienstplanKalender();
+                console.log('✅ Schicht verschoben:', fromKey, '→', toKey);
+            } catch (error) {
+                console.error('Fehler beim Verschieben:', error);
+            }
+        }
+
+        // ===== DIENSTTYPEN MODAL =====
+        function openDiensttypenModal() {
+            renderDiensttypenListe();
+            document.getElementById('diensttypenModal').classList.add('active');
+        }
+
+        function closeDiensttypenModal() {
+            document.getElementById('diensttypenModal').classList.remove('active');
+        }
+
+        function renderDiensttypenListe() {
+            const container = document.getElementById('diensttypenListe');
+            if (!container) return;
+
+            container.innerHTML = dienstplanDiensttypen.map(dt => `
+                <div class="diensttyp-item">
+                    <div class="diensttyp-preview">
+                        <span class="schicht-badge" style="background: ${dt.farbe}; color: ${getContrastColor(dt.farbe)}">${dt.code}</span>
+                        <div class="diensttyp-info">
+                            <span class="diensttyp-name">${dt.name}</span>
+                            <span class="diensttyp-zeit">${dt.zeit || 'Keine Zeitangabe'}</span>
+                        </div>
+                    </div>
+                    <div class="diensttyp-actions">
+                        <button class="btn btn-sm btn-secondary" onclick="editDiensttyp('${dt.id}')">✏️</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteDiensttyp('${dt.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addNewDiensttyp() {
+            document.getElementById('dt_id').value = '';
+            document.getElementById('dt_code').value = '';
+            document.getElementById('dt_name').value = '';
+            document.getElementById('dt_zeit').value = '';
+            document.getElementById('dt_farbe').value = '#3498db';
+            document.getElementById('dt_farbe_hex').textContent = '#3498db';
+            document.getElementById('diensttypEditTitle').textContent = 'Neuer Diensttyp';
+            document.getElementById('diensttypEditModal').classList.add('active');
+        }
+
+        function editDiensttyp(id) {
+            const dt = dienstplanDiensttypen.find(d => d.id === id);
+            if (!dt) return;
+
+            document.getElementById('dt_id').value = dt.id;
+            document.getElementById('dt_code').value = dt.code;
+            document.getElementById('dt_name').value = dt.name;
+            document.getElementById('dt_zeit').value = dt.zeit || '';
+            document.getElementById('dt_farbe').value = dt.farbe;
+            document.getElementById('dt_farbe_hex').textContent = dt.farbe;
+            document.getElementById('diensttypEditTitle').textContent = 'Diensttyp bearbeiten';
+            document.getElementById('diensttypEditModal').classList.add('active');
+        }
+
+        function closeDiensttypEditModal() {
+            document.getElementById('diensttypEditModal').classList.remove('active');
+        }
+
+        async function saveDiensttyp(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('dt_id').value;
+            const data = {
+                code: document.getElementById('dt_code').value.toUpperCase(),
+                name: document.getElementById('dt_name').value,
+                zeit: document.getElementById('dt_zeit').value,
+                farbe: document.getElementById('dt_farbe').value,
+                reihenfolge: id ? (dienstplanDiensttypen.find(d => d.id === id)?.reihenfolge || 99) : dienstplanDiensttypen.length + 1
+            };
+
+            try {
+                const { collection, doc, setDoc } = window.firebaseModules;
+
+                if (id) {
+                    await setDoc(doc(window.firestoreDB, 'dienstplan_diensttypen', id), data);
+                    const idx = dienstplanDiensttypen.findIndex(d => d.id === id);
+                    if (idx !== -1) dienstplanDiensttypen[idx] = { id, ...data };
+                } else {
+                    const newDocRef = doc(collection(window.firestoreDB, 'dienstplan_diensttypen'));
+                    await setDoc(newDocRef, data);
+                    dienstplanDiensttypen.push({ id: newDocRef.id, ...data });
+                }
+
+                closeDiensttypEditModal();
+                renderDiensttypenListe();
+                renderDiensttypenPalette();
+                renderDienstplanLegende();
+                renderDienstplanKalender();
+                console.log('✅ Diensttyp gespeichert');
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Fehler: ' + error.message);
+            }
+        }
+
+        async function deleteDiensttyp(id) {
+            if (!confirm('Diensttyp wirklich löschen?')) return;
+
+            try {
+                const { doc, deleteDoc } = window.firebaseModules;
+                await deleteDoc(doc(window.firestoreDB, 'dienstplan_diensttypen', id));
+
+                dienstplanDiensttypen = dienstplanDiensttypen.filter(d => d.id !== id);
+                renderDiensttypenListe();
+                renderDiensttypenPalette();
+                renderDienstplanLegende();
+                console.log('✅ Diensttyp gelöscht');
+            } catch (error) {
+                console.error('Fehler:', error);
+            }
         }
 
         // Mitarbeiter aus Firestore laden
@@ -7321,14 +7844,67 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                     const schicht = dienstplanSchichten[key];
                     const schichtTyp = schicht?.schichtTyp || '';
 
-                    const badgeHtml = schichtTyp ?
-                        `<span class="schicht-badge schicht-${schichtTyp.toLowerCase()}">${schichtTyp}</span>` : '';
+                    // Dynamische Farben aus Diensttypen
+                    let badgeHtml = '';
+                    if (schichtTyp) {
+                        const dt = getDiensttypByCode(schichtTyp);
+                        const bgColor = dt?.farbe || '#6c757d';
+                        const textColor = getContrastColor(bgColor);
+                        badgeHtml = `<span class="schicht-badge"
+                                          style="background: ${bgColor}; color: ${textColor}"
+                                          draggable="true"
+                                          data-diensttyp="${schichtTyp}"
+                                          data-from-mitarbeiter="${ma.id}"
+                                          data-from-datum="${datum}">${schichtTyp}</span>`;
+                    }
 
                     html += `<div class="dienstplan-cell ${isWeekend ? 'weekend' : ''}"
-                                  onclick="openSchichtModal('${ma.id}', '${datum}', '${ma.name}')">${badgeHtml}</div>`;
+                                  data-mitarbeiter-id="${ma.id}"
+                                  data-datum="${datum}"
+                                  data-mitarbeiter-name="${ma.name}">${badgeHtml}</div>`;
                 }
                 html += '</div>';
             }
+
+            container.innerHTML = html;
+
+            // Drop-Zones auf Zellen einrichten
+            container.querySelectorAll('.dienstplan-cell[data-mitarbeiter-id]').forEach(cell => {
+                setupDropZone(cell);
+                // Click-Handler für Modal (als Fallback)
+                cell.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('schicht-badge')) return; // Badge geklickt, nicht Zelle
+                    openSchichtModal(cell.dataset.mitarbeiterId, cell.dataset.datum, cell.dataset.mitarbeiterName);
+                });
+            });
+
+            // Bestehende Schicht-Badges draggable machen
+            container.querySelectorAll('.schicht-badge[draggable="true"]').forEach(badge => {
+                badge.addEventListener('dragstart', handleSchichtDragStart);
+                badge.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        // Schicht-Auswahl dynamisch rendern
+        function renderSchichtAuswahl() {
+            const container = document.getElementById('schichtAuswahlContainer');
+            if (!container) return;
+
+            // Diensttypen-Buttons rendern
+            const sortedTypes = [...dienstplanDiensttypen].sort((a, b) => (a.reihenfolge || 99) - (b.reihenfolge || 99));
+            let html = sortedTypes.map(dt => {
+                const textColor = getContrastColor(dt.farbe);
+                return `<button class="schicht-btn" onclick="setSchicht('${dt.code}')"
+                                style="background: ${dt.farbe}; color: ${textColor}; border: 2px solid ${dt.farbe}">
+                            ${dt.code}<br><small>${dt.name}</small>
+                        </button>`;
+            }).join('');
+
+            // Löschen-Button hinzufügen
+            html += `<button class="schicht-btn" onclick="setSchicht('')"
+                             style="background: #e9ecef; color: #6c757d; border: 2px solid #dee2e6">
+                        ✕<br><small>Löschen</small>
+                    </button>`;
 
             container.innerHTML = html;
         }
@@ -7342,6 +7918,9 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const dateObj = new Date(datum);
             const formattedDate = `${dateObj.getDate()}. ${MONATE[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
             document.getElementById('schichtModalTitle').textContent = `${mitarbeiterName} - ${formattedDate}`;
+
+            // Buttons dynamisch rendern
+            renderSchichtAuswahl();
 
             document.getElementById('schichtModal').classList.add('active');
         }
