@@ -1139,6 +1139,34 @@
             cursor: grabbing;
         }
 
+        /* Fill-Handle (kleines Quadrat zum Durchziehen wie in Excel) */
+        .fill-handle {
+            position: absolute;
+            right: -3px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--dakota-gold);
+            border: 1px solid #fff;
+            border-radius: 2px;
+            cursor: crosshair;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 10;
+        }
+
+        .schicht-badge:hover .fill-handle {
+            opacity: 1;
+        }
+
+        /* Markierung während Fill-Drag */
+        .dienstplan-cell.fill-preview {
+            background: rgba(219, 167, 101, 0.4) !important;
+            outline: 2px solid var(--dakota-gold);
+            outline-offset: -2px;
+        }
+
         .dienstplan-container {
             overflow-x: auto;
             margin: 1rem 0;
@@ -7502,6 +7530,91 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
         }
 
+        // ========== FILL-DRAG (Durchziehen wie Excel) ==========
+        let fillDragState = {
+            active: false,
+            diensttyp: null,
+            mitarbeiterId: null,
+            startDatum: null,
+            previewCells: []
+        };
+
+        function handleFillStart(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const handle = e.target;
+
+            fillDragState = {
+                active: true,
+                diensttyp: handle.dataset.diensttyp,
+                mitarbeiterId: handle.dataset.mitarbeiter,
+                startDatum: handle.dataset.startDatum,
+                previewCells: []
+            };
+
+            document.addEventListener('mousemove', handleFillMove);
+            document.addEventListener('mouseup', handleFillEnd);
+        }
+
+        function handleFillMove(e) {
+            if (!fillDragState.active) return;
+
+            const cell = document.elementFromPoint(e.clientX, e.clientY)
+                ?.closest('.dienstplan-cell[data-mitarbeiter-id]');
+
+            if (!cell) return;
+            if (cell.dataset.mitarbeiterId !== fillDragState.mitarbeiterId) return;
+
+            updateFillPreview(fillDragState.startDatum, cell.dataset.datum);
+        }
+
+        function updateFillPreview(startDatum, endDatum) {
+            fillDragState.previewCells.forEach(c => c.classList.remove('fill-preview'));
+            fillDragState.previewCells = [];
+
+            const start = new Date(startDatum);
+            const end = new Date(endDatum);
+            const [earlier, later] = start <= end ? [start, end] : [end, start];
+
+            const cells = document.querySelectorAll(
+                `.dienstplan-cell[data-mitarbeiter-id="${fillDragState.mitarbeiterId}"]`
+            );
+
+            cells.forEach(cell => {
+                const cellDate = new Date(cell.dataset.datum);
+                if (cellDate >= earlier && cellDate <= later) {
+                    cell.classList.add('fill-preview');
+                    fillDragState.previewCells.push(cell);
+                }
+            });
+        }
+
+        async function handleFillEnd(e) {
+            if (!fillDragState.active) return;
+
+            document.removeEventListener('mousemove', handleFillMove);
+            document.removeEventListener('mouseup', handleFillEnd);
+
+            // Alle Preview-Zellen mit Dienst füllen
+            const promises = fillDragState.previewCells.map(cell =>
+                setSchichtDirect(
+                    cell.dataset.mitarbeiterId,
+                    cell.dataset.datum,
+                    fillDragState.diensttyp
+                )
+            );
+
+            await Promise.all(promises);
+
+            // Reset
+            fillDragState.previewCells.forEach(c => c.classList.remove('fill-preview'));
+            fillDragState = { active: false, diensttyp: null, mitarbeiterId: null, startDatum: null, previewCells: [] };
+
+            renderDienstplanKalender();
+            console.log('✅ Fill abgeschlossen');
+        }
+        // ========== ENDE FILL-DRAG ==========
+
         function setupDropZone(cell) {
             cell.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -7851,11 +7964,14 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                         const bgColor = dt?.farbe || '#6c757d';
                         const textColor = getContrastColor(bgColor);
                         badgeHtml = `<span class="schicht-badge"
-                                          style="background: ${bgColor}; color: ${textColor}"
+                                          style="background: ${bgColor}; color: ${textColor}; position: relative;"
                                           draggable="true"
                                           data-diensttyp="${schichtTyp}"
                                           data-from-mitarbeiter="${ma.id}"
-                                          data-from-datum="${datum}">${schichtTyp}</span>`;
+                                          data-from-datum="${datum}">${schichtTyp}<span class="fill-handle"
+                                              data-diensttyp="${schichtTyp}"
+                                              data-mitarbeiter="${ma.id}"
+                                              data-start-datum="${datum}"></span></span>`;
                     }
 
                     html += `<div class="dienstplan-cell ${isWeekend ? 'weekend' : ''}"
@@ -7882,6 +7998,11 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             container.querySelectorAll('.schicht-badge[draggable="true"]').forEach(badge => {
                 badge.addEventListener('dragstart', handleSchichtDragStart);
                 badge.addEventListener('dragend', handleDragEnd);
+            });
+
+            // Fill-Handle Events (Durchziehen)
+            container.querySelectorAll('.fill-handle').forEach(handle => {
+                handle.addEventListener('mousedown', handleFillStart);
             });
         }
 
