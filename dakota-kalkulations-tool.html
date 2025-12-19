@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dakota Kalkulations-Tool | Professional Food Cost Management</title>
 
     <!-- Google Fonts -->
@@ -1556,19 +1556,26 @@
                 width: 100%;
             }
 
-            /* Tab Navigation - Horizontaler Scroll */
+            /* Tab Navigation - Horizontaler Scroll (iOS Safari Fix) */
             .nav-tabs {
-                top: auto;
-                position: relative;
+                position: -webkit-sticky;
+                position: sticky;
+                top: 0;
+                overflow: visible;
             }
 
             .tabs-container {
+                display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
+                width: 100%;
                 overflow-x: auto;
+                overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: thin;
                 padding-bottom: 0.25rem;
+                /* iOS Safari: Scroll-Container braucht min-width */
+                min-width: 0;
             }
 
             .tabs-container::-webkit-scrollbar {
@@ -1582,6 +1589,7 @@
 
             .tab-button {
                 flex: 0 0 auto;
+                min-width: 0;
                 padding: 0.75rem 1rem;
                 font-size: 0.85rem;
                 white-space: nowrap;
@@ -1606,15 +1614,22 @@
                 margin-bottom: 1rem;
             }
 
-            /* Tabellen - Responsive Wrapper */
+            /* Tabellen - Responsive Wrapper (iOS Safari Fix) */
             .tab-content {
                 overflow-x: auto;
+                overflow-y: visible;
                 -webkit-overflow-scrolling: touch;
+                /* iOS Safari: Container muss block sein */
+                display: block;
+                width: 100%;
             }
 
+            /* Wrapper für Tabellen-Scroll */
             .data-table {
                 font-size: 0.85rem;
                 min-width: 600px;
+                /* iOS Safari: Tabelle braucht explizite Breite */
+                width: max-content;
             }
 
             .data-table th,
@@ -1622,17 +1637,23 @@
                 padding: 0.75rem 0.5rem;
             }
 
-            /* Sticky erste Spalte */
+            /* Sticky erste Spalte (iOS Safari Fix) */
             .data-table th:first-child,
             .data-table td:first-child {
+                position: -webkit-sticky;
                 position: sticky;
                 left: 0;
-                background: inherit;
-                z-index: 1;
+                z-index: 2;
             }
 
+            /* iOS Safari braucht explizite Hintergrundfarben */
             .data-table th:first-child {
                 background: var(--dakota-dark);
+                z-index: 3;
+            }
+
+            .data-table td:first-child {
+                background: #ffffff;
             }
 
             .data-table tr:nth-child(even) td:first-child {
@@ -1640,7 +1661,7 @@
             }
 
             .data-table tr:hover td:first-child {
-                background: rgba(219, 167, 101, 0.1);
+                background: rgba(219, 167, 101, 0.15);
             }
 
             /* Touch-freundliche Icon Buttons */
