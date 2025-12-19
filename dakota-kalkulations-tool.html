@@ -1500,8 +1500,22 @@
 
         /* === TABLETS (max 960px) === */
         @media (max-width: 960px) {
+            /* Viewport-Overflow Fix */
+            html, body {
+                overflow-x: hidden;
+                max-width: 100vw;
+                width: 100%;
+            }
+
             .header {
                 padding: 1.5rem;
+                max-width: 100vw;
+                box-sizing: border-box;
+            }
+
+            .header-content {
+                max-width: 100%;
+                overflow: hidden;
             }
 
             .header-stats {
@@ -1514,6 +1528,9 @@
 
             .container {
                 padding: 0 1.5rem;
+                max-width: 100%;
+                overflow-x: hidden;
+                box-sizing: border-box;
             }
         }
 
@@ -1622,14 +1639,17 @@
                 /* iOS Safari: Container muss block sein */
                 display: block;
                 width: 100%;
+                max-width: 100vw;
+                box-sizing: border-box;
             }
 
             /* Wrapper für Tabellen-Scroll */
             .data-table {
                 font-size: 0.85rem;
                 min-width: 600px;
-                /* iOS Safari: Tabelle braucht explizite Breite */
-                width: max-content;
+                /* Entfernt: width: max-content verursacht Viewport-Overflow */
+                width: 100%;
+                table-layout: auto;
             }
 
             .data-table th,
