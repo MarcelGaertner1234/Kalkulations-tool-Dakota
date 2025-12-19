@@ -1572,43 +1572,38 @@
                 width: 100%;
             }
 
-            /* Tab Navigation - Horizontaler Scroll (iOS Safari Fix) */
+            /* Tab Navigation - 2 Zeilen Grid (4+4 Tabs) */
             .nav-tabs {
                 position: -webkit-sticky;
                 position: sticky;
                 top: 0;
-                overflow: visible;
             }
 
             .tabs-container {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.25rem;
                 width: 100%;
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: thin;
-                padding-bottom: 0.25rem;
-                /* iOS Safari: Scroll-Container braucht min-width */
-                min-width: 0;
-            }
-
-            .tabs-container::-webkit-scrollbar {
-                height: 4px;
-            }
-
-            .tabs-container::-webkit-scrollbar-thumb {
-                background: var(--dakota-gold);
-                border-radius: 2px;
+                padding: 0.25rem;
             }
 
             .tab-button {
-                flex: 0 0 auto;
-                min-width: 0;
-                padding: 0.75rem 1rem;
-                font-size: 0.85rem;
-                white-space: nowrap;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0.4rem 0.25rem;
+                font-size: 0.65rem;
+                text-align: center;
+                gap: 0.15rem;
+                min-height: 50px;
+            }
+
+            .tab-button span:not(.tab-icon) {
+                display: block;
+                line-height: 1.1;
+                word-break: break-word;
+                white-space: normal;
             }
 
             .tab-icon {
@@ -1642,23 +1637,26 @@
                 box-sizing: border-box;
             }
 
-            /* Wrapper für Tabellen-Scroll */
+            /* Tabellen kompakter für Mobile */
             .data-table {
-                font-size: 0.85rem;
-                min-width: 600px;
-                /* Entfernt: width: max-content verursacht Viewport-Overflow */
+                font-size: 0.7rem;
+                min-width: 500px;
                 width: 100%;
                 table-layout: auto;
             }
 
             .data-table th,
             .data-table td {
-                padding: 0.75rem 0.5rem;
+                padding: 0.35rem 0.25rem;
             }
 
-            /* Sticky erste Spalte (iOS Safari Fix) */
+            /* Erste Spalte: kompakt + sticky */
             .data-table th:first-child,
             .data-table td:first-child {
+                max-width: 90px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 position: -webkit-sticky;
                 position: sticky;
                 left: 0;
