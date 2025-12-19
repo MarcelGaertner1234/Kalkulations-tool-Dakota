@@ -1536,6 +1536,22 @@
 
         /* === GROSSE SMARTPHONES (max 768px) === */
         @media (max-width: 768px) {
+            /* ========================================
+               KRITISCH: Override Inline min-width Styles
+               Diese verursachen Viewport-Overflow!
+               ======================================== */
+            div[style*="min-width: 200px"],
+            div[style*="min-width:200px"] {
+                min-width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+
+            /* Alle Inline flex-Container wrappen */
+            div[style*="display: flex"],
+            div[style*="display:flex"] {
+                flex-wrap: wrap !important;
+            }
+
             /* Header */
             .header {
                 padding: 1rem;
