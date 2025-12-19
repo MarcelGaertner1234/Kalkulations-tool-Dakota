@@ -1175,7 +1175,7 @@
 
         .dienstplan-kalender {
             display: grid;
-            min-width: 1200px;
+            /* min-width wird dynamisch via JavaScript gesetzt */
             border: 1px solid #ddd;
             border-radius: 8px;
             overflow: hidden;
@@ -8090,6 +8090,9 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const totalCols = daysInMonth + 3; // Name + WT + Std + Tage
 
             container.style.gridTemplateColumns = `120px 35px 45px repeat(${daysInMonth}, 40px)`;
+            // Dynamische min-width basierend auf Tagen im Monat
+            const minWidth = 120 + 35 + 45 + (daysInMonth * 40) + 20; // +20 für Puffer
+            container.style.minWidth = `${minWidth}px`;
 
             let html = '';
 
