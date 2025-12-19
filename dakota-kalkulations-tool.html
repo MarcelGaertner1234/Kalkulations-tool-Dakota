@@ -1496,32 +1496,542 @@
             border: 1px solid #ddd;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
+        /* ===== RESPONSIVE - MOBILE OPTIMIERUNGEN ===== */
+
+        /* === TABLETS (max 960px) === */
+        @media (max-width: 960px) {
+            .header {
+                padding: 1.5rem;
+            }
+
+            .header-stats {
                 gap: 1rem;
             }
 
-            .tabs-container {
+            .global-search-input {
+                width: 250px;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* === GROSSE SMARTPHONES (max 768px) === */
+        @media (max-width: 768px) {
+            /* Header */
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
                 flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .header-stats {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+            }
+
+            .stat-item {
+                font-size: 0.8rem;
+            }
+
+            /* Global Search */
+            .global-search-container {
+                width: 100%;
+            }
+
+            .global-search-input {
+                width: 100%;
+            }
+
+            .global-search-input:focus {
+                width: 100%;
+            }
+
+            /* Tab Navigation - Horizontaler Scroll */
+            .nav-tabs {
+                top: auto;
+                position: relative;
+            }
+
+            .tabs-container {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                padding-bottom: 0.25rem;
+            }
+
+            .tabs-container::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            .tabs-container::-webkit-scrollbar-thumb {
+                background: var(--dakota-gold);
+                border-radius: 2px;
             }
 
             .tab-button {
-                border-bottom: 1px solid #eee;
+                flex: 0 0 auto;
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+                white-space: nowrap;
             }
 
+            .tab-icon {
+                font-size: 1rem;
+            }
+
+            /* Container */
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            /* Forms */
             .form-row {
                 grid-template-columns: 1fr;
             }
 
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            /* Tabellen - Responsive Wrapper */
+            .tab-content {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
             .data-table {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
+                min-width: 600px;
             }
 
             .data-table th,
             .data-table td {
                 padding: 0.75rem 0.5rem;
+            }
+
+            /* Sticky erste Spalte */
+            .data-table th:first-child,
+            .data-table td:first-child {
+                position: sticky;
+                left: 0;
+                background: inherit;
+                z-index: 1;
+            }
+
+            .data-table th:first-child {
+                background: var(--dakota-dark);
+            }
+
+            .data-table tr:nth-child(even) td:first-child {
+                background: #fafafa;
+            }
+
+            .data-table tr:hover td:first-child {
+                background: rgba(219, 167, 101, 0.1);
+            }
+
+            /* Touch-freundliche Icon Buttons */
+            .btn-icon {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 0.75rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .action-buttons {
+                gap: 0.25rem;
+            }
+
+            /* Buttons */
+            .btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .btn-sm {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            /* Modals */
+            .modal-content {
+                max-width: 95%;
+                padding: 1.25rem;
+                margin: 0.5rem;
+                max-height: 90vh;
+            }
+
+            .modal-header h2 {
+                font-size: 1.25rem;
+            }
+
+            .rezept-modal-content {
+                max-width: 95%;
+                margin: 0.5rem auto;
+            }
+
+            .rezept-modal-body {
+                padding: 1rem;
+            }
+
+            .rezept-modal-meta {
+                gap: 1rem;
+            }
+
+            /* Dienstplan */
+            .dienstplan-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Header-Zellen sticky */
+            .dienstplan-header-cell.name-col {
+                min-width: 100px;
+                position: sticky;
+                left: 0;
+                z-index: 3;
+                background: var(--dakota-dark);
+            }
+
+            .dienstplan-header-cell.wt-col {
+                position: sticky;
+                left: 100px;
+                z-index: 3;
+                background: var(--dakota-dark);
+            }
+
+            .dienstplan-header-cell.std-col {
+                position: sticky;
+                left: 135px;
+                z-index: 3;
+                background: var(--dakota-dark);
+            }
+
+            /* Body-Zellen sticky */
+            .dienstplan-cell.name-cell {
+                min-width: 100px;
+                position: sticky;
+                left: 0;
+                z-index: 2;
+                background: white;
+            }
+
+            .dienstplan-cell.wt-cell {
+                position: sticky;
+                left: 100px;
+                z-index: 2;
+                background: white;
+            }
+
+            .dienstplan-cell.std-cell {
+                position: sticky;
+                left: 135px;
+                z-index: 2;
+                background: white;
+            }
+
+            .dienstplan-header-cell.day-col {
+                min-width: 36px;
+            }
+
+            .dienstplan-cell {
+                min-height: 40px;
+            }
+
+            .schicht-badge {
+                width: 26px;
+                height: 22px;
+                font-size: 0.7rem;
+            }
+
+            /* Legende Grid */
+            .legende-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            /* Calc Results */
+            .calc-result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Rezept Cards */
+            .rezept-cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            /* Saisonkalender */
+            .saison-monat {
+                min-width: 80px;
+            }
+        }
+
+        /* === SMARTPHONES (max 600px) === */
+        @media (max-width: 600px) {
+            .header {
+                padding: 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+                letter-spacing: 1px;
+            }
+
+            .tagline {
+                font-size: 0.7rem;
+            }
+
+            .header-stats {
+                display: none;
+            }
+
+            .tab-button {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .tab-button span:not(.tab-icon) {
+                display: none;
+            }
+
+            .tab-icon {
+                margin: 0;
+            }
+
+            .container {
+                padding: 0 0.75rem;
+                margin: 0.75rem auto;
+            }
+
+            /* Modals vollbreit */
+            .modal-content {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+                max-height: 100vh;
+            }
+
+            .modal-header {
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 10;
+                padding-bottom: 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .rezept-modal {
+                padding: 0;
+            }
+
+            .rezept-modal-content {
+                border-radius: 0;
+                max-width: 100%;
+                max-height: 100vh;
+            }
+
+            /* Dienstplan noch kompakter */
+            .dienstplan-header-cell.name-col,
+            .dienstplan-cell.name-cell {
+                min-width: 80px;
+                font-size: 0.7rem;
+                left: 0;
+            }
+
+            .dienstplan-header-cell.wt-col,
+            .dienstplan-cell.wt-cell {
+                left: 80px;
+                min-width: 28px;
+            }
+
+            .dienstplan-header-cell.std-col,
+            .dienstplan-cell.std-cell {
+                left: 108px;
+                min-width: 35px;
+            }
+
+            .dienstplan-header-cell.day-col {
+                min-width: 32px;
+                font-size: 0.65rem;
+            }
+
+            .dienstplan-cell {
+                font-size: 0.7rem;
+                padding: 0.25rem;
+            }
+
+            .schicht-badge {
+                width: 24px;
+                height: 20px;
+                font-size: 0.65rem;
+            }
+
+            /* Tabellen kompakter */
+            .data-table {
+                font-size: 0.8rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem 0.35rem;
+            }
+
+            /* Import/Export Bereich */
+            .import-export-container {
+                flex-direction: column;
+            }
+
+            .import-export-container > div {
+                min-width: 100% !important;
+            }
+
+            /* Buttons */
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            /* Schicht-Auswahl Modal */
+            .schicht-auswahl {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* === KLEINE SMARTPHONES (max 480px) === */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0.5rem;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .tab-button {
+                padding: 0.5rem;
+            }
+
+            .tab-icon {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 0 0.5rem;
+            }
+
+            /* Forms einzeilig */
+            .form-input,
+            .form-select,
+            .form-textarea {
+                padding: 0.6rem;
+                font-size: 16px; /* Verhindert iOS Zoom */
+            }
+
+            /* Dienstplan minimal */
+            .dienstplan-header-cell.day-col {
+                min-width: 28px;
+                padding: 0.25rem 0.1rem;
+            }
+
+            .schicht-badge {
+                width: 22px;
+                height: 18px;
+                font-size: 0.6rem;
+            }
+
+            /* Legende einzeilig */
+            .legende-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Cards einzeilig */
+            .rezept-cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            /* Modal Inhalt */
+            .modal-content {
+                padding: 1rem 0.75rem;
+            }
+        }
+
+        /* === TOUCH-OPTIMIERUNGEN === */
+        @media (hover: none) and (pointer: coarse) {
+            /* Grössere Touch-Targets */
+            .btn-icon {
+                min-width: 48px;
+                min-height: 48px;
+            }
+
+            .tab-button {
+                min-height: 48px;
+            }
+
+            .dienstplan-cell {
+                min-height: 44px;
+            }
+
+            .schicht-badge {
+                cursor: default;
+            }
+
+            /* Hover-Effekte entfernen */
+            .data-table tr:hover {
+                background: transparent;
+            }
+
+            .btn:hover {
+                transform: none;
+            }
+
+            /* Active States für Touch */
+            .btn:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+
+            .tab-button:active {
+                background: rgba(219, 167, 101, 0.2);
+            }
+
+            .dienstplan-cell:active {
+                background: rgba(219, 167, 101, 0.3);
+            }
+        }
+
+        /* === LANDSCAPE MODUS === */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header {
+                padding: 0.5rem;
+                position: relative;
+            }
+
+            .nav-tabs {
+                position: relative;
+            }
+
+            .modal-content {
+                max-height: 95vh;
             }
         }
 
