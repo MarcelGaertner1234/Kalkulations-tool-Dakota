@@ -10838,8 +10838,22 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
         function showModalLebensmittelListe() {
             const dropdown = document.getElementById('modalArtikelDropdown');
             if (!dropdown) return;
+
+            // Stelle sicher dass Liste geladen ist
+            if (schnellArtikelListe.length === 0 && lebensmittelData.length > 0) {
+                schnellArtikelListe = lebensmittelData
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(lm => ({
+                        id: lm.id,
+                        name: lm.name,
+                        kategorie: lm.kategorie,
+                        einheit: lm.einheit || 'Stk',
+                        preis: lm.preis || 0,
+                        lieferant: lm.lieferant || ''
+                    }));
+            }
+
             filterModalLebensmittelListe();
-            dropdown.classList.add('active');
         }
 
         function filterModalLebensmittelListe() {
@@ -10850,6 +10864,13 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             const filter = input.value.toLowerCase().trim();
             modalArtikelSelectedIndex = -1;
 
+            // Falls noch keine Artikel geladen, zeige Hinweis
+            if (schnellArtikelListe.length === 0) {
+                dropdown.innerHTML = '<div class="schnell-artikel-item" style="color: var(--text-muted);">Lade Artikel...</div>';
+                dropdown.style.display = 'block';
+                return;
+            }
+
             // Filtern
             const filtered = filter
                 ? schnellArtikelListe.filter(a =>
@@ -10857,18 +10878,18 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                     a.kategorie.toLowerCase().includes(filter) ||
                     (a.lieferant && a.lieferant.toLowerCase().includes(filter))
                   )
-                : schnellArtikelListe.slice(0, 20); // Zeige erste 20 wenn leer
+                : schnellArtikelListe.slice(0, 20);
 
             // Max 15 Ergebnisse anzeigen
             const limited = filtered.slice(0, 15);
 
             if (limited.length === 0) {
-                dropdown.innerHTML = '<div class="schnell-artikel-item" style="color: var(--text-muted); cursor: default;">Kein Artikel gefunden - manuell eingeben</div>';
+                dropdown.innerHTML = '<div class="schnell-artikel-item" style="color: #888; cursor: default;">Kein Artikel gefunden - manuell eingeben</div>';
             } else {
                 dropdown.innerHTML = limited.map((a, idx) => `
                     <div class="schnell-artikel-item" data-id="${a.id}" data-index="${idx}">
                         <strong>${highlightMatch(a.name, filter)}</strong>
-                        <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem;">
+                        <span style="color: #888; font-size: 0.85rem; margin-left: 0.5rem;">
                             ${a.kategorie} ${a.lieferant ? '· ' + a.lieferant : ''} ${a.preis ? '· CHF ' + a.preis.toFixed(2) : ''}
                         </span>
                     </div>
@@ -10884,6 +10905,8 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 });
             }
 
+            // Zeige dropdown
+            dropdown.style.display = 'block';
             dropdown.classList.add('active');
         }
 
