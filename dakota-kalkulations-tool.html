@@ -2124,15 +2124,23 @@
             }
 
             /* Tabellen - Responsive Wrapper (iOS Safari Fix) */
+            /* NUR aktive Tabs anzeigen - nicht alle! */
             .tab-content {
                 overflow-x: auto;
                 overflow-y: visible;
                 -webkit-overflow-scrolling: touch;
-                /* iOS Safari: Container muss block sein */
-                display: block;
                 width: 100%;
                 max-width: 100vw;
                 box-sizing: border-box;
+            }
+
+            /* WICHTIG: Nur aktive Tabs sichtbar */
+            .tab-content:not(.active) {
+                display: none !important;
+            }
+
+            .tab-content.active {
+                display: block !important;
             }
 
             /* Tabellen kompakter für Mobile */
