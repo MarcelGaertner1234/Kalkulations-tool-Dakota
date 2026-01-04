@@ -11911,7 +11911,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                         };
 
                         lebensmittelData.push(newLM);
-                        await saveToFirestore(newLM);
+                        await saveLebensmittelDirect(newLM);
 
                         // Verknüpfung zum Inventar-Artikel herstellen
                         artikel.lebensmittel_id = newLM.id;
