@@ -676,7 +676,8 @@
         }
 
         /* Schnell-Erfassung Autocomplete */
-        .schnell-artikel-dropdown {
+        .schnell-artikel-dropdown,
+        .modal-artikel-dropdown {
             position: absolute;
             top: 100%;
             left: 0;
@@ -692,8 +693,14 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        .schnell-artikel-dropdown.active {
+        .schnell-artikel-dropdown.active,
+        .modal-artikel-dropdown.active {
             display: block;
+        }
+
+        /* Modal Dropdown muss über Modal-Content sein */
+        .modal-artikel-dropdown {
+            z-index: 10001;
         }
 
         .schnell-artikel-item {
@@ -4188,11 +4195,18 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label class="form-label">Verknüpfung Lebensmittel-DB</label>
-                        <select class="form-select" id="inv_lebensmittel_id" onchange="prefillFromLebensmittel()">
-                            <option value="">-- Optional: Aus DB wählen --</option>
-                        </select>
+                        <input type="text" class="form-input" id="inv_lebensmittel_search"
+                            placeholder="Artikel suchen... (z.B. Bratbutter)"
+                            autocomplete="off"
+                            oninput="filterModalLebensmittelListe()"
+                            onfocus="showModalLebensmittelListe()"
+                            onkeydown="handleModalLebensmittelKeydown(event)">
+                        <input type="hidden" id="inv_lebensmittel_id">
+                        <div class="modal-artikel-dropdown" id="modalArtikelDropdown">
+                            <!-- Wird dynamisch gefüllt -->
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Oder manuell: Artikelname *</label>
@@ -10816,6 +10830,120 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             loadArtikelDetails(artikelId);
         }
 
+        // ----- MODAL LEBENSMITTEL AUTOCOMPLETE -----
+        let modalArtikelSelectedIndex = -1;
+
+        function showModalLebensmittelListe() {
+            const dropdown = document.getElementById('modalArtikelDropdown');
+            if (!dropdown) return;
+            filterModalLebensmittelListe();
+            dropdown.classList.add('active');
+        }
+
+        function filterModalLebensmittelListe() {
+            const dropdown = document.getElementById('modalArtikelDropdown');
+            const input = document.getElementById('inv_lebensmittel_search');
+            if (!dropdown || !input) return;
+
+            const filter = input.value.toLowerCase().trim();
+            modalArtikelSelectedIndex = -1;
+
+            // Filtern
+            const filtered = filter
+                ? schnellArtikelListe.filter(a =>
+                    a.name.toLowerCase().includes(filter) ||
+                    a.kategorie.toLowerCase().includes(filter) ||
+                    (a.lieferant && a.lieferant.toLowerCase().includes(filter))
+                  )
+                : schnellArtikelListe.slice(0, 20); // Zeige erste 20 wenn leer
+
+            // Max 15 Ergebnisse anzeigen
+            const limited = filtered.slice(0, 15);
+
+            if (limited.length === 0) {
+                dropdown.innerHTML = '<div class="schnell-artikel-item" style="color: var(--text-muted); cursor: default;">Kein Artikel gefunden - manuell eingeben</div>';
+            } else {
+                dropdown.innerHTML = limited.map((a, idx) => `
+                    <div class="schnell-artikel-item" data-id="${a.id}" data-index="${idx}"
+                         onclick="selectModalLebensmittel('${a.id}')">
+                        <strong>${highlightMatch(a.name, filter)}</strong>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem;">
+                            ${a.kategorie} ${a.lieferant ? '· ' + a.lieferant : ''} ${a.preis ? '· CHF ' + a.preis.toFixed(2) : ''}
+                        </span>
+                    </div>
+                `).join('');
+            }
+
+            dropdown.classList.add('active');
+        }
+
+        function handleModalLebensmittelKeydown(event) {
+            const dropdown = document.getElementById('modalArtikelDropdown');
+            if (!dropdown) return;
+
+            const items = dropdown.querySelectorAll('.schnell-artikel-item[data-id]');
+            if (items.length === 0) return;
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    modalArtikelSelectedIndex = Math.min(modalArtikelSelectedIndex + 1, items.length - 1);
+                    updateModalArtikelSelection(items);
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    modalArtikelSelectedIndex = Math.max(modalArtikelSelectedIndex - 1, 0);
+                    updateModalArtikelSelection(items);
+                    break;
+                case 'Enter':
+                    event.preventDefault();
+                    if (modalArtikelSelectedIndex >= 0 && items[modalArtikelSelectedIndex]) {
+                        const id = items[modalArtikelSelectedIndex].dataset.id;
+                        selectModalLebensmittel(id);
+                    }
+                    break;
+                case 'Escape':
+                    dropdown.classList.remove('active');
+                    break;
+            }
+        }
+
+        function updateModalArtikelSelection(items) {
+            items.forEach((item, idx) => {
+                if (idx === modalArtikelSelectedIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        function selectModalLebensmittel(artikelId) {
+            const artikel = schnellArtikelListe.find(a => a.id === artikelId);
+            if (!artikel) return;
+
+            const searchInput = document.getElementById('inv_lebensmittel_search');
+            const hiddenInput = document.getElementById('inv_lebensmittel_id');
+            const dropdown = document.getElementById('modalArtikelDropdown');
+
+            if (searchInput) searchInput.value = artikel.name;
+            if (hiddenInput) hiddenInput.value = artikelId;
+            if (dropdown) dropdown.classList.remove('active');
+
+            // Felder automatisch ausfüllen
+            prefillFromLebensmittel();
+        }
+
+        // Click-Outside Handler für Modal-Dropdown
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('modalArtikelDropdown');
+            const input = document.getElementById('inv_lebensmittel_search');
+            if (dropdown && !dropdown.contains(e.target) && e.target !== input) {
+                dropdown.classList.remove('active');
+            }
+        });
+
         // ----- FOTO FUNKTIONEN FÜR SCHNELL-ERFASSUNG -----
         function handleSchnellFoto(event) {
             const file = event.target.files[0];
@@ -11532,6 +11660,13 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             document.getElementById('invFotoPlaceholder').style.display = 'block';
             document.getElementById('invFotoRemoveBtn').style.display = 'none';
 
+            // Reset Autocomplete-Suchfeld
+            const searchInput = document.getElementById('inv_lebensmittel_search');
+            if (searchInput) searchInput.value = '';
+            document.getElementById('inv_lebensmittel_id').value = '';
+            const dropdown = document.getElementById('modalArtikelDropdown');
+            if (dropdown) dropdown.classList.remove('active');
+
             initInventarDropdowns();
 
             if (artikelId) {
@@ -11551,6 +11686,12 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                     document.getElementById('inv_mhd').value = artikel.mhd || '';
                     document.getElementById('inv_barcode').value = artikel.barcode || '';
                     document.getElementById('inv_notiz').value = artikel.notiz || '';
+
+                    // Zeige verknüpften Artikel im Suchfeld
+                    if (artikel.lebensmittel_id && searchInput) {
+                        const lm = lebensmittelData.find(l => l.id == artikel.lebensmittel_id);
+                        if (lm) searchInput.value = lm.name;
+                    }
 
                     if (artikel.foto) {
                         currentInvFotoBase64 = artikel.foto;
