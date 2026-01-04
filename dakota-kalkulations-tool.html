@@ -11790,8 +11790,18 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             }
         }
 
+        let isSavingInventar = false; // Schutz gegen Doppelklicks
+
         async function saveInventarArtikel(event) {
-            event.preventDefault();
+            if (event) event.preventDefault();
+
+            // Schutz gegen Doppelklicks
+            if (isSavingInventar) {
+                console.log('Speichern läuft bereits...');
+                return;
+            }
+            isSavingInventar = true;
+
             console.log('saveInventarArtikel gestartet');
 
             try {
@@ -11804,6 +11814,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 if (!name || !kategorie || !menge || !lagerort) {
                     showNotification('⚠️ Bitte alle Pflichtfelder ausfüllen!', 'error');
                     console.log('Validierung fehlgeschlagen:', { name, kategorie, menge, lagerort });
+                    isSavingInventar = false;
                     return;
                 }
 
@@ -11903,6 +11914,8 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
                 showNotification('❌ Fehler: ' + error.message, 'error');
+            } finally {
+                isSavingInventar = false;
             }
         }
 
