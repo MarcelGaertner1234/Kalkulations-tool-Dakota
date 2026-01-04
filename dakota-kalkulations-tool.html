@@ -4313,7 +4313,7 @@
 
                 <div class="modal-footer" style="position: sticky; bottom: 0; background: white; padding: 1rem 0; margin-top: 1rem; border-top: 1px solid #eee;">
                     <button type="button" class="btn btn-secondary" onclick="closeInventarModal()">Abbrechen</button>
-                    <button type="button" class="btn btn-primary" id="btnSaveInventar" ontouchstart="handleSaveClick()" onclick="handleSaveClick()">💾 Speichern</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveInventar">💾 Speichern</button>
                 </div>
             </form>
         </div>
@@ -10629,33 +10629,46 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
         // ===== INVENTAR MODUL - FUNKTIONEN =====
         // ============================================================
 
-        // Click-Handler mit Button-Deaktivierung
-        function handleSaveClick() {
+        // Speichern-Button Setup (wird einmalig ausgeführt)
+        let saveButtonInitialized = false;
+
+        function initSaveButton() {
+            if (saveButtonInitialized) return;
+
             const btn = document.getElementById('btnSaveInventar');
+            if (!btn) return;
 
-            // Bereits am Speichern?
-            if (btn && btn.disabled) {
-                console.log('Speichern läuft bereits...');
-                return;
-            }
+            btn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-            // Button deaktivieren und Text ändern
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '⏳ Speichert...';
-                btn.style.opacity = '0.7';
-            }
+                // Bereits am Speichern?
+                if (this.disabled) {
+                    console.log('Speichern läuft bereits...');
+                    return;
+                }
 
-            // Speichern ausführen
-            saveInventarArtikel().finally(() => {
-                // Button wieder aktivieren (falls Modal noch offen)
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '💾 Speichern';
-                    btn.style.opacity = '1';
+                // Button deaktivieren
+                this.disabled = true;
+                this.innerHTML = '⏳ Speichert...';
+                this.style.opacity = '0.7';
+
+                try {
+                    await saveInventarArtikel();
+                } finally {
+                    // Button wieder aktivieren
+                    this.disabled = false;
+                    this.innerHTML = '💾 Speichern';
+                    this.style.opacity = '1';
                 }
             });
+
+            saveButtonInitialized = true;
+            console.log('Save-Button initialisiert');
         }
+
+        // Bei DOMContentLoaded initialisieren
+        document.addEventListener('DOMContentLoaded', initSaveButton);
 
         // ----- FIREBASE OPERATIONEN -----
         async function loadInventar() {
