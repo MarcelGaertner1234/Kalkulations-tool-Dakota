@@ -11857,12 +11857,49 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 }
 
                 await saveInventarToFirebase(artikel);
-                console.log('In Firebase gespeichert');
+                console.log('In Firebase Inventar gespeichert');
+
+                // Falls kein Lebensmittel verknüpft und Artikel neu → auch in Lebensmittel-DB speichern
+                if (!artikel.lebensmittel_id && !isEdit) {
+                    const existingLM = lebensmittelData.find(lm =>
+                        lm.name.toLowerCase() === name.toLowerCase()
+                    );
+
+                    if (!existingLM) {
+                        // Neuen Artikel auch in Lebensmittel-DB anlegen
+                        const newLM = {
+                            id: Date.now().toString(),
+                            gastro_id: 'INV-' + Date.now(),
+                            name: name,
+                            kategorie: kategorie,
+                            einheit: artikel.einheit,
+                            preis: artikel.preis || 0,
+                            lieferant: artikel.lieferant || '',
+                            erstellt: new Date().toISOString()
+                        };
+
+                        lebensmittelData.push(newLM);
+                        await saveToFirestore(newLM);
+
+                        // Verknüpfung zum Inventar-Artikel herstellen
+                        artikel.lebensmittel_id = newLM.id;
+                        await saveInventarToFirebase(artikel);
+
+                        console.log('Auch in Lebensmittel-DB gespeichert:', newLM.name);
+                        showNotification('✓ ' + name + ' gespeichert + zur Lebensmittel-DB hinzugefügt!');
+                    } else {
+                        // Existiert bereits - nur verknüpfen
+                        artikel.lebensmittel_id = existingLM.id;
+                        await saveInventarToFirebase(artikel);
+                        showNotification('✓ ' + name + ' gespeichert (mit bestehendem DB-Eintrag verknüpft)');
+                    }
+                } else {
+                    showNotification('✓ ' + name + ' gespeichert!');
+                }
 
                 closeInventarModal();
                 updateInventarStats();
                 renderInventarTable();
-                showNotification('✓ ' + name + ' gespeichert!');
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
                 showNotification('❌ Fehler: ' + error.message, 'error');
