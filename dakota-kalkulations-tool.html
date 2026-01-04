@@ -2314,6 +2314,87 @@
             .saison-monat {
                 min-width: 80px;
             }
+
+            /* ===== INVENTAR MOBILE STYLES ===== */
+            .inventar-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .inventar-stat-card {
+                padding: 1rem;
+            }
+
+            .inventar-stat-icon {
+                font-size: 1.5rem;
+            }
+
+            .inventar-stat-value {
+                font-size: 1.25rem;
+            }
+
+            /* Schnell-Erfassung Mobile */
+            .inventar-schnellerfassung .form-row {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+            }
+
+            .inventar-schnellerfassung .form-group {
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }
+
+            .inventar-schnellerfassung .form-group[style*="flex: 0 0 auto"] {
+                flex: 1 1 100% !important;
+                width: 100% !important;
+            }
+
+            .inventar-schnellerfassung .btn {
+                width: 100%;
+            }
+
+            /* Foto-Wrapper Mobile */
+            .schnell-foto-wrapper {
+                flex-direction: row;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .schnell-foto-btn {
+                flex: 0 0 auto;
+            }
+
+            /* Inventar Filter Mobile */
+            .inventar-filter-section {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .inventar-filter-section .form-group {
+                width: 100%;
+            }
+
+            /* Inventar Tabelle Mobile */
+            .inventar-table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .inventar-table th,
+            .inventar-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            /* Inventar Actions Mobile */
+            .inventar-export-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .inventar-export-actions .btn {
+                width: 100%;
+            }
         }
 
         /* === SMARTPHONES (max 600px) === */
@@ -5921,6 +6002,22 @@
             if (tabName === 'menuekarten') loadMenuekartenTab();
             if (tabName === 'einstellungen') loadEinstellungenTab();
             if (tabName === 'dienstplan') initDienstplan();
+            if (tabName === 'inventar') loadInventarTab();
+        }
+
+        // ===== INVENTAR TAB LADEN =====
+        async function loadInventarTab() {
+            // Lebensmittel laden falls noch nicht geschehen (für Autocomplete)
+            if (lebensmittelData.length === 0) {
+                lebensmittelData = await getAllLebensmittel();
+            }
+            // Inventar-Dropdowns initialisieren
+            initInventarDropdowns();
+            // Inventar-Daten laden
+            await loadInventarData();
+            // Stats & Tabelle aktualisieren
+            updateInventarStats();
+            renderInventarTable();
         }
 
         // ===== LEBENSMITTEL FUNCTIONS =====
