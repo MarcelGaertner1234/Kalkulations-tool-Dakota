@@ -800,6 +800,317 @@
             background: #c82333;
         }
 
+        /* ===== MENGEN-SCHNELLÄNDERUNG ===== */
+        .menge-quick-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .menge-quick-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menge-quick-btn.minus {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .menge-quick-btn.minus:hover {
+            background: #f5c6cb;
+        }
+
+        .menge-quick-btn.plus {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .menge-quick-btn.plus:hover {
+            background: #c3e6cb;
+        }
+
+        .menge-display {
+            min-width: 60px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* ===== PREIS-VERGLEICH ===== */
+        .preis-trend {
+            font-size: 0.8rem;
+            margin-left: 0.25rem;
+        }
+
+        .preis-trend.up {
+            color: #dc3545;
+        }
+
+        .preis-trend.down {
+            color: #28a745;
+        }
+
+        .preis-trend.same {
+            color: #6c757d;
+        }
+
+        /* ===== INVENTUR-MODUS ===== */
+        .inventur-modus-banner {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #000;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .inventur-modus-banner h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .inventur-modus-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .inventur-modus-stat {
+            text-align: center;
+        }
+
+        .inventur-modus-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .inventur-modus-stat-label {
+            font-size: 0.8rem;
+        }
+
+        .inventur-input {
+            width: 70px;
+            padding: 0.25rem 0.5rem;
+            border: 2px solid var(--dakota-gold);
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .inventur-differenz {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .inventur-differenz.positiv {
+            color: #28a745;
+        }
+
+        .inventur-differenz.negativ {
+            color: #dc3545;
+        }
+
+        .inventur-differenz.null {
+            color: #6c757d;
+        }
+
+        /* ===== KATEGORIE-CHART ===== */
+        .kategorie-chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .kategorie-chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .kategorie-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .kategorie-bar-label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .kategorie-bar-track {
+            flex: 1;
+            height: 24px;
+            background: #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .kategorie-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dakota-gold) 0%, #c49b6a 100%);
+            border-radius: 12px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .kategorie-bar-value {
+            min-width: 100px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* ===== FOTO-GALERIE ===== */
+        .foto-galerie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .foto-galerie-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .foto-galerie-item:hover {
+            transform: scale(1.05);
+        }
+
+        .foto-galerie-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .foto-galerie-item .foto-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 0.75rem 0.5rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .foto-galerie-item .foto-name {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .foto-galerie-item .foto-menge {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .foto-galerie-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            color: #adb5bd;
+            font-size: 2rem;
+        }
+
+        /* ===== OFFLINE-MODUS ===== */
+        .offline-banner {
+            background: #dc3545;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .offline-banner.syncing {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .offline-banner.synced {
+            background: #28a745;
+        }
+
+        .sync-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .sync-indicator.offline {
+            color: #dc3545;
+        }
+
+        .sync-indicator.syncing {
+            color: #ffc107;
+        }
+
+        /* ===== SORTIER-BUTTONS ===== */
+        .sort-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .sort-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .sort-btn:hover {
+            border-color: var(--dakota-gold);
+        }
+
+        .sort-btn.active {
+            background: var(--dakota-gold);
+            color: white;
+            border-color: var(--dakota-gold);
+        }
+
         /* Barcode Scanner */
         .barcode-scanner-bereich {
             background: #1a1d20;
@@ -3607,7 +3918,40 @@
                         <button class="btn btn-success" onclick="openInventurAbschlussModal()">
                             ✅ Inventur abschliessen
                         </button>
+                        <button class="btn btn-warning" id="inventurModusBtn" onclick="toggleInventurModus()">
+                            📋 Inventur-Modus
+                        </button>
+                        <button class="btn btn-secondary" onclick="toggleFotoGalerie()">
+                            🖼️ Foto-Galerie
+                        </button>
                     </div>
+                </div>
+
+                <!-- OFFLINE-STATUS BANNER -->
+                <div id="offlineBanner" class="offline-banner" style="display: none;">
+                    <span>⚠️</span>
+                    <span id="offlineText">Offline - Änderungen werden lokal gespeichert</span>
+                    <button class="btn btn-sm" onclick="syncOfflineData()" style="margin-left: auto;">🔄 Sync</button>
+                </div>
+
+                <!-- INVENTUR-MODUS BANNER -->
+                <div id="inventurModusBanner" class="inventur-modus-banner" style="display: none;">
+                    <h3>📋 Inventur-Modus aktiv</h3>
+                    <div class="inventur-modus-stats">
+                        <div class="inventur-modus-stat">
+                            <div class="inventur-modus-stat-value" id="invModusGezaehlt">0</div>
+                            <div class="inventur-modus-stat-label">Gezählt</div>
+                        </div>
+                        <div class="inventur-modus-stat">
+                            <div class="inventur-modus-stat-value" id="invModusOffen">0</div>
+                            <div class="inventur-modus-stat-label">Offen</div>
+                        </div>
+                        <div class="inventur-modus-stat">
+                            <div class="inventur-modus-stat-value" id="invModusDifferenz">CHF 0</div>
+                            <div class="inventur-modus-stat-label">Differenz</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-dark" onclick="beendeInventurModus()">✓ Inventur beenden</button>
                 </div>
 
                 <!-- INVENTAR WARNUNGEN -->
@@ -3636,6 +3980,25 @@
                         <div class="inventar-stat-icon">📅</div>
                         <div class="inventar-stat-value" id="invStatLetzte">-</div>
                         <div class="inventar-stat-label">Letzte Inventur</div>
+                    </div>
+                </div>
+
+                <!-- KATEGORIE-CHART (4. Bestandswert nach Kategorie) -->
+                <div id="kategorieChartContainer" class="kategorie-chart-container" style="display: none;">
+                    <h3 style="margin-bottom: 1rem;">📊 Bestandswert nach Kategorie</h3>
+                    <div id="kategorieChartBars" class="kategorie-chart-bars">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+                </div>
+
+                <!-- FOTO-GALERIE (9. Grid-Ansicht) -->
+                <div id="fotoGalerieContainer" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>🖼️ Foto-Galerie</h3>
+                        <button class="btn btn-secondary" onclick="toggleFotoGalerie()">✕ Schliessen</button>
+                    </div>
+                    <div id="fotoGalerieGrid" class="foto-galerie-grid">
+                        <!-- Wird dynamisch gefüllt -->
                     </div>
                 </div>
 
@@ -3766,6 +4129,16 @@
                     </div>
                 </div>
 
+                <!-- SORTIERUNG (3. MHD-Sortierung) -->
+                <div class="sort-buttons">
+                    <span style="color: #666; margin-right: 0.5rem;">Sortieren:</span>
+                    <button class="sort-btn active" onclick="sortInventar('name')" id="sortBtnName">A-Z</button>
+                    <button class="sort-btn" onclick="sortInventar('mhd')" id="sortBtnMhd">🕐 MHD kritisch</button>
+                    <button class="sort-btn" onclick="sortInventar('menge')" id="sortBtnMenge">📉 Bestand niedrig</button>
+                    <button class="sort-btn" onclick="sortInventar('wert')" id="sortBtnWert">💰 Wert hoch</button>
+                    <button class="sort-btn" onclick="sortInventar('kategorie')" id="sortBtnKategorie">📁 Kategorie</button>
+                </div>
+
                 <!-- INVENTAR TABELLE -->
                 <div id="inventarTable"></div>
 
@@ -3782,6 +4155,9 @@
                     </button>
                     <button class="btn btn-secondary" onclick="showInventurHistorie()">
                         📈 Inventur-Historie
+                    </button>
+                    <button class="btn btn-secondary" onclick="toggleKategorieChart()">
+                        📊 Kategorie-Chart
                     </button>
                 </div>
             </div>
@@ -4488,6 +4864,14 @@
         let currentInvFotoBase64 = null;
         let barcodeStream = null;
         let currentEtikettArtikel = null;
+
+        // Neue Features Variablen
+        let inventurModusAktiv = false;
+        let inventurZaehlungen = {}; // { artikelId: gezaehlterWert }
+        let preisHistorie = {}; // { artikelId: [{ preis, datum }] }
+        let currentSortierung = 'name';
+        let isOffline = false;
+        let offlineQueue = []; // Warteschlange für Offline-Änderungen
 
         // ===== INDEXEDDB INIT =====
         function initDB() {
@@ -6015,6 +6399,9 @@
 
         // ===== INVENTAR TAB LADEN =====
         async function loadInventarTab() {
+            // Offline-Support initialisieren
+            initOfflineSupport();
+
             // Lebensmittel laden falls noch nicht geschehen (für Autocomplete)
             if (lebensmittelData.length === 0) {
                 lebensmittelData = await getAllLebensmittel();
@@ -10552,12 +10939,15 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 return;
             }
 
+            // Spalten je nach Modus anpassen
+            let extraHeader = inventurModusAktiv ? '<th>Gezählt</th><th>Diff.</th>' : '';
             let html = `<table class="data-table">
                 <thead>
                     <tr>
                         <th>Artikel</th>
                         <th>Kategorie</th>
                         <th>Bestand</th>
+                        ${extraHeader}
                         <th>Preis</th>
                         <th>Wert</th>
                         <th>Lagerort</th>
@@ -10571,23 +10961,71 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             displayData.forEach(a => {
                 const wert = (a.menge || 0) * (a.preis || 0);
                 const unterMindest = a.mindestbestand && a.menge < a.mindestbestand;
-                const mhdWarnung = a.mhd && ((new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24)) <= 7;
+                const mhdTage = a.mhd ? Math.ceil((new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+                const mhdWarnung = mhdTage !== null && mhdTage <= 7 && mhdTage >= 0;
+                const mhdAbgelaufen = mhdTage !== null && mhdTage < 0;
 
+                // Status Badge
                 let statusBadge = '<span class="badge badge-ok">OK</span>';
-                if (unterMindest) statusBadge = '<span class="badge badge-warnung">Nachbestellen!</span>';
-                if (mhdWarnung) statusBadge = '<span class="badge badge-warnung badge-mhd-warnung">MHD!</span>';
+                if (mhdAbgelaufen) statusBadge = '<span class="badge badge-danger">Abgelaufen!</span>';
+                else if (mhdWarnung) statusBadge = '<span class="badge badge-warnung">MHD ' + mhdTage + 'd</span>';
+                else if (unterMindest) statusBadge = '<span class="badge badge-warnung">Nachbestellen!</span>';
 
-                html += `<tr>
+                // Preis-Trend (2. Feature)
+                let preisTrend = '';
+                if (a.letzterPreis && a.letzterPreis !== a.preis) {
+                    if (a.preis > a.letzterPreis) {
+                        preisTrend = `<span class="preis-trend up">↑${((a.preis - a.letzterPreis) / a.letzterPreis * 100).toFixed(0)}%</span>`;
+                    } else {
+                        preisTrend = `<span class="preis-trend down">↓${((a.letzterPreis - a.preis) / a.letzterPreis * 100).toFixed(0)}%</span>`;
+                    }
+                }
+
+                // Inventur-Modus Spalten (6. Feature)
+                let inventurCells = '';
+                if (inventurModusAktiv) {
+                    const gezaehlt = inventurZaehlungen[a.id];
+                    const diffWert = gezaehlt !== undefined ? gezaehlt - a.menge : null;
+                    let diffClass = 'null';
+                    let diffText = '-';
+                    if (diffWert !== null) {
+                        diffClass = diffWert > 0 ? 'positiv' : diffWert < 0 ? 'negativ' : 'null';
+                        diffText = diffWert > 0 ? `+${diffWert}` : diffWert.toString();
+                    }
+                    inventurCells = `
+                        <td>
+                            <input type="number" class="inventur-input"
+                                value="${gezaehlt !== undefined ? gezaehlt : ''}"
+                                placeholder="${a.menge}"
+                                onchange="updateInventurZaehlung('${a.id}', this.value)"
+                                step="0.1">
+                        </td>
+                        <td><span class="inventur-differenz ${diffClass}">${diffText}</span></td>
+                    `;
+                }
+
+                // Mengen-Schnelländerung (1. Feature) - nur wenn NICHT im Inventur-Modus
+                let mengenDisplay = inventurModusAktiv
+                    ? `${a.menge} ${a.einheit}`
+                    : `<div class="menge-quick-controls">
+                        <button class="menge-quick-btn minus" onclick="quickMengeAendern('${a.id}', -1)" title="-1">−</button>
+                        <span class="menge-display">${a.menge} ${a.einheit}</span>
+                        <button class="menge-quick-btn plus" onclick="quickMengeAendern('${a.id}', 1)" title="+1">+</button>
+                      </div>`;
+
+                html += `<tr data-id="${a.id}" class="${mhdAbgelaufen ? 'row-danger' : mhdWarnung ? 'row-warning' : ''}">
                     <td>
                         <strong>${a.name}</strong>
                         ${a.lieferant ? `<br><small style="color: #888;">${a.lieferant}</small>` : ''}
+                        ${a.foto ? `<br><span style="color: var(--dakota-gold); font-size: 0.8rem;">📷</span>` : ''}
                     </td>
                     <td><span class="badge badge-gold">${a.kategorie || '-'}</span></td>
                     <td class="${unterMindest ? 'menge-warnung' : 'menge-ok'}">
-                        ${a.menge} ${a.einheit}
+                        ${mengenDisplay}
                         ${a.mindestbestand ? `<br><small style="color: #888;">Min: ${a.mindestbestand}</small>` : ''}
                     </td>
-                    <td>CHF ${(a.preis || 0).toFixed(2)}</td>
+                    ${inventurCells}
+                    <td>CHF ${(a.preis || 0).toFixed(2)}${preisTrend}</td>
                     <td><strong>CHF ${wert.toFixed(2)}</strong></td>
                     <td>${a.lagerort || '-'}</td>
                     <td>${a.mhd ? new Date(a.mhd).toLocaleDateString('de-CH') : '-'}</td>
@@ -10607,18 +11045,371 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             tableDiv.innerHTML = html;
         }
 
-        // ----- FILTER & SUCHE -----
+        // ===== 1. MENGEN-SCHNELLÄNDERUNG =====
+        async function quickMengeAendern(artikelId, delta) {
+            const artikel = inventarData.find(a => a.id === artikelId);
+            if (!artikel) return;
+
+            const alteMenge = artikel.menge;
+            const neueMenge = Math.max(0, artikel.menge + delta);
+
+            if (neueMenge === alteMenge) return;
+
+            // Historie speichern
+            await addArtikelHistorie(artikelId, 'menge', alteMenge, neueMenge);
+
+            artikel.menge = neueMenge;
+            artikel.aktualisiert = new Date().toISOString();
+
+            await saveInventarWithOfflineSupport(artikel);
+
+            updateInventarStats();
+            renderInventarTable();
+        }
+
+        // ===== 3. SORTIERUNG =====
+        function sortInventar(sortBy) {
+            currentSortierung = sortBy;
+
+            // Buttons aktualisieren
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('sortBtn' + sortBy.charAt(0).toUpperCase() + sortBy.slice(1))?.classList.add('active');
+
+            let sorted = [...inventarData];
+
+            switch(sortBy) {
+                case 'name':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'mhd':
+                    sorted.sort((a, b) => {
+                        if (!a.mhd && !b.mhd) return 0;
+                        if (!a.mhd) return 1;
+                        if (!b.mhd) return -1;
+                        return new Date(a.mhd) - new Date(b.mhd);
+                    });
+                    break;
+                case 'menge':
+                    sorted.sort((a, b) => {
+                        const aRatio = a.mindestbestand ? a.menge / a.mindestbestand : a.menge;
+                        const bRatio = b.mindestbestand ? b.menge / b.mindestbestand : b.menge;
+                        return aRatio - bRatio;
+                    });
+                    break;
+                case 'wert':
+                    sorted.sort((a, b) => ((b.menge || 0) * (b.preis || 0)) - ((a.menge || 0) * (a.preis || 0)));
+                    break;
+                case 'kategorie':
+                    sorted.sort((a, b) => (a.kategorie || '').localeCompare(b.kategorie || ''));
+                    break;
+            }
+
+            renderInventarTable(sorted);
+        }
+
+        // ===== 4. KATEGORIE-CHART =====
+        function toggleKategorieChart() {
+            const container = document.getElementById('kategorieChartContainer');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                renderKategorieChart();
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function renderKategorieChart() {
+            const chartDiv = document.getElementById('kategorieChartBars');
+
+            // Werte nach Kategorie summieren
+            const kategorien = {};
+            inventarData.forEach(a => {
+                const kat = a.kategorie || 'Ohne Kategorie';
+                const wert = (a.menge || 0) * (a.preis || 0);
+                kategorien[kat] = (kategorien[kat] || 0) + wert;
+            });
+
+            // Sortieren nach Wert
+            const sorted = Object.entries(kategorien).sort((a, b) => b[1] - a[1]);
+            const maxWert = sorted[0]?.[1] || 1;
+
+            let html = '';
+            sorted.forEach(([kat, wert]) => {
+                const prozent = (wert / maxWert * 100).toFixed(0);
+                html += `
+                    <div class="kategorie-bar-row">
+                        <div class="kategorie-bar-label">${kat}</div>
+                        <div class="kategorie-bar-track">
+                            <div class="kategorie-bar-fill" style="width: ${prozent}%"></div>
+                        </div>
+                        <div class="kategorie-bar-value">CHF ${wert.toFixed(0)}</div>
+                    </div>
+                `;
+            });
+
+            chartDiv.innerHTML = html || '<p style="color: #888;">Keine Daten vorhanden</p>';
+        }
+
+        // ===== 5. BARCODE-SUCHE =====
         function searchInventar() {
-            const query = document.getElementById('searchInventar').value.toLowerCase();
-            const filtered = inventarData.filter(a =>
-                a.name.toLowerCase().includes(query) ||
-                (a.kategorie && a.kategorie.toLowerCase().includes(query)) ||
-                (a.lagerort && a.lagerort.toLowerCase().includes(query)) ||
-                (a.lieferant && a.lieferant.toLowerCase().includes(query))
-            );
+            const query = document.getElementById('searchInventar').value.trim();
+
+            // Prüfen ob Barcode (nur Zahlen, mindestens 8 Zeichen)
+            const isBarcode = /^\d{8,}$/.test(query);
+
+            let filtered;
+            if (isBarcode) {
+                // Barcode-Suche
+                filtered = inventarData.filter(a => a.barcode === query);
+                if (filtered.length === 1) {
+                    // Direkt öffnen wenn genau 1 Treffer
+                    openInventarModal(filtered[0].id);
+                    return;
+                }
+            } else {
+                // Normale Textsuche
+                const lowerQuery = query.toLowerCase();
+                filtered = inventarData.filter(a =>
+                    a.name.toLowerCase().includes(lowerQuery) ||
+                    (a.kategorie && a.kategorie.toLowerCase().includes(lowerQuery)) ||
+                    (a.lagerort && a.lagerort.toLowerCase().includes(lowerQuery)) ||
+                    (a.lieferant && a.lieferant.toLowerCase().includes(lowerQuery)) ||
+                    (a.barcode && a.barcode.includes(query))
+                );
+            }
+
             renderInventarTable(filtered);
         }
 
+        // ===== 6. INVENTUR-MODUS =====
+        function toggleInventurModus() {
+            inventurModusAktiv = !inventurModusAktiv;
+
+            const banner = document.getElementById('inventurModusBanner');
+            const btn = document.getElementById('inventurModusBtn');
+
+            if (inventurModusAktiv) {
+                // Modus aktivieren
+                inventurZaehlungen = {};
+                banner.style.display = 'flex';
+                btn.textContent = '⏹️ Inventur beenden';
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-danger');
+
+                // Schnell-Erfassung ausblenden
+                document.getElementById('schnellErfassungPanel').style.display = 'none';
+
+                updateInventurModusStats();
+            } else {
+                beendeInventurModus();
+            }
+
+            renderInventarTable();
+        }
+
+        function updateInventurZaehlung(artikelId, wert) {
+            const numWert = parseFloat(wert);
+            if (!isNaN(numWert)) {
+                inventurZaehlungen[artikelId] = numWert;
+            } else {
+                delete inventurZaehlungen[artikelId];
+            }
+            updateInventurModusStats();
+            renderInventarTable();
+        }
+
+        function updateInventurModusStats() {
+            const gezaehlt = Object.keys(inventurZaehlungen).length;
+            const offen = inventarData.length - gezaehlt;
+
+            let differenzWert = 0;
+            Object.entries(inventurZaehlungen).forEach(([id, gezaehltMenge]) => {
+                const artikel = inventarData.find(a => a.id === id);
+                if (artikel) {
+                    const diff = gezaehltMenge - artikel.menge;
+                    differenzWert += diff * (artikel.preis || 0);
+                }
+            });
+
+            document.getElementById('invModusGezaehlt').textContent = gezaehlt;
+            document.getElementById('invModusOffen').textContent = offen;
+            document.getElementById('invModusDifferenz').textContent =
+                (differenzWert >= 0 ? '+' : '') + 'CHF ' + differenzWert.toFixed(2);
+            document.getElementById('invModusDifferenz').style.color =
+                differenzWert > 0 ? '#28a745' : differenzWert < 0 ? '#dc3545' : '#6c757d';
+        }
+
+        async function beendeInventurModus() {
+            if (Object.keys(inventurZaehlungen).length > 0) {
+                const bestaetigt = confirm(
+                    `${Object.keys(inventurZaehlungen).length} Artikel wurden gezählt.\n\n` +
+                    `Sollen die gezählten Mengen übernommen werden?`
+                );
+
+                if (bestaetigt) {
+                    // Mengen aktualisieren
+                    for (const [id, neueMenge] of Object.entries(inventurZaehlungen)) {
+                        const artikel = inventarData.find(a => a.id === id);
+                        if (artikel && artikel.menge !== neueMenge) {
+                            await addArtikelHistorie(id, 'menge', artikel.menge, neueMenge);
+                            artikel.menge = neueMenge;
+                            artikel.aktualisiert = new Date().toISOString();
+                            await saveInventarWithOfflineSupport(artikel);
+                        }
+                    }
+                    showNotification('✓ Inventur-Mengen übernommen!');
+                }
+            }
+
+            inventurModusAktiv = false;
+            inventurZaehlungen = {};
+
+            document.getElementById('inventurModusBanner').style.display = 'none';
+            const btn = document.getElementById('inventurModusBtn');
+            btn.textContent = '📋 Inventur-Modus';
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-warning');
+
+            document.getElementById('schnellErfassungPanel').style.display = 'block';
+
+            updateInventarStats();
+            renderInventarTable();
+        }
+
+        // ===== 9. FOTO-GALERIE =====
+        function toggleFotoGalerie() {
+            const container = document.getElementById('fotoGalerieContainer');
+            const normalContent = document.getElementById('schnellErfassungPanel');
+
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                renderFotoGalerie();
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function renderFotoGalerie() {
+            const grid = document.getElementById('fotoGalerieGrid');
+
+            const artikelMitFoto = inventarData.filter(a => a.foto);
+            const artikelOhneFoto = inventarData.filter(a => !a.foto);
+
+            let html = '';
+
+            // Artikel mit Foto
+            artikelMitFoto.forEach(a => {
+                html += `
+                    <div class="foto-galerie-item" onclick="openInventarModal('${a.id}')">
+                        <img src="${a.foto}" alt="${a.name}">
+                        <div class="foto-overlay">
+                            <div class="foto-name">${a.name}</div>
+                            <div class="foto-menge">${a.menge} ${a.einheit}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Platzhalter für Artikel ohne Foto
+            artikelOhneFoto.slice(0, 8).forEach(a => {
+                html += `
+                    <div class="foto-galerie-item foto-galerie-placeholder" onclick="openInventarModal('${a.id}')">
+                        <span>📷</span>
+                        <span style="font-size: 0.7rem; margin-top: 0.5rem;">${a.name.substring(0, 15)}...</span>
+                    </div>
+                `;
+            });
+
+            if (html === '') {
+                html = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Noch keine Fotos vorhanden</p>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+        // ===== 10. OFFLINE-MODUS =====
+        function initOfflineSupport() {
+            // Online/Offline Events
+            window.addEventListener('online', () => {
+                isOffline = false;
+                document.getElementById('offlineBanner').style.display = 'none';
+                syncOfflineData();
+            });
+
+            window.addEventListener('offline', () => {
+                isOffline = true;
+                document.getElementById('offlineBanner').style.display = 'flex';
+                document.getElementById('offlineText').textContent = 'Offline - Änderungen werden lokal gespeichert';
+            });
+
+            // Initial prüfen
+            isOffline = !navigator.onLine;
+            if (isOffline) {
+                document.getElementById('offlineBanner').style.display = 'flex';
+            }
+
+            // Offline-Queue aus LocalStorage laden
+            const savedQueue = localStorage.getItem('dakota_offline_queue');
+            if (savedQueue) {
+                offlineQueue = JSON.parse(savedQueue);
+            }
+        }
+
+        async function saveInventarWithOfflineSupport(artikel) {
+            if (isOffline || !window.firestoreDB) {
+                // Offline: In Queue speichern
+                offlineQueue.push({
+                    type: 'save',
+                    data: artikel,
+                    timestamp: Date.now()
+                });
+                localStorage.setItem('dakota_offline_queue', JSON.stringify(offlineQueue));
+                localStorage.setItem('dakota_inventar', JSON.stringify(inventarData));
+                return;
+            }
+
+            // Online: Normal speichern
+            await saveInventarToFirebase(artikel);
+        }
+
+        async function syncOfflineData() {
+            if (offlineQueue.length === 0) return;
+            if (!window.firestoreDB) return;
+
+            const banner = document.getElementById('offlineBanner');
+            banner.style.display = 'flex';
+            banner.classList.add('syncing');
+            document.getElementById('offlineText').textContent = `Synchronisiere ${offlineQueue.length} Änderungen...`;
+
+            try {
+                for (const item of offlineQueue) {
+                    if (item.type === 'save') {
+                        await saveInventarToFirebase(item.data);
+                    } else if (item.type === 'delete') {
+                        await deleteInventarFromFirebase(item.id);
+                    }
+                }
+
+                offlineQueue = [];
+                localStorage.removeItem('dakota_offline_queue');
+
+                banner.classList.remove('syncing');
+                banner.classList.add('synced');
+                document.getElementById('offlineText').textContent = '✓ Alle Änderungen synchronisiert!';
+
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                    banner.classList.remove('synced');
+                }, 2000);
+
+            } catch (err) {
+                console.error('Sync fehlgeschlagen:', err);
+                banner.classList.remove('syncing');
+                document.getElementById('offlineText').textContent = '⚠️ Sync fehlgeschlagen - Erneut versuchen';
+            }
+        }
+
+        // ----- FILTER -----
         function filterInventar() {
             const kategorie = document.getElementById('filterInvKategorie').value;
             const lagerort = document.getElementById('filterInvLagerort').value;
