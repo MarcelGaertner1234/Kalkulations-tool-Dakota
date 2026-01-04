@@ -14,6 +14,9 @@
     <!-- jsPDF for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <!-- QR Code Generator für Inventar-Etiketten -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
     <!-- Firebase SDK v9 (Modular) -->
     <script type="module">
         // Firebase v9 Modular SDK
@@ -585,6 +588,440 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
+        }
+
+        /* ===== INVENTAR MODUL STYLES ===== */
+        .inventar-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .inventar-stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .inventar-stat-card:hover {
+            border-color: var(--dakota-gold);
+            transform: translateY(-2px);
+        }
+
+        .inventar-stat-card.warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+        }
+
+        .inventar-stat-card.warning .inventar-stat-value {
+            color: #856404;
+        }
+
+        .inventar-stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .inventar-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dakota-gold);
+        }
+
+        .inventar-stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .inventar-warnungen {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .inventar-warnungen h4 {
+            color: #856404;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warnung-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.5);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .warnung-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .inventar-schnellerfassung {
+            background: linear-gradient(135deg, rgba(219, 167, 101, 0.1) 0%, rgba(219, 167, 101, 0.05) 100%);
+            border: 2px dashed var(--dakota-gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Schnell-Erfassung Autocomplete */
+        .schnell-artikel-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid var(--dakota-gold);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .schnell-artikel-dropdown.active {
+            display: block;
+        }
+
+        .schnell-artikel-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .schnell-artikel-item:last-child {
+            border-bottom: none;
+        }
+
+        .schnell-artikel-item:hover,
+        .schnell-artikel-item.selected {
+            background: rgba(219, 167, 101, 0.15);
+        }
+
+        .schnell-artikel-item .artikel-name {
+            font-weight: 600;
+            color: var(--dakota-dark);
+        }
+
+        .schnell-artikel-item .artikel-info {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.2rem;
+        }
+
+        .schnell-artikel-item .artikel-kategorie {
+            display: inline-block;
+            background: var(--dakota-gold);
+            color: white;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+        }
+
+        .schnell-artikel-no-results {
+            padding: 1rem;
+            text-align: center;
+            color: #888;
+        }
+
+        /* Barcode Scanner */
+        .barcode-scanner-bereich {
+            background: #1a1d20;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scanner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .scanner-header h3 {
+            color: var(--dakota-gold);
+            margin: 0;
+        }
+
+        .scanner-video-wrapper {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .scanner-video-wrapper video {
+            width: 100%;
+            display: block;
+        }
+
+        .scanner-overlay-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 100px;
+            border: 3px solid var(--dakota-gold);
+            border-radius: 8px;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+        }
+
+        .scanner-result-box {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Foto Upload */
+        .foto-upload-box {
+            border: 3px dashed #ddd;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foto-upload-box:hover {
+            border-color: var(--dakota-gold);
+            background: rgba(219, 167, 101, 0.05);
+        }
+
+        .foto-placeholder {
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .foto-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+
+        .foto-remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Inventur Abschluss */
+        .inventur-abschluss-content {
+            padding: 1rem 0;
+        }
+
+        .inventur-abschluss-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .inventur-abschluss-summary h4 {
+            margin-bottom: 0.75rem;
+            color: #495057;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Etikett Preview */
+        .etikett-preview {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .etikett-preview canvas {
+            display: block;
+            margin: 0 auto 1rem;
+        }
+
+        .etikett-info {
+            text-align: center;
+        }
+
+        .etikett-info .artikel-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .etikett-info .artikel-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Inventar Tabelle Badges */
+        .badge-warnung {
+            background: #ffc107;
+            color: #212529;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-mhd-warnung {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-ok {
+            background: #28a745;
+            color: white;
+        }
+
+        .menge-warnung {
+            color: #dc3545;
+            font-weight: 700;
+        }
+
+        .menge-ok {
+            color: #28a745;
+        }
+
+        /* Historie */
+        .historie-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .historie-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+        }
+
+        .historie-item {
+            position: relative;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .historie-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 1.25rem;
+            width: 10px;
+            height: 10px;
+            background: var(--dakota-gold);
+            border-radius: 50%;
+        }
+
+        .historie-datum {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.25rem;
+        }
+
+        .historie-aenderung {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .historie-alt {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .historie-neu {
+            font-weight: 600;
+            color: var(--dakota-gold);
+        }
+
+        /* Inventur Vergleich */
+        .inventur-vergleich-card {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .inventur-vergleich-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .inventur-datum {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .inventur-wert {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dakota-gold);
+        }
+
+        .inventur-diff {
+            font-size: 0.9rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .inventur-diff.positiv {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .inventur-diff.negativ {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         /* ===== NAVIGATION TABS ===== */
@@ -2580,6 +3017,9 @@
             <button class="tab-button" onclick="switchTab('dienstplan')">
                 <span class="tab-icon">📅</span> Dienstplan
             </button>
+            <button class="tab-button" onclick="switchTab('inventar')">
+                <span class="tab-icon">📦</span> Inventar
+            </button>
         </div>
     </nav>
 
@@ -2997,6 +3437,389 @@
                         <!-- Wird dynamisch gefüllt -->
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- TAB 8: INVENTAR -->
+        <div id="tab-inventar" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span>📦</span> Inventar & Lagerbestand
+                    </h2>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="openInventarModal()">
+                            ➕ Neuer Artikel
+                        </button>
+                        <button class="btn btn-secondary" onclick="startBarcodeScanner()">
+                            📷 Barcode scannen
+                        </button>
+                        <button class="btn btn-success" onclick="openInventurAbschlussModal()">
+                            ✅ Inventur abschliessen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- INVENTAR WARNUNGEN -->
+                <div id="inventarWarnungen" class="inventar-warnungen" style="display: none;">
+                    <!-- Wird dynamisch gefüllt bei Mindestbestand-Unterschreitung -->
+                </div>
+
+                <!-- INVENTAR STATS -->
+                <div class="inventar-stats-grid">
+                    <div class="inventar-stat-card">
+                        <div class="inventar-stat-icon">📦</div>
+                        <div class="inventar-stat-value" id="invStatArtikel">0</div>
+                        <div class="inventar-stat-label">Artikel gesamt</div>
+                    </div>
+                    <div class="inventar-stat-card">
+                        <div class="inventar-stat-icon">💰</div>
+                        <div class="inventar-stat-value" id="invStatWert">CHF 0</div>
+                        <div class="inventar-stat-label">Gesamtwert</div>
+                    </div>
+                    <div class="inventar-stat-card warning">
+                        <div class="inventar-stat-icon">⚠️</div>
+                        <div class="inventar-stat-value" id="invStatWarnungen">0</div>
+                        <div class="inventar-stat-label">Unter Mindestbestand</div>
+                    </div>
+                    <div class="inventar-stat-card">
+                        <div class="inventar-stat-icon">📅</div>
+                        <div class="inventar-stat-value" id="invStatLetzte">-</div>
+                        <div class="inventar-stat-label">Letzte Inventur</div>
+                    </div>
+                </div>
+
+                <!-- SCHNELL-ERFASSUNG -->
+                <div class="inventar-schnellerfassung" id="schnellErfassungPanel">
+                    <h3 style="margin-bottom: 1rem;">⚡ Schnell-Erfassung</h3>
+                    <div class="form-row" style="align-items: flex-end;">
+                        <div class="form-group" style="flex: 2; position: relative;">
+                            <label class="form-label">Artikel aus Lebensmittel-DB</label>
+                            <input type="text" class="form-input" id="invSchnellArtikelInput"
+                                placeholder="Artikel eingeben oder suchen..."
+                                autocomplete="off"
+                                oninput="filterSchnellArtikelListe()"
+                                onfocus="showSchnellArtikelListe()"
+                                onkeydown="handleSchnellArtikelKeydown(event)">
+                            <input type="hidden" id="invSchnellArtikel">
+                            <div class="schnell-artikel-dropdown" id="schnellArtikelDropdown">
+                                <!-- Wird dynamisch gefüllt -->
+                            </div>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">Menge</label>
+                            <input type="number" class="form-input" id="invSchnellMenge" step="0.1" min="0" placeholder="z.B. 5">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">Lagerort</label>
+                            <select class="form-select" id="invSchnellLagerort">
+                                <option value="Kühlschrank">Kühlschrank</option>
+                                <option value="Tiefkühler">Tiefkühler</option>
+                                <option value="Trockenlager">Trockenlager</option>
+                                <option value="Keller">Keller</option>
+                                <option value="Bar">Bar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" onclick="schnellErfassen()">
+                                ✓ Erfassen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARCODE SCANNER BEREICH -->
+                <div id="barcodeScannerBereich" class="barcode-scanner-bereich" style="display: none;">
+                    <div class="scanner-header">
+                        <h3>📷 Barcode/QR Scanner</h3>
+                        <button class="btn btn-secondary" onclick="stopBarcodeScanner()">✕ Schliessen</button>
+                    </div>
+                    <div class="scanner-video-wrapper">
+                        <video id="barcodeVideo" playsinline></video>
+                        <div class="scanner-overlay-box"></div>
+                    </div>
+                    <div id="scannerResultBox" class="scanner-result-box" style="display: none;">
+                        <div id="scannerResultContent"></div>
+                    </div>
+                </div>
+
+                <!-- FILTER & SUCHE -->
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInventar"
+                        placeholder="Inventar durchsuchen... (Name, Kategorie, Lagerort)"
+                        onkeyup="searchInventar()">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Filter Kategorie:</label>
+                        <select class="form-select" id="filterInvKategorie" onchange="filterInventar()">
+                            <option value="">Alle Kategorien</option>
+                            <option value="Fleisch">Fleisch</option>
+                            <option value="Fisch & Meeresfrüchte">Fisch & Meeresfrüchte</option>
+                            <option value="Gemüse">Gemüse</option>
+                            <option value="Milchprodukte">Milchprodukte</option>
+                            <option value="Tiefkühl">Tiefkühl</option>
+                            <option value="Trockenware">Trockenware</option>
+                            <option value="Getränke">Getränke</option>
+                            <option value="Gewürze">Gewürze</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Filter Lagerort:</label>
+                        <select class="form-select" id="filterInvLagerort" onchange="filterInventar()">
+                            <option value="">Alle Lagerorte</option>
+                            <option value="Kühlschrank">Kühlschrank</option>
+                            <option value="Tiefkühler">Tiefkühler</option>
+                            <option value="Trockenlager">Trockenlager</option>
+                            <option value="Keller">Keller</option>
+                            <option value="Bar">Bar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nur Warnungen:</label>
+                        <select class="form-select" id="filterInvWarnung" onchange="filterInventar()">
+                            <option value="">Alle anzeigen</option>
+                            <option value="unter-mindest">Unter Mindestbestand</option>
+                            <option value="mhd-bald">MHD bald erreicht</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- INVENTAR TABELLE -->
+                <div id="inventarTable"></div>
+
+                <!-- EXPORT BUTTONS -->
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="exportInventarPDF()">
+                        📄 PDF Export
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportInventarCSV()">
+                        📊 CSV Export
+                    </button>
+                    <button class="btn btn-secondary" onclick="printAllQRCodes()">
+                        🏷️ Alle Etiketten drucken
+                    </button>
+                    <button class="btn btn-secondary" onclick="showInventurHistorie()">
+                        📈 Inventur-Historie
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: INVENTAR ARTIKEL -->
+    <div id="inventarModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 id="inventarModalTitle">Neuer Inventar-Artikel</h2>
+                <button class="modal-close" onclick="closeInventarModal()">×</button>
+            </div>
+            <form id="inventarForm" onsubmit="saveInventarArtikel(event)">
+                <input type="hidden" id="inv_id">
+
+                <!-- Foto Upload -->
+                <div class="form-group">
+                    <label class="form-label">Foto (optional)</label>
+                    <div class="foto-upload-box" id="invFotoUploadBox" onclick="document.getElementById('invFotoInput').click()">
+                        <div class="foto-placeholder" id="invFotoPlaceholder">
+                            📷 Klicken oder Foto hierher ziehen
+                        </div>
+                        <img id="invFotoPreview" class="foto-preview" style="display: none;">
+                        <button type="button" class="foto-remove-btn" id="invFotoRemoveBtn" onclick="event.stopPropagation(); removeInventarFoto()" style="display: none;">✕</button>
+                    </div>
+                    <input type="file" id="invFotoInput" accept="image/*" capture="environment" style="display: none;" onchange="handleInventarFoto(event)">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Verknüpfung Lebensmittel-DB</label>
+                        <select class="form-select" id="inv_lebensmittel_id" onchange="prefillFromLebensmittel()">
+                            <option value="">-- Optional: Aus DB wählen --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Oder manuell: Artikelname *</label>
+                        <input type="text" class="form-input" id="inv_name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Kategorie *</label>
+                        <select class="form-select" id="inv_kategorie" required>
+                            <option value="">-- Wählen --</option>
+                            <option value="Fleisch">Fleisch</option>
+                            <option value="Fisch & Meeresfrüchte">Fisch & Meeresfrüchte</option>
+                            <option value="Gemüse">Gemüse</option>
+                            <option value="Milchprodukte">Milchprodukte</option>
+                            <option value="Tiefkühl">Tiefkühl</option>
+                            <option value="Trockenware">Trockenware</option>
+                            <option value="Getränke">Getränke</option>
+                            <option value="Gewürze">Gewürze</option>
+                            <option value="Sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lieferant</label>
+                        <select class="form-select" id="inv_lieferant">
+                            <option value="">-- Wählen --</option>
+                            <!-- Wird dynamisch aus Lebensmittel-DB gefüllt -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Aktueller Bestand *</label>
+                        <input type="number" class="form-input" id="inv_menge" step="0.1" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Einheit *</label>
+                        <select class="form-select" id="inv_einheit" required>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="Stk">Stück</option>
+                            <option value="Liter">Liter</option>
+                            <option value="dl">dl</option>
+                            <option value="Packung">Packung</option>
+                            <option value="Bund">Bund</option>
+                            <option value="Dose">Dose</option>
+                            <option value="Flasche">Flasche</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preis/Einheit (CHF)</label>
+                        <input type="number" class="form-input" id="inv_preis" step="0.01" min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Mindestbestand</label>
+                        <input type="number" class="form-input" id="inv_mindestbestand" step="0.1" min="0" placeholder="Warnung wenn unterschritten">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lagerort *</label>
+                        <select class="form-select" id="inv_lagerort" required>
+                            <option value="Kühlschrank">Kühlschrank</option>
+                            <option value="Tiefkühler">Tiefkühler</option>
+                            <option value="Trockenlager">Trockenlager</option>
+                            <option value="Keller">Keller</option>
+                            <option value="Bar">Bar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">MHD</label>
+                        <input type="date" class="form-input" id="inv_mhd">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Barcode/EAN (optional)</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" class="form-input" id="inv_barcode" placeholder="z.B. 7612345678901">
+                            <button type="button" class="btn btn-secondary" onclick="scanBarcodeForInput()">📷</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notiz</label>
+                        <input type="text" class="form-input" id="inv_notiz" placeholder="Zusätzliche Info...">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeInventarModal()">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: INVENTUR ABSCHLUSS -->
+    <div id="inventurAbschlussModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>✅ Inventur abschliessen</h2>
+                <button class="modal-close" onclick="closeInventurAbschlussModal()">×</button>
+            </div>
+            <div class="inventur-abschluss-content">
+                <p style="margin-bottom: 1rem; color: #666;">
+                    Hiermit wird ein Snapshot des aktuellen Inventars erstellt.
+                    Dieser kann später mit zukünftigen Inventuren verglichen werden.
+                </p>
+
+                <div class="form-group">
+                    <label class="form-label">Inventur-Datum *</label>
+                    <input type="date" class="form-input" id="invAbschlussDatum" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bemerkung</label>
+                    <textarea class="form-input" id="invAbschlussBemerkung" rows="3" placeholder="z.B. Monatsabschluss Januar 2026"></textarea>
+                </div>
+
+                <div class="inventur-abschluss-summary">
+                    <h4>Zusammenfassung</h4>
+                    <div class="summary-row">
+                        <span>Artikel gesamt:</span>
+                        <strong id="invAbschlussArtikel">0</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Gesamtwert:</span>
+                        <strong id="invAbschlussWert">CHF 0.00</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeInventurAbschlussModal()">Abbrechen</button>
+                <button type="button" class="btn btn-success" onclick="saveInventurAbschluss()">✅ Inventur abschliessen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: INVENTUR HISTORIE -->
+    <div id="inventurHistorieModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>📈 Inventur-Historie</h2>
+                <button class="modal-close" onclick="closeInventurHistorieModal()">×</button>
+            </div>
+            <div id="inventurHistorieContent">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ARTIKEL HISTORIE -->
+    <div id="artikelHistorieModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>📊 Artikel-Historie</h2>
+                <button class="modal-close" onclick="closeArtikelHistorieModal()">×</button>
+            </div>
+            <div id="artikelHistorieContent">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: QR/ETIKETT -->
+    <div id="etikettModal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h2>🏷️ Etikett</h2>
+                <button class="modal-close" onclick="closeEtikettModal()">×</button>
+            </div>
+            <div class="etikett-preview" id="etikettPreview">
+                <canvas id="qrCodeCanvas"></canvas>
+                <div class="etikett-info" id="etikettInfo"></div>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button class="btn btn-secondary" onclick="downloadEtikett()">⬇️ Download</button>
+                <button class="btn btn-primary" onclick="printEtikett()">🖨️ Drucken</button>
             </div>
         </div>
     </div>
@@ -3478,6 +4301,14 @@
         let menuekartenData = [];
         let currentMenuekarteGerichte = [];
         let currentEditId = null;
+
+        // INVENTAR STATE
+        let inventarData = [];
+        let inventurHistorieData = [];
+        let artikelHistorieData = [];
+        let currentInvFotoBase64 = null;
+        let barcodeStream = null;
+        let currentEtikettArtikel = null;
 
         // ===== INDEXEDDB INIT =====
         function initDB() {
@@ -9176,6 +10007,10 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
 
                 // 🔍 GLOBAL SEARCH INITIALISIEREN
                 initGlobalSearch();
+
+                // 📦 INVENTAR INITIALISIEREN
+                await loadInventar();
+                initInventarDropdowns();
             } catch (error) {
                 console.error('Error initializing app:', error);
                 alert('Fehler beim Laden der Datenbank: ' + error.message);
@@ -9184,6 +10019,1116 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
 
         // Start app when DOM is ready
         document.addEventListener('DOMContentLoaded', initApp);
+
+        // ============================================================
+        // ===== INVENTAR MODUL - FUNKTIONEN =====
+        // ============================================================
+
+        // ----- FIREBASE OPERATIONEN -----
+        async function loadInventar() {
+            try {
+                if (window.firestoreDB) {
+                    const { collection, getDocs, query, orderBy } = window.firebaseModules;
+
+                    // Inventar laden
+                    const invQuery = query(collection(window.firestoreDB, 'inventar'), orderBy('name'));
+                    const invSnapshot = await getDocs(invQuery);
+                    inventarData = [];
+                    invSnapshot.forEach(doc => inventarData.push({ id: doc.id, ...doc.data() }));
+
+                    // Inventur-Historie laden
+                    const histQuery = query(collection(window.firestoreDB, 'inventur_historie'), orderBy('datum', 'desc'));
+                    const histSnapshot = await getDocs(histQuery);
+                    inventurHistorieData = [];
+                    histSnapshot.forEach(doc => inventurHistorieData.push({ id: doc.id, ...doc.data() }));
+
+                    console.log(`✓ ${inventarData.length} Inventar-Artikel geladen`);
+                }
+            } catch (err) {
+                console.error('Inventar laden fehlgeschlagen:', err);
+                // Fallback LocalStorage
+                const saved = localStorage.getItem('dakota_inventar');
+                if (saved) inventarData = JSON.parse(saved);
+            }
+
+            updateInventarStats();
+            renderInventarTable();
+        }
+
+        async function saveInventarToFirebase(artikel) {
+            if (!window.firestoreDB) {
+                localStorage.setItem('dakota_inventar', JSON.stringify(inventarData));
+                return;
+            }
+
+            const { doc, setDoc } = window.firebaseModules;
+            await setDoc(doc(window.firestoreDB, 'inventar', artikel.id), artikel);
+        }
+
+        async function deleteInventarFromFirebase(artikelId) {
+            if (!window.firestoreDB) return;
+            const { doc, deleteDoc } = window.firebaseModules;
+            await deleteDoc(doc(window.firestoreDB, 'inventar', artikelId));
+        }
+
+        // ----- INITIALISIERUNG -----
+        let schnellArtikelListe = []; // Globale Liste für Autocomplete
+        let schnellArtikelSelectedIndex = -1; // Aktuell ausgewählter Index
+
+        function initInventarDropdowns() {
+            // Artikelliste für Autocomplete vorbereiten
+            if (lebensmittelData.length > 0) {
+                schnellArtikelListe = lebensmittelData
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(lm => ({
+                        id: lm.id,
+                        name: lm.name,
+                        kategorie: lm.kategorie,
+                        einheit: lm.einheit || 'Stk',
+                        preis: lm.preis || 0,
+                        lieferant: lm.lieferant || ''
+                    }));
+            }
+
+            // Modal-Dropdown für Lebensmittel
+            const modalSelect = document.getElementById('inv_lebensmittel_id');
+            if (modalSelect && lebensmittelData.length > 0) {
+                const options = lebensmittelData
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(lm => `<option value="${lm.id}">${lm.name} (${lm.kategorie})</option>`)
+                    .join('');
+                modalSelect.innerHTML = '<option value="">-- Optional: Aus DB wählen --</option>' + options;
+            }
+
+            // Lieferanten aus Lebensmittel-DB extrahieren
+            const lieferantSelect = document.getElementById('inv_lieferant');
+            if (lieferantSelect && lebensmittelData.length > 0) {
+                const lieferanten = [...new Set(lebensmittelData.map(lm => lm.lieferant).filter(l => l))];
+                lieferantSelect.innerHTML = '<option value="">-- Wählen --</option>' +
+                    lieferanten.sort().map(l => `<option value="${l}">${l}</option>`).join('');
+            }
+
+            // Click-Outside Handler für Dropdown
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('schnellArtikelDropdown');
+                const input = document.getElementById('invSchnellArtikelInput');
+                if (dropdown && !dropdown.contains(e.target) && e.target !== input) {
+                    dropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // ----- AUTOCOMPLETE FUNKTIONEN -----
+        function showSchnellArtikelListe() {
+            const dropdown = document.getElementById('schnellArtikelDropdown');
+            const input = document.getElementById('invSchnellArtikelInput');
+            if (!dropdown || !input) return;
+
+            const filter = input.value.toLowerCase().trim();
+            filterSchnellArtikelListe();
+            dropdown.classList.add('active');
+        }
+
+        function filterSchnellArtikelListe() {
+            const dropdown = document.getElementById('schnellArtikelDropdown');
+            const input = document.getElementById('invSchnellArtikelInput');
+            if (!dropdown || !input) return;
+
+            const filter = input.value.toLowerCase().trim();
+            schnellArtikelSelectedIndex = -1;
+
+            // Filtern
+            const filtered = filter
+                ? schnellArtikelListe.filter(a =>
+                    a.name.toLowerCase().includes(filter) ||
+                    a.kategorie.toLowerCase().includes(filter) ||
+                    (a.lieferant && a.lieferant.toLowerCase().includes(filter))
+                  )
+                : schnellArtikelListe;
+
+            // Max 15 Ergebnisse anzeigen
+            const limited = filtered.slice(0, 15);
+
+            if (limited.length === 0) {
+                dropdown.innerHTML = '<div class="schnell-artikel-item" style="color: var(--text-muted); cursor: default;">Keine Artikel gefunden</div>';
+            } else {
+                dropdown.innerHTML = limited.map((a, idx) => `
+                    <div class="schnell-artikel-item" data-id="${a.id}" data-index="${idx}"
+                         onclick="selectSchnellArtikel('${a.id}')">
+                        <strong>${highlightMatch(a.name, filter)}</strong>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem;">
+                            ${a.kategorie} ${a.lieferant ? '· ' + a.lieferant : ''}
+                        </span>
+                    </div>
+                `).join('');
+            }
+
+            dropdown.classList.add('active');
+        }
+
+        function highlightMatch(text, filter) {
+            if (!filter) return text;
+            const regex = new RegExp(`(${filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark style="background: rgba(219, 167, 101, 0.3); padding: 0 2px;">$1</mark>');
+        }
+
+        function handleSchnellArtikelKeydown(event) {
+            const dropdown = document.getElementById('schnellArtikelDropdown');
+            if (!dropdown) return;
+
+            const items = dropdown.querySelectorAll('.schnell-artikel-item[data-id]');
+            if (items.length === 0) return;
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    schnellArtikelSelectedIndex = Math.min(schnellArtikelSelectedIndex + 1, items.length - 1);
+                    updateSchnellArtikelSelection(items);
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    schnellArtikelSelectedIndex = Math.max(schnellArtikelSelectedIndex - 1, 0);
+                    updateSchnellArtikelSelection(items);
+                    break;
+                case 'Enter':
+                    event.preventDefault();
+                    if (schnellArtikelSelectedIndex >= 0 && items[schnellArtikelSelectedIndex]) {
+                        const id = items[schnellArtikelSelectedIndex].dataset.id;
+                        selectSchnellArtikel(id);
+                    }
+                    break;
+                case 'Escape':
+                    dropdown.classList.remove('active');
+                    break;
+            }
+        }
+
+        function updateSchnellArtikelSelection(items) {
+            items.forEach((item, idx) => {
+                if (idx === schnellArtikelSelectedIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        function selectSchnellArtikel(artikelId) {
+            const artikel = schnellArtikelListe.find(a => a.id === artikelId);
+            if (!artikel) return;
+
+            const input = document.getElementById('invSchnellArtikelInput');
+            const hidden = document.getElementById('invSchnellArtikel');
+            const dropdown = document.getElementById('schnellArtikelDropdown');
+
+            if (input) input.value = artikel.name;
+            if (hidden) hidden.value = artikelId;
+            if (dropdown) dropdown.classList.remove('active');
+
+            // Artikeldetails laden
+            loadArtikelDetails(artikelId);
+        }
+
+        // ----- STATS & WARNUNGEN -----
+        function updateInventarStats() {
+            const total = inventarData.length;
+            const totalWert = inventarData.reduce((sum, a) => sum + ((a.menge || 0) * (a.preis || 0)), 0);
+            const unterMindest = inventarData.filter(a => a.mindestbestand && a.menge < a.mindestbestand).length;
+            const letzteInv = inventurHistorieData[0];
+
+            document.getElementById('invStatArtikel').textContent = total;
+            document.getElementById('invStatWert').textContent = 'CHF ' + totalWert.toFixed(0);
+            document.getElementById('invStatWarnungen').textContent = unterMindest;
+            document.getElementById('invStatLetzte').textContent = letzteInv ? new Date(letzteInv.datum).toLocaleDateString('de-CH') : '-';
+
+            // Warnungen anzeigen
+            renderInventarWarnungen();
+        }
+
+        function renderInventarWarnungen() {
+            const warnungenDiv = document.getElementById('inventarWarnungen');
+            const unterMindest = inventarData.filter(a => a.mindestbestand && a.menge < a.mindestbestand);
+            const mhdBald = inventarData.filter(a => {
+                if (!a.mhd) return false;
+                const diff = (new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24);
+                return diff >= 0 && diff <= 7;
+            });
+
+            if (unterMindest.length === 0 && mhdBald.length === 0) {
+                warnungenDiv.style.display = 'none';
+                return;
+            }
+
+            let html = '<h4>⚠️ Warnungen</h4>';
+
+            unterMindest.forEach(a => {
+                html += `<div class="warnung-item">
+                    <span><strong>${a.name}</strong> - Bestand: ${a.menge} ${a.einheit} (Min: ${a.mindestbestand})</span>
+                    <button class="btn btn-sm btn-primary" onclick="openInventarModal('${a.id}')">Bearbeiten</button>
+                </div>`;
+            });
+
+            mhdBald.forEach(a => {
+                const tage = Math.ceil((new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24));
+                html += `<div class="warnung-item" style="background: rgba(220,53,69,0.2);">
+                    <span><strong>${a.name}</strong> - MHD in ${tage} Tagen (${new Date(a.mhd).toLocaleDateString('de-CH')})</span>
+                    <button class="btn btn-sm btn-secondary" onclick="openInventarModal('${a.id}')">Bearbeiten</button>
+                </div>`;
+            });
+
+            warnungenDiv.innerHTML = html;
+            warnungenDiv.style.display = 'block';
+        }
+
+        // ----- TABELLE RENDERN -----
+        function renderInventarTable(data = null) {
+            const tableDiv = document.getElementById('inventarTable');
+            const displayData = data || inventarData;
+
+            if (displayData.length === 0) {
+                tableDiv.innerHTML = `<div style="text-align: center; padding: 3rem; color: #888;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+                    <h3>Noch keine Artikel erfasst</h3>
+                    <p>Nutze die Schnell-Erfassung oder klicke auf "Neuer Artikel"</p>
+                </div>`;
+                return;
+            }
+
+            let html = `<table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Artikel</th>
+                        <th>Kategorie</th>
+                        <th>Bestand</th>
+                        <th>Preis</th>
+                        <th>Wert</th>
+                        <th>Lagerort</th>
+                        <th>MHD</th>
+                        <th>Status</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            displayData.forEach(a => {
+                const wert = (a.menge || 0) * (a.preis || 0);
+                const unterMindest = a.mindestbestand && a.menge < a.mindestbestand;
+                const mhdWarnung = a.mhd && ((new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24)) <= 7;
+
+                let statusBadge = '<span class="badge badge-ok">OK</span>';
+                if (unterMindest) statusBadge = '<span class="badge badge-warnung">Nachbestellen!</span>';
+                if (mhdWarnung) statusBadge = '<span class="badge badge-warnung badge-mhd-warnung">MHD!</span>';
+
+                html += `<tr>
+                    <td>
+                        <strong>${a.name}</strong>
+                        ${a.lieferant ? `<br><small style="color: #888;">${a.lieferant}</small>` : ''}
+                    </td>
+                    <td><span class="badge badge-gold">${a.kategorie || '-'}</span></td>
+                    <td class="${unterMindest ? 'menge-warnung' : 'menge-ok'}">
+                        ${a.menge} ${a.einheit}
+                        ${a.mindestbestand ? `<br><small style="color: #888;">Min: ${a.mindestbestand}</small>` : ''}
+                    </td>
+                    <td>CHF ${(a.preis || 0).toFixed(2)}</td>
+                    <td><strong>CHF ${wert.toFixed(2)}</strong></td>
+                    <td>${a.lagerort || '-'}</td>
+                    <td>${a.mhd ? new Date(a.mhd).toLocaleDateString('de-CH') : '-'}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
+                            <button class="btn btn-sm btn-secondary" onclick="showEtikett('${a.id}')" title="QR-Code">🏷️</button>
+                            <button class="btn btn-sm btn-secondary" onclick="showArtikelHistorie('${a.id}')" title="Historie">📊</button>
+                            <button class="btn btn-sm btn-primary" onclick="openInventarModal('${a.id}')" title="Bearbeiten">✏️</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteInventarArtikel('${a.id}')" title="Löschen">🗑️</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            tableDiv.innerHTML = html;
+        }
+
+        // ----- FILTER & SUCHE -----
+        function searchInventar() {
+            const query = document.getElementById('searchInventar').value.toLowerCase();
+            const filtered = inventarData.filter(a =>
+                a.name.toLowerCase().includes(query) ||
+                (a.kategorie && a.kategorie.toLowerCase().includes(query)) ||
+                (a.lagerort && a.lagerort.toLowerCase().includes(query)) ||
+                (a.lieferant && a.lieferant.toLowerCase().includes(query))
+            );
+            renderInventarTable(filtered);
+        }
+
+        function filterInventar() {
+            const kategorie = document.getElementById('filterInvKategorie').value;
+            const lagerort = document.getElementById('filterInvLagerort').value;
+            const warnung = document.getElementById('filterInvWarnung').value;
+
+            let filtered = [...inventarData];
+
+            if (kategorie) filtered = filtered.filter(a => a.kategorie === kategorie);
+            if (lagerort) filtered = filtered.filter(a => a.lagerort === lagerort);
+            if (warnung === 'unter-mindest') {
+                filtered = filtered.filter(a => a.mindestbestand && a.menge < a.mindestbestand);
+            }
+            if (warnung === 'mhd-bald') {
+                filtered = filtered.filter(a => {
+                    if (!a.mhd) return false;
+                    const diff = (new Date(a.mhd) - new Date()) / (1000 * 60 * 60 * 24);
+                    return diff >= 0 && diff <= 7;
+                });
+            }
+
+            renderInventarTable(filtered);
+        }
+
+        // ----- SCHNELL-ERFASSUNG -----
+        function loadArtikelDetails(artikelId = null) {
+            const lmId = artikelId || document.getElementById('invSchnellArtikel').value;
+            if (!lmId) return;
+
+            const lm = lebensmittelData.find(l => l.id == lmId);
+            if (lm) {
+                // Prüfen ob schon im Inventar
+                const existing = inventarData.find(a => a.lebensmittel_id == lmId);
+                if (existing) {
+                    document.getElementById('invSchnellMenge').value = existing.menge;
+                    document.getElementById('invSchnellLagerort').value = existing.lagerort || 'Kühlschrank';
+                } else {
+                    // Feld leeren für neuen Artikel
+                    document.getElementById('invSchnellMenge').value = '';
+                    document.getElementById('invSchnellLagerort').value = 'Kühlschrank';
+                }
+                // Fokus auf Menge setzen für schnellen Workflow
+                document.getElementById('invSchnellMenge').focus();
+            }
+        }
+
+        async function schnellErfassen() {
+            const lmId = document.getElementById('invSchnellArtikel').value;
+            const menge = parseFloat(document.getElementById('invSchnellMenge').value);
+            const lagerort = document.getElementById('invSchnellLagerort').value;
+
+            if (!lmId || !menge) {
+                alert('Bitte Artikel und Menge angeben!');
+                return;
+            }
+
+            const lm = lebensmittelData.find(l => l.id == lmId);
+            if (!lm) return;
+
+            // Prüfen ob Update oder Neu
+            const existing = inventarData.find(a => a.lebensmittel_id == lmId);
+
+            if (existing) {
+                // Historien-Eintrag
+                await addArtikelHistorie(existing.id, 'menge', existing.menge, menge);
+                existing.menge = menge;
+                existing.lagerort = lagerort;
+                existing.aktualisiert = new Date().toISOString();
+                await saveInventarToFirebase(existing);
+            } else {
+                // Neuer Artikel
+                const artikel = {
+                    id: 'INV-' + Date.now(),
+                    lebensmittel_id: lmId,
+                    name: lm.name,
+                    kategorie: lm.kategorie,
+                    menge: menge,
+                    einheit: lm.einheit || 'kg',
+                    preis: lm.preis || 0,
+                    lieferant: lm.lieferant || '',
+                    lagerort: lagerort,
+                    mindestbestand: 0,
+                    mhd: null,
+                    barcode: '',
+                    notiz: '',
+                    foto: null,
+                    erstellt: new Date().toISOString(),
+                    aktualisiert: new Date().toISOString()
+                };
+                inventarData.push(artikel);
+                await saveInventarToFirebase(artikel);
+            }
+
+            // Reset - beide Felder leeren (Input + Hidden)
+            document.getElementById('invSchnellArtikelInput').value = '';
+            document.getElementById('invSchnellArtikel').value = '';
+            document.getElementById('invSchnellMenge').value = '';
+
+            // Fokus zurück auf Artikelsuche für schnellen Workflow
+            document.getElementById('invSchnellArtikelInput').focus();
+
+            updateInventarStats();
+            renderInventarTable();
+            showNotification('✓ Artikel erfasst!');
+        }
+
+        // ----- MODAL FUNKTIONEN -----
+        function openInventarModal(artikelId = null) {
+            document.getElementById('inventarModal').classList.add('active');
+            document.getElementById('inventarForm').reset();
+            currentInvFotoBase64 = null;
+            document.getElementById('invFotoPreview').style.display = 'none';
+            document.getElementById('invFotoPlaceholder').style.display = 'block';
+            document.getElementById('invFotoRemoveBtn').style.display = 'none';
+
+            initInventarDropdowns();
+
+            if (artikelId) {
+                document.getElementById('inventarModalTitle').textContent = 'Artikel bearbeiten';
+                const artikel = inventarData.find(a => a.id === artikelId);
+                if (artikel) {
+                    document.getElementById('inv_id').value = artikel.id;
+                    document.getElementById('inv_lebensmittel_id').value = artikel.lebensmittel_id || '';
+                    document.getElementById('inv_name').value = artikel.name;
+                    document.getElementById('inv_kategorie').value = artikel.kategorie;
+                    document.getElementById('inv_lieferant').value = artikel.lieferant || '';
+                    document.getElementById('inv_menge').value = artikel.menge;
+                    document.getElementById('inv_einheit').value = artikel.einheit;
+                    document.getElementById('inv_preis').value = artikel.preis || '';
+                    document.getElementById('inv_mindestbestand').value = artikel.mindestbestand || '';
+                    document.getElementById('inv_lagerort').value = artikel.lagerort;
+                    document.getElementById('inv_mhd').value = artikel.mhd || '';
+                    document.getElementById('inv_barcode').value = artikel.barcode || '';
+                    document.getElementById('inv_notiz').value = artikel.notiz || '';
+
+                    if (artikel.foto) {
+                        currentInvFotoBase64 = artikel.foto;
+                        document.getElementById('invFotoPreview').src = artikel.foto;
+                        document.getElementById('invFotoPreview').style.display = 'block';
+                        document.getElementById('invFotoPlaceholder').style.display = 'none';
+                        document.getElementById('invFotoRemoveBtn').style.display = 'block';
+                    }
+                }
+            } else {
+                document.getElementById('inventarModalTitle').textContent = 'Neuer Inventar-Artikel';
+                document.getElementById('inv_id').value = '';
+            }
+        }
+
+        function closeInventarModal() {
+            document.getElementById('inventarModal').classList.remove('active');
+        }
+
+        function prefillFromLebensmittel() {
+            const lmId = document.getElementById('inv_lebensmittel_id').value;
+            if (!lmId) return;
+
+            const lm = lebensmittelData.find(l => l.id == lmId);
+            if (lm) {
+                document.getElementById('inv_name').value = lm.name;
+                document.getElementById('inv_kategorie').value = lm.kategorie || '';
+                document.getElementById('inv_einheit').value = lm.einheit || 'kg';
+                document.getElementById('inv_preis').value = lm.preis || '';
+                document.getElementById('inv_lieferant').value = lm.lieferant || '';
+            }
+        }
+
+        async function saveInventarArtikel(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('inv_id').value || 'INV-' + Date.now();
+            const isEdit = !!document.getElementById('inv_id').value;
+
+            const artikel = {
+                id: id,
+                lebensmittel_id: document.getElementById('inv_lebensmittel_id').value || null,
+                name: document.getElementById('inv_name').value,
+                kategorie: document.getElementById('inv_kategorie').value,
+                lieferant: document.getElementById('inv_lieferant').value,
+                menge: parseFloat(document.getElementById('inv_menge').value),
+                einheit: document.getElementById('inv_einheit').value,
+                preis: parseFloat(document.getElementById('inv_preis').value) || 0,
+                mindestbestand: parseFloat(document.getElementById('inv_mindestbestand').value) || 0,
+                lagerort: document.getElementById('inv_lagerort').value,
+                mhd: document.getElementById('inv_mhd').value || null,
+                barcode: document.getElementById('inv_barcode').value,
+                notiz: document.getElementById('inv_notiz').value,
+                foto: currentInvFotoBase64,
+                erstellt: isEdit ? (inventarData.find(a => a.id === id)?.erstellt || new Date().toISOString()) : new Date().toISOString(),
+                aktualisiert: new Date().toISOString()
+            };
+
+            if (isEdit) {
+                const oldArtikel = inventarData.find(a => a.id === id);
+                if (oldArtikel && oldArtikel.menge !== artikel.menge) {
+                    await addArtikelHistorie(id, 'menge', oldArtikel.menge, artikel.menge);
+                }
+                inventarData = inventarData.map(a => a.id === id ? artikel : a);
+            } else {
+                inventarData.push(artikel);
+            }
+
+            await saveInventarToFirebase(artikel);
+
+            closeInventarModal();
+            updateInventarStats();
+            renderInventarTable();
+            showNotification('✓ Artikel gespeichert!');
+        }
+
+        async function deleteInventarArtikel(artikelId) {
+            if (!confirm('Artikel wirklich löschen?')) return;
+
+            inventarData = inventarData.filter(a => a.id !== artikelId);
+            await deleteInventarFromFirebase(artikelId);
+
+            updateInventarStats();
+            renderInventarTable();
+            showNotification('Artikel gelöscht');
+        }
+
+        // ----- FOTO HANDLING -----
+        function handleInventarFoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentInvFotoBase64 = e.target.result;
+                document.getElementById('invFotoPreview').src = currentInvFotoBase64;
+                document.getElementById('invFotoPreview').style.display = 'block';
+                document.getElementById('invFotoPlaceholder').style.display = 'none';
+                document.getElementById('invFotoRemoveBtn').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeInventarFoto() {
+            currentInvFotoBase64 = null;
+            document.getElementById('invFotoPreview').src = '';
+            document.getElementById('invFotoPreview').style.display = 'none';
+            document.getElementById('invFotoPlaceholder').style.display = 'block';
+            document.getElementById('invFotoRemoveBtn').style.display = 'none';
+            document.getElementById('invFotoInput').value = '';
+        }
+
+        // ----- ARTIKEL HISTORIE -----
+        async function addArtikelHistorie(artikelId, feld, altWert, neuWert) {
+            const eintrag = {
+                id: 'HIST-' + Date.now(),
+                artikel_id: artikelId,
+                feld: feld,
+                alt: altWert,
+                neu: neuWert,
+                datum: new Date().toISOString()
+            };
+
+            artikelHistorieData.push(eintrag);
+
+            if (window.firestoreDB) {
+                const { doc, setDoc } = window.firebaseModules;
+                await setDoc(doc(window.firestoreDB, 'artikel_historie', eintrag.id), eintrag);
+            }
+        }
+
+        async function showArtikelHistorie(artikelId) {
+            const artikel = inventarData.find(a => a.id === artikelId);
+            if (!artikel) return;
+
+            // Historie aus Firebase laden
+            let historie = [];
+            if (window.firestoreDB) {
+                const { collection, getDocs, query, where, orderBy } = window.firebaseModules;
+                try {
+                    const q = query(
+                        collection(window.firestoreDB, 'artikel_historie'),
+                        where('artikel_id', '==', artikelId),
+                        orderBy('datum', 'desc')
+                    );
+                    const snapshot = await getDocs(q);
+                    snapshot.forEach(doc => historie.push(doc.data()));
+                } catch (e) {
+                    console.log('Historie laden fehlgeschlagen:', e);
+                }
+            }
+
+            document.getElementById('artikelHistorieModal').classList.add('active');
+
+            let html = `<h3 style="margin-bottom: 1rem;">${artikel.name}</h3>`;
+
+            if (historie.length === 0) {
+                html += '<p style="color: #888;">Keine Änderungen dokumentiert.</p>';
+            } else {
+                html += '<div class="historie-timeline">';
+                historie.forEach(h => {
+                    html += `<div class="historie-item">
+                        <div class="historie-datum">${new Date(h.datum).toLocaleString('de-CH')}</div>
+                        <div class="historie-aenderung">
+                            <span>${h.feld}:</span>
+                            <span class="historie-alt">${h.alt}</span>
+                            <span>→</span>
+                            <span class="historie-neu">${h.neu}</span>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+            }
+
+            document.getElementById('artikelHistorieContent').innerHTML = html;
+        }
+
+        function closeArtikelHistorieModal() {
+            document.getElementById('artikelHistorieModal').classList.remove('active');
+        }
+
+        // ----- INVENTUR ABSCHLUSS -----
+        function openInventurAbschlussModal() {
+            document.getElementById('inventurAbschlussModal').classList.add('active');
+            document.getElementById('invAbschlussDatum').value = new Date().toISOString().split('T')[0];
+            document.getElementById('invAbschlussBemerkung').value = '';
+
+            const totalArtikel = inventarData.length;
+            const totalWert = inventarData.reduce((sum, a) => sum + ((a.menge || 0) * (a.preis || 0)), 0);
+
+            document.getElementById('invAbschlussArtikel').textContent = totalArtikel;
+            document.getElementById('invAbschlussWert').textContent = 'CHF ' + totalWert.toFixed(2);
+        }
+
+        function closeInventurAbschlussModal() {
+            document.getElementById('inventurAbschlussModal').classList.remove('active');
+        }
+
+        async function saveInventurAbschluss() {
+            const datum = document.getElementById('invAbschlussDatum').value;
+            const bemerkung = document.getElementById('invAbschlussBemerkung').value;
+
+            if (!datum) {
+                alert('Bitte Datum angeben!');
+                return;
+            }
+
+            const snapshot = {
+                id: 'INVENTUR-' + Date.now(),
+                datum: datum,
+                bemerkung: bemerkung,
+                artikelCount: inventarData.length,
+                totalWert: inventarData.reduce((sum, a) => sum + ((a.menge || 0) * (a.preis || 0)), 0),
+                artikel: inventarData.map(a => ({
+                    id: a.id,
+                    name: a.name,
+                    kategorie: a.kategorie,
+                    menge: a.menge,
+                    einheit: a.einheit,
+                    preis: a.preis,
+                    wert: (a.menge || 0) * (a.preis || 0)
+                })),
+                erstellt: new Date().toISOString()
+            };
+
+            inventurHistorieData.unshift(snapshot);
+
+            if (window.firestoreDB) {
+                const { doc, setDoc } = window.firebaseModules;
+                await setDoc(doc(window.firestoreDB, 'inventur_historie', snapshot.id), snapshot);
+            }
+
+            closeInventurAbschlussModal();
+            updateInventarStats();
+            showNotification('✓ Inventur abgeschlossen!');
+        }
+
+        function showInventurHistorie() {
+            document.getElementById('inventurHistorieModal').classList.add('active');
+
+            let html = '';
+
+            if (inventurHistorieData.length === 0) {
+                html = '<p style="text-align: center; color: #888; padding: 2rem;">Noch keine Inventur-Abschlüsse vorhanden.</p>';
+            } else {
+                inventurHistorieData.forEach((inv, idx) => {
+                    const vorherige = inventurHistorieData[idx + 1];
+                    let diffHtml = '';
+
+                    if (vorherige) {
+                        const diff = inv.totalWert - vorherige.totalWert;
+                        const diffClass = diff >= 0 ? 'positiv' : 'negativ';
+                        const diffSign = diff >= 0 ? '+' : '';
+                        diffHtml = `<span class="inventur-diff ${diffClass}">${diffSign}CHF ${diff.toFixed(2)}</span>`;
+                    }
+
+                    html += `<div class="inventur-vergleich-card">
+                        <div class="inventur-vergleich-header">
+                            <div>
+                                <div class="inventur-datum">${new Date(inv.datum).toLocaleDateString('de-CH')}</div>
+                                <small style="color: #888;">${inv.bemerkung || ''}</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="inventur-wert">CHF ${inv.totalWert.toFixed(2)}</div>
+                                ${diffHtml}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; color: #666; font-size: 0.9rem;">
+                            <span>📦 ${inv.artikelCount} Artikel</span>
+                            <button class="btn btn-sm btn-secondary" onclick="downloadInventurPDF('${inv.id}')">📄 PDF</button>
+                        </div>
+                    </div>`;
+                });
+            }
+
+            document.getElementById('inventurHistorieContent').innerHTML = html;
+        }
+
+        function closeInventurHistorieModal() {
+            document.getElementById('inventurHistorieModal').classList.remove('active');
+        }
+
+        // ----- BARCODE SCANNER -----
+        async function startBarcodeScanner() {
+            document.getElementById('barcodeScannerBereich').style.display = 'block';
+            document.getElementById('scannerResultBox').style.display = 'none';
+
+            try {
+                const video = document.getElementById('barcodeVideo');
+                barcodeStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                video.srcObject = barcodeStream;
+                video.play();
+
+                // Barcode detection (native API falls verfügbar, sonst manuell)
+                if ('BarcodeDetector' in window) {
+                    const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'qr_code', 'code_128'] });
+
+                    const detectLoop = async () => {
+                        if (!barcodeStream) return;
+
+                        try {
+                            const barcodes = await detector.detect(video);
+                            if (barcodes.length > 0) {
+                                handleBarcodeDetected(barcodes[0].rawValue);
+                                return;
+                            }
+                        } catch (e) {}
+
+                        requestAnimationFrame(detectLoop);
+                    };
+                    detectLoop();
+                } else {
+                    document.getElementById('scannerResultBox').style.display = 'block';
+                    document.getElementById('scannerResultContent').innerHTML = `
+                        <p style="color: #888;">Automatische Barcode-Erkennung nicht verfügbar.</p>
+                        <div class="form-group">
+                            <label class="form-label">Barcode manuell eingeben:</label>
+                            <input type="text" class="form-input" id="manualBarcodeInput" placeholder="EAN/Barcode...">
+                            <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="handleBarcodeDetected(document.getElementById('manualBarcodeInput').value)">Suchen</button>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Kamera-Zugriff fehlgeschlagen:', err);
+                alert('Kamera-Zugriff nicht möglich. Bitte Berechtigung erteilen.');
+                stopBarcodeScanner();
+            }
+        }
+
+        function stopBarcodeScanner() {
+            if (barcodeStream) {
+                barcodeStream.getTracks().forEach(track => track.stop());
+                barcodeStream = null;
+            }
+            document.getElementById('barcodeScannerBereich').style.display = 'none';
+        }
+
+        function handleBarcodeDetected(barcode) {
+            if (!barcode) return;
+
+            // Suche in Inventar
+            const artikel = inventarData.find(a => a.barcode === barcode);
+
+            document.getElementById('scannerResultBox').style.display = 'block';
+
+            if (artikel) {
+                document.getElementById('scannerResultContent').innerHTML = `
+                    <div style="background: #d4edda; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong>✓ Artikel gefunden!</strong>
+                    </div>
+                    <h4>${artikel.name}</h4>
+                    <p>${artikel.kategorie} | ${artikel.lagerort}</p>
+                    <p><strong>Aktueller Bestand:</strong> ${artikel.menge} ${artikel.einheit}</p>
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label class="form-label">Neuer Bestand:</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="number" class="form-input" id="scannerNewMenge" value="${artikel.menge}" step="0.1">
+                            <button class="btn btn-primary" onclick="updateScannedArtikel('${artikel.id}')">Speichern</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('scannerResultContent').innerHTML = `
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong>⚠️ Barcode nicht gefunden: ${barcode}</strong>
+                    </div>
+                    <p>Möchtest du einen neuen Artikel mit diesem Barcode anlegen?</p>
+                    <button class="btn btn-primary" onclick="openInventarModal(); document.getElementById('inv_barcode').value='${barcode}'; stopBarcodeScanner();">
+                        ➕ Neuen Artikel anlegen
+                    </button>
+                `;
+            }
+        }
+
+        async function updateScannedArtikel(artikelId) {
+            const newMenge = parseFloat(document.getElementById('scannerNewMenge').value);
+            const artikel = inventarData.find(a => a.id === artikelId);
+
+            if (artikel && !isNaN(newMenge)) {
+                await addArtikelHistorie(artikelId, 'menge', artikel.menge, newMenge);
+                artikel.menge = newMenge;
+                artikel.aktualisiert = new Date().toISOString();
+                await saveInventarToFirebase(artikel);
+
+                updateInventarStats();
+                renderInventarTable();
+                showNotification('✓ Bestand aktualisiert!');
+                stopBarcodeScanner();
+            }
+        }
+
+        function scanBarcodeForInput() {
+            // Mini-Scanner für Barcode-Eingabefeld im Modal
+            startBarcodeScanner();
+        }
+
+        // ----- ETIKETTEN / QR-CODES -----
+        function showEtikett(artikelId) {
+            const artikel = inventarData.find(a => a.id === artikelId);
+            if (!artikel) return;
+
+            currentEtikettArtikel = artikel;
+            document.getElementById('etikettModal').classList.add('active');
+
+            // QR-Code generieren
+            const canvas = document.getElementById('qrCodeCanvas');
+            const qrData = JSON.stringify({
+                id: artikel.id,
+                name: artikel.name,
+                barcode: artikel.barcode || ''
+            });
+
+            // QRCode library (muss geladen sein)
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(canvas, qrData, {
+                    width: 150,
+                    margin: 2,
+                    color: { dark: '#32373c', light: '#ffffff' }
+                });
+            } else {
+                canvas.getContext('2d').fillText('QR-Code nicht verfügbar', 10, 75);
+            }
+
+            document.getElementById('etikettInfo').innerHTML = `
+                <div class="artikel-name">${artikel.name}</div>
+                <div class="artikel-details">
+                    ${artikel.kategorie} | ${artikel.einheit}<br>
+                    ${artikel.barcode ? 'EAN: ' + artikel.barcode : ''}
+                </div>
+            `;
+        }
+
+        function closeEtikettModal() {
+            document.getElementById('etikettModal').classList.remove('active');
+            currentEtikettArtikel = null;
+        }
+
+        function downloadEtikett() {
+            if (!currentEtikettArtikel) return;
+
+            const canvas = document.getElementById('qrCodeCanvas');
+            const link = document.createElement('a');
+            link.download = `Etikett_${currentEtikettArtikel.name.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function printEtikett() {
+            const printContent = document.getElementById('etikettPreview').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Etikett drucken</title>
+                    <style>
+                        body { font-family: sans-serif; text-align: center; padding: 20px; }
+                        .artikel-name { font-size: 18px; font-weight: bold; margin: 10px 0; }
+                        .artikel-details { font-size: 12px; color: #666; }
+                        @page { size: 62mm 29mm; margin: 0; }
+                        @media print { body { padding: 5px; } }
+                    </style>
+                </head>
+                <body>${printContent}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function printAllQRCodes() {
+            if (inventarData.length === 0) {
+                alert('Keine Artikel im Inventar!');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Alle Etiketten - Dakota Inventar</title>
+                    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"><\/script>
+                    <style>
+                        body { font-family: sans-serif; }
+                        .etikett-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; }
+                        .etikett { text-align: center; border: 1px solid #ddd; padding: 10px; page-break-inside: avoid; }
+                        .etikett-name { font-size: 11px; font-weight: bold; margin-top: 5px; }
+                        .etikett-info { font-size: 9px; color: #666; }
+                        @media print { .etikett-grid { gap: 5px; } }
+                    </style>
+                </head>
+                <body>
+                    <h1 style="text-align: center;">Dakota Inventar - Etiketten</h1>
+                    <div class="etikett-grid" id="grid"></div>
+                    <script>
+                        const items = ${JSON.stringify(inventarData.map(a => ({ id: a.id, name: a.name, kategorie: a.kategorie, einheit: a.einheit, barcode: a.barcode })))};
+                        const grid = document.getElementById('grid');
+                        items.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'etikett';
+                            const canvas = document.createElement('canvas');
+                            QRCode.toCanvas(canvas, JSON.stringify({ id: item.id, name: item.name }), { width: 80, margin: 1 });
+                            div.appendChild(canvas);
+                            div.innerHTML += '<div class="etikett-name">' + item.name + '</div>';
+                            div.innerHTML += '<div class="etikett-info">' + item.kategorie + ' | ' + item.einheit + '</div>';
+                            grid.appendChild(div);
+                        });
+                        setTimeout(() => window.print(), 500);
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // ----- EXPORT FUNKTIONEN -----
+        function exportInventarCSV() {
+            const headers = ['Name', 'Kategorie', 'Menge', 'Einheit', 'Preis', 'Wert', 'Mindestbestand', 'Lagerort', 'Lieferant', 'MHD', 'Barcode', 'Notiz'];
+            const rows = inventarData.map(a => [
+                a.name,
+                a.kategorie,
+                a.menge,
+                a.einheit,
+                a.preis || 0,
+                (a.menge || 0) * (a.preis || 0),
+                a.mindestbestand || '',
+                a.lagerort,
+                a.lieferant || '',
+                a.mhd || '',
+                a.barcode || '',
+                a.notiz || ''
+            ]);
+
+            let csv = headers.join(';') + '\n';
+            rows.forEach(row => csv += row.map(c => `"${c}"`).join(';') + '\n');
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Dakota_Inventar_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+
+            showNotification('✓ CSV exportiert!');
+        }
+
+        function exportInventarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(20);
+            doc.text('Hotel Dakota - Inventar', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('Stand: ' + new Date().toLocaleString('de-CH'), 105, 28, { align: 'center' });
+
+            const totalWert = inventarData.reduce((sum, a) => sum + ((a.menge || 0) * (a.preis || 0)), 0);
+            doc.setFontSize(14);
+            doc.text(`Gesamt: ${inventarData.length} Artikel | Wert: CHF ${totalWert.toFixed(2)}`, 105, 40, { align: 'center' });
+
+            let y = 55;
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'bold');
+            doc.text('Artikel', 14, y);
+            doc.text('Kategorie', 60, y);
+            doc.text('Menge', 95, y);
+            doc.text('Preis', 120, y);
+            doc.text('Wert', 145, y);
+            doc.text('Lagerort', 175, y);
+
+            doc.setFont(undefined, 'normal');
+            y += 7;
+
+            inventarData.forEach(a => {
+                if (y > 280) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                doc.text(a.name.substring(0, 25), 14, y);
+                doc.text((a.kategorie || '-').substring(0, 15), 60, y);
+                doc.text(`${a.menge} ${a.einheit}`, 95, y);
+                doc.text(`CHF ${(a.preis || 0).toFixed(2)}`, 120, y);
+                doc.text(`CHF ${((a.menge || 0) * (a.preis || 0)).toFixed(2)}`, 145, y);
+                doc.text((a.lagerort || '-').substring(0, 12), 175, y);
+                y += 5;
+            });
+
+            doc.save(`Dakota_Inventar_${new Date().toISOString().split('T')[0]}.pdf`);
+            showNotification('✓ PDF exportiert!');
+        }
+
+        function downloadInventurPDF(inventurId) {
+            const inventur = inventurHistorieData.find(i => i.id === inventurId);
+            if (!inventur) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text('Inventur-Abschluss', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Datum: ${new Date(inventur.datum).toLocaleDateString('de-CH')}`, 105, 30, { align: 'center' });
+            if (inventur.bemerkung) {
+                doc.text(inventur.bemerkung, 105, 38, { align: 'center' });
+            }
+
+            doc.setFontSize(14);
+            doc.text(`Artikel: ${inventur.artikelCount} | Gesamtwert: CHF ${inventur.totalWert.toFixed(2)}`, 105, 50, { align: 'center' });
+
+            let y = 65;
+            doc.setFontSize(9);
+
+            if (inventur.artikel) {
+                inventur.artikel.forEach(a => {
+                    if (y > 280) { doc.addPage(); y = 20; }
+                    doc.text(`${a.name} | ${a.menge} ${a.einheit} | CHF ${a.wert.toFixed(2)}`, 14, y);
+                    y += 5;
+                });
+            }
+
+            doc.save(`Inventur_${new Date(inventur.datum).toISOString().split('T')[0]}.pdf`);
+        }
+
+        // Hilfs-Funktion für Benachrichtigungen
+        function showNotification(message) {
+            // Falls globale showToast existiert, nutzen
+            if (typeof showToast === 'function') {
+                showToast(message, 'success');
+            } else {
+                console.log(message);
+            }
+        }
     </script>
 
     <!-- REZEPT DETAIL MODAL -->

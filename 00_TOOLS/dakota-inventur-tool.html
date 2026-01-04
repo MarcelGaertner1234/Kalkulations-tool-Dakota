@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dakota Inventur-Tool | Schnelle Bestandserfassung</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase SDK v9 (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy, where } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcJIxRaSEgZ81zgbS0ABPrshHnWi7WeII",
+            authDomain: "dakota-485ec.firebaseapp.com",
+            projectId: "dakota-485ec",
+            storageBucket: "dakota-485ec.firebasestorage.app",
+            messagingSenderId: "167881815096",
+            appId: "1:167881815096:web:4f21dc27bcf1ad7dcc62cd",
+            measurementId: "G-C40N5JEB9E"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const firestoreDB = getFirestore(app);
+        const auth = getAuth(app);
+
+        window.firebaseApp = app;
+        window.firestoreDB = firestoreDB;
+        window.firebaseAuth = auth;
+        window.firebaseModules = {
+            collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy, where,
+            signInAnonymously, onAuthStateChanged
+        };
+
+        // Auto-Login
+        signInAnonymously(auth).then(() => {
+            console.log('Firebase Auth: Anonym angemeldet');
+            window.dispatchEvent(new Event('firebaseReady'));
+        }).catch(err => {
+            console.error('Firebase Auth Error:', err);
+        });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dakota-gold: #dba765;
+            --dakota-dark: #32373c;
+            --dakota-light: #f5f5f5;
+            --dakota-white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: var(--dakota-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dakota-dark);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--dakota-dark) 0%, #1a1d20 100%);
+            color: var(--dakota-gold);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo-sub {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dakota-gold);
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.75rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .mode-btn.active {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .mode-btn:not(.active):hover {
+            background: rgba(219, 167, 101, 0.1);
+        }
+
+        /* Schnell-Erfassung Panel */
+        .quick-entry {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .quick-entry h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Foto Upload */
+        .foto-upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .foto-upload-area:hover,
+        .foto-upload-area.dragover {
+            border-color: var(--dakota-gold);
+            background: rgba(219, 167, 101, 0.05);
+        }
+
+        .foto-upload-area.has-image {
+            padding: 0;
+            border-style: solid;
+        }
+
+        .foto-upload-icon {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .foto-upload-text {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .foto-upload-text strong {
+            color: var(--dakota-gold);
+        }
+
+        .foto-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            display: none;
+        }
+
+        .foto-upload-area.has-image .foto-preview {
+            display: block;
+        }
+
+        .foto-upload-area.has-image .foto-upload-icon,
+        .foto-upload-area.has-image .foto-upload-text {
+            display: none;
+        }
+
+        .foto-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .foto-upload-area.has-image .foto-remove {
+            display: block;
+        }
+
+        #fotoInput {
+            display: none;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #555;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--dakota-gold);
+        }
+
+        .form-input.large {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Kategorie Buttons */
+        .kategorie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .kategorie-btn {
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .kategorie-btn:hover {
+            border-color: var(--dakota-gold);
+        }
+
+        .kategorie-btn.active {
+            border-color: var(--dakota-gold);
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .kategorie-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--dakota-gold) 0%, #c99a5a 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(219, 167, 101, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Inventur Liste */
+        .inventur-liste {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .liste-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .liste-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .liste-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.6rem 1rem;
+            border: 2px solid var(--dakota-gold);
+            background: white;
+            color: var(--dakota-dark);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .action-btn:hover {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .action-btn.danger {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .action-btn.danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .filter-tab .count {
+            background: rgba(0,0,0,0.1);
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            margin-left: 0.3rem;
+            font-size: 0.75rem;
+        }
+
+        .filter-tab.active .count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Artikel Cards */
+        .artikel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .artikel-card {
+            background: #fafafa;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .artikel-card:hover {
+            border-color: var(--dakota-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .artikel-foto {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: #e0e0e0;
+        }
+
+        .artikel-foto-placeholder {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            font-size: 3rem;
+            color: #bbb;
+        }
+
+        .artikel-content {
+            padding: 1rem;
+        }
+
+        .artikel-kategorie {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 0.3rem;
+        }
+
+        .artikel-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .artikel-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .artikel-menge {
+            font-weight: 600;
+            color: var(--dakota-gold);
+        }
+
+        .artikel-preis {
+            color: #666;
+        }
+
+        .artikel-wert {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .artikel-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #eee;
+        }
+
+        .artikel-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .artikel-btn.qr {
+            background: #f0f0f0;
+            color: var(--dakota-dark);
+        }
+
+        .artikel-btn.qr:hover {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .artikel-btn.edit {
+            background: #e8f4ff;
+            color: var(--info);
+        }
+
+        .artikel-btn.delete {
+            background: #ffe8e8;
+            color: var(--danger);
+        }
+
+        /* QR Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .qr-artikel-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-artikel-details {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: var(--dakota-gold);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: var(--dakota-dark);
+        }
+
+        /* QR Scanner */
+        .qr-scanner-container {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .qr-scanner-container.active {
+            display: block;
+        }
+
+        .scanner-video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #qrVideo {
+            width: 100%;
+            display: block;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 3px solid var(--dakota-gold);
+            border-radius: 12px;
+        }
+
+        .scanner-result {
+            padding: 1rem;
+            background: #f8f8f8;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, var(--dakota-dark) 0%, #1a1d20 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .summary-item {
+            padding: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dakota-gold);
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dakota-dark);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-stats {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kategorie-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .artikel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .liste-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .liste-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .mode-toggle, .quick-entry, .liste-actions, .artikel-actions, .filter-tabs {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .inventur-liste {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .artikel-grid {
+                display: table;
+                width: 100%;
+            }
+
+            .artikel-card {
+                display: table-row;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            DAKOTA <span class="logo-sub">Inventur-Tool</span>
+        </div>
+        <div class="header-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalArtikel">0</div>
+                <div class="stat-label">Artikel</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalWert">CHF 0</div>
+                <div class="stat-label">Gesamtwert</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="heuteErfasst">0</div>
+                <div class="stat-label">Heute erfasst</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Container -->
+<div class="container">
+
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('erfassen')" id="modeErfassen">
+            <span>+</span> Erfassen
+        </button>
+        <button class="mode-btn" onclick="setMode('scannen')" id="modeScannen">
+            <span>&#x2316;</span> QR Scannen
+        </button>
+        <button class="mode-btn" onclick="setMode('liste')" id="modeListe">
+            <span>&#x2630;</span> Liste
+        </button>
+    </div>
+
+    <!-- Schnell-Erfassung -->
+    <div class="quick-entry" id="panelErfassen">
+        <h2>+ Neuer Artikel</h2>
+
+        <!-- Foto Upload -->
+        <div class="foto-upload-area" id="fotoUploadArea" onclick="document.getElementById('fotoInput').click()">
+            <div class="foto-upload-icon">&#128247;</div>
+            <div class="foto-upload-text">
+                <strong>Foto aufnehmen</strong> oder hierher ziehen<br>
+                <small>Optional - hilft bei der Identifikation</small>
+            </div>
+            <img class="foto-preview" id="fotoPreview" alt="Vorschau">
+            <button class="foto-remove" onclick="event.stopPropagation(); removeFoto()">&#x2715;</button>
+        </div>
+        <input type="file" id="fotoInput" accept="image/*" capture="environment" onchange="handleFotoUpload(event)">
+
+        <!-- Kategorie Auswahl -->
+        <label class="form-label">Kategorie *</label>
+        <div class="kategorie-grid" id="kategorieGrid">
+            <button type="button" class="kategorie-btn" data-kategorie="Fleisch" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F969;</span>
+                Fleisch
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Fisch" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F41F;</span>
+                Fisch
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Gemüse" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F966;</span>
+                Gemüse
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Milchprodukte" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F9C0;</span>
+                Milch
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Früchte" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F34E;</span>
+                Früchte
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Trockenware" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F35E;</span>
+                Trocken
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Tiefkühl" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x2744;</span>
+                Tiefkühl
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Getränke" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F37A;</span>
+                Getränke
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Gewürze" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F9C2;</span>
+                Gewürze
+            </button>
+            <button type="button" class="kategorie-btn" data-kategorie="Sonstiges" onclick="selectKategorie(this)">
+                <span class="kategorie-icon">&#x1F4E6;</span>
+                Sonstiges
+            </button>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Artikelname *</label>
+                <input type="text" class="form-input large" id="artikelName" placeholder="z.B. Rindsfilet">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Menge *</label>
+                <input type="number" class="form-input" id="artikelMenge" placeholder="z.B. 5" step="0.1" min="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Einheit</label>
+                <select class="form-select" id="artikelEinheit">
+                    <option value="kg">kg</option>
+                    <option value="g">g</option>
+                    <option value="Stk">Stück</option>
+                    <option value="Liter">Liter</option>
+                    <option value="dl">dl</option>
+                    <option value="Packung">Packung</option>
+                    <option value="Bund">Bund</option>
+                    <option value="Dose">Dose</option>
+                    <option value="Flasche">Flasche</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Preis (CHF/Einheit)</label>
+                <input type="number" class="form-input" id="artikelPreis" placeholder="z.B. 45.00" step="0.05" min="0">
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Lieferant</label>
+                <input type="text" class="form-input" id="artikelLieferant" placeholder="z.B. Metzgerei Trachsel">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Lagerort</label>
+                <select class="form-select" id="artikelLagerort">
+                    <option value="Kühlschrank">Kühlschrank</option>
+                    <option value="Tiefkühler">Tiefkühler</option>
+                    <option value="Trockenlager">Trockenlager</option>
+                    <option value="Keller">Keller</option>
+                    <option value="Bar">Bar</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">MHD (optional)</label>
+                <input type="date" class="form-input" id="artikelMHD">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Notiz</label>
+                <input type="text" class="form-input" id="artikelNotiz" placeholder="Zusätzliche Info...">
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="saveArtikel()" id="submitBtn">
+            <span>&#x2713;</span> Artikel speichern
+        </button>
+    </div>
+
+    <!-- QR Scanner Panel -->
+    <div class="qr-scanner-container" id="panelScannen">
+        <h2 style="text-align: center; margin-bottom: 1rem;">&#x2316; QR-Code scannen</h2>
+        <div class="scanner-video-container">
+            <video id="qrVideo" playsinline></video>
+            <div class="scanner-overlay"></div>
+        </div>
+        <p style="text-align: center; color: #888; font-size: 0.9rem;">
+            Halte den QR-Code eines Artikels vor die Kamera
+        </p>
+        <div class="scanner-result" id="scannerResult" style="display: none;">
+            <h4>Artikel gefunden:</h4>
+            <div id="scannedArtikelInfo"></div>
+            <div style="margin-top: 1rem;">
+                <label class="form-label">Neue Menge:</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="number" class="form-input" id="scannedMenge" step="0.1">
+                    <button class="action-btn" onclick="updateScannedArtikel()" style="white-space: nowrap;">Aktualisieren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Box (nur bei Liste) -->
+    <div class="summary-box" id="summaryBox" style="display: none;">
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-value" id="summaryFleisch">0</div>
+                <div class="summary-label">Fleisch</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="summaryFisch">0</div>
+                <div class="summary-label">Fisch</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="summaryGemüse">0</div>
+                <div class="summary-label">Gemüse</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="summaryMilch">0</div>
+                <div class="summary-label">Milchprodukte</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="summaryTiefkühl">0</div>
+                <div class="summary-label">Tiefkühl</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="summarySonstige">0</div>
+                <div class="summary-label">Sonstige</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventur Liste -->
+    <div class="inventur-liste" id="panelListe" style="display: none;">
+        <div class="liste-header">
+            <h2>&#x2630; Inventar-Liste</h2>
+            <div class="liste-actions">
+                <button class="action-btn" onclick="exportPDF()">
+                    <span>&#x1F4C4;</span> PDF Export
+                </button>
+                <button class="action-btn" onclick="exportCSV()">
+                    <span>&#x1F4CA;</span> CSV Export
+                </button>
+                <button class="action-btn" onclick="printQRCodes()">
+                    <span>&#x2316;</span> Alle QR-Codes
+                </button>
+                <button class="action-btn danger" onclick="confirmClearAll()">
+                    <span>&#x1F5D1;</span> Alles löschen
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-tab active" data-filter="alle" onclick="filterByKategorie('alle')">
+                Alle <span class="count" id="countAlle">0</span>
+            </button>
+            <button class="filter-tab" data-filter="Fleisch" onclick="filterByKategorie('Fleisch')">
+                Fleisch <span class="count" id="countFleisch">0</span>
+            </button>
+            <button class="filter-tab" data-filter="Fisch" onclick="filterByKategorie('Fisch')">
+                Fisch <span class="count" id="countFisch">0</span>
+            </button>
+            <button class="filter-tab" data-filter="Gemüse" onclick="filterByKategorie('Gemüse')">
+                Gemüse <span class="count" id="countGemüse">0</span>
+            </button>
+            <button class="filter-tab" data-filter="Milchprodukte" onclick="filterByKategorie('Milchprodukte')">
+                Milch <span class="count" id="countMilch">0</span>
+            </button>
+            <button class="filter-tab" data-filter="Tiefkühl" onclick="filterByKategorie('Tiefkühl')">
+                Tiefkühl <span class="count" id="countTiefkühl">0</span>
+            </button>
+        </div>
+
+        <!-- Artikel Grid -->
+        <div class="artikel-grid" id="artikelGrid">
+            <div class="empty-state">
+                <div class="empty-icon">&#x1F4E6;</div>
+                <h3>Noch keine Artikel erfasst</h3>
+                <p>Wechsle zu "Erfassen" um Artikel hinzuzufügen</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- QR Modal -->
+<div class="modal-overlay" id="qrModal">
+    <div class="modal-content">
+        <h3 class="modal-title">QR-Code</h3>
+        <div class="qr-container">
+            <canvas id="qrCanvas"></canvas>
+        </div>
+        <div class="qr-artikel-name" id="qrArtikelName"></div>
+        <div class="qr-artikel-details" id="qrArtikelDetails"></div>
+        <div class="modal-actions">
+            <button class="modal-btn secondary" onclick="closeQRModal()">Schliessen</button>
+            <button class="modal-btn primary" onclick="downloadQR()">&#x2B07; Download</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // ============ STATE ============
+    let inventarData = [];
+    let selectedKategorie = null;
+    let currentFotoBase64 = null;
+    let currentFilter = 'alle';
+    let currentQRArtikel = null;
+    let videoStream = null;
+
+    // ============ INIT ============
+    window.addEventListener('firebaseReady', () => {
+        console.log('Firebase ready - loading data...');
+        loadInventar();
+    });
+
+    // Fallback: LocalStorage wenn Firebase nicht verfügbar
+    if (!window.firestoreDB) {
+        setTimeout(() => {
+            if (!window.firestoreDB) {
+                console.log('Using LocalStorage fallback');
+                loadFromLocalStorage();
+            }
+        }, 3000);
+    }
+
+    // ============ MODE SWITCHING ============
+    function setMode(mode) {
+        // Update buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('mode' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
+
+        // Update panels
+        document.getElementById('panelErfassen').style.display = mode === 'erfassen' ? 'block' : 'none';
+        document.getElementById('panelScannen').style.display = mode === 'scannen' ? 'block' : 'none';
+        document.getElementById('panelListe').style.display = mode === 'liste' ? 'block' : 'none';
+        document.getElementById('summaryBox').style.display = mode === 'liste' ? 'block' : 'none';
+
+        // Handle scanner
+        if (mode === 'scannen') {
+            startQRScanner();
+        } else {
+            stopQRScanner();
+        }
+
+        // Refresh list when switching to liste mode
+        if (mode === 'liste') {
+            renderArtikelGrid();
+        }
+    }
+
+    // ============ KATEGORIE SELECTION ============
+    function selectKategorie(btn) {
+        document.querySelectorAll('.kategorie-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedKategorie = btn.dataset.kategorie;
+    }
+
+    // ============ FOTO HANDLING ============
+    function handleFotoUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            currentFotoBase64 = e.target.result;
+            document.getElementById('fotoPreview').src = currentFotoBase64;
+            document.getElementById('fotoUploadArea').classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function removeFoto() {
+        currentFotoBase64 = null;
+        document.getElementById('fotoPreview').src = '';
+        document.getElementById('fotoUploadArea').classList.remove('has-image');
+        document.getElementById('fotoInput').value = '';
+    }
+
+    // Drag & Drop
+    const uploadArea = document.getElementById('fotoUploadArea');
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                currentFotoBase64 = ev.target.result;
+                document.getElementById('fotoPreview').src = currentFotoBase64;
+                uploadArea.classList.add('has-image');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ============ SAVE ARTIKEL ============
+    async function saveArtikel() {
+        const name = document.getElementById('artikelName').value.trim();
+        const menge = parseFloat(document.getElementById('artikelMenge').value);
+        const einheit = document.getElementById('artikelEinheit').value;
+        const preis = parseFloat(document.getElementById('artikelPreis').value) || 0;
+        const lieferant = document.getElementById('artikelLieferant').value.trim();
+        const lagerort = document.getElementById('artikelLagerort').value;
+        const mhd = document.getElementById('artikelMHD').value;
+        const notiz = document.getElementById('artikelNotiz').value.trim();
+
+        // Validation
+        if (!selectedKategorie) {
+            showToast('Bitte Kategorie wählen', 'error');
+            return;
+        }
+        if (!name) {
+            showToast('Bitte Artikelname eingeben', 'error');
+            return;
+        }
+        if (!menge || menge <= 0) {
+            showToast('Bitte gültige Menge eingeben', 'error');
+            return;
+        }
+
+        const artikel = {
+            id: 'INV-' + Date.now(),
+            name: name,
+            kategorie: selectedKategorie,
+            menge: menge,
+            einheit: einheit,
+            preis: preis,
+            wert: menge * preis,
+            lieferant: lieferant,
+            lagerort: lagerort,
+            mhd: mhd,
+            notiz: notiz,
+            foto: currentFotoBase64,
+            erfasstAm: new Date().toISOString(),
+            aktualisiert: new Date().toISOString()
+        };
+
+        // Save
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading-spinner"></span> Speichern...';
+
+        try {
+            await saveToFirebase(artikel);
+            inventarData.push(artikel);
+            updateStats();
+            resetForm();
+            showToast('Artikel gespeichert!', 'success');
+        } catch (err) {
+            console.error('Save error:', err);
+            // Fallback: LocalStorage
+            saveToLocalStorage();
+            inventarData.push(artikel);
+            updateStats();
+            resetForm();
+            showToast('Lokal gespeichert (Offline)', 'success');
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<span>&#x2713;</span> Artikel speichern';
+    }
+
+    function resetForm() {
+        document.getElementById('artikelName').value = '';
+        document.getElementById('artikelMenge').value = '';
+        document.getElementById('artikelPreis').value = '';
+        document.getElementById('artikelLieferant').value = '';
+        document.getElementById('artikelMHD').value = '';
+        document.getElementById('artikelNotiz').value = '';
+        document.querySelectorAll('.kategorie-btn').forEach(b => b.classList.remove('active'));
+        selectedKategorie = null;
+        removeFoto();
+    }
+
+    // ============ FIREBASE OPERATIONS ============
+    async function saveToFirebase(artikel) {
+        if (!window.firestoreDB) throw new Error('Firebase not initialized');
+
+        const { doc, setDoc } = window.firebaseModules;
+        await setDoc(doc(window.firestoreDB, 'inventar', artikel.id), artikel);
+    }
+
+    async function loadInventar() {
+        try {
+            if (!window.firestoreDB) throw new Error('Firebase not initialized');
+
+            const { collection, getDocs, query, orderBy } = window.firebaseModules;
+            const q = query(collection(window.firestoreDB, 'inventar'), orderBy('erfasstAm', 'desc'));
+            const snapshot = await getDocs(q);
+
+            inventarData = [];
+            snapshot.forEach(doc => {
+                inventarData.push(doc.data());
+            });
+
+            console.log('Loaded', inventarData.length, 'items from Firebase');
+            updateStats();
+            renderArtikelGrid();
+        } catch (err) {
+            console.error('Load error:', err);
+            loadFromLocalStorage();
+        }
+    }
+
+    async function deleteFromFirebase(artikelId) {
+        if (!window.firestoreDB) throw new Error('Firebase not initialized');
+
+        const { doc, deleteDoc } = window.firebaseModules;
+        await deleteDoc(doc(window.firestoreDB, 'inventar', artikelId));
+    }
+
+    // ============ LOCALSTORAGE FALLBACK ============
+    function saveToLocalStorage() {
+        localStorage.setItem('dakota_inventar', JSON.stringify(inventarData));
+    }
+
+    function loadFromLocalStorage() {
+        const saved = localStorage.getItem('dakota_inventar');
+        if (saved) {
+            inventarData = JSON.parse(saved);
+            updateStats();
+            renderArtikelGrid();
+        }
+    }
+
+    // ============ STATS ============
+    function updateStats() {
+        const total = inventarData.length;
+        const totalWert = inventarData.reduce((sum, a) => sum + (a.wert || 0), 0);
+        const heute = new Date().toDateString();
+        const heuteErfasst = inventarData.filter(a => new Date(a.erfasstAm).toDateString() === heute).length;
+
+        document.getElementById('totalArtikel').textContent = total;
+        document.getElementById('totalWert').textContent = 'CHF ' + totalWert.toFixed(0);
+        document.getElementById('heuteErfasst').textContent = heuteErfasst;
+
+        // Category counts
+        const counts = {
+            Fleisch: 0,
+            Fisch: 0,
+            'Gemüse': 0,
+            Milchprodukte: 0,
+            'Tiefkühl': 0
+        };
+
+        inventarData.forEach(a => {
+            if (counts[a.kategorie] !== undefined) {
+                counts[a.kategorie]++;
+            }
+        });
+
+        document.getElementById('countAlle').textContent = total;
+        document.getElementById('countFleisch').textContent = counts.Fleisch;
+        document.getElementById('countFisch').textContent = counts.Fisch;
+        document.getElementById('countGemüse').textContent = counts['Gemüse'];
+        document.getElementById('countMilch').textContent = counts.Milchprodukte;
+        document.getElementById('countTiefkühl').textContent = counts['Tiefkühl'];
+
+        // Summary
+        document.getElementById('summaryFleisch').textContent = counts.Fleisch;
+        document.getElementById('summaryFisch').textContent = counts.Fisch;
+        document.getElementById('summaryGemüse').textContent = counts['Gemüse'];
+        document.getElementById('summaryMilch').textContent = counts.Milchprodukte;
+        document.getElementById('summaryTiefkühl').textContent = counts['Tiefkühl'];
+        document.getElementById('summarySonstige').textContent = total - Object.values(counts).reduce((a,b) => a+b, 0);
+    }
+
+    // ============ RENDER GRID ============
+    function renderArtikelGrid() {
+        const grid = document.getElementById('artikelGrid');
+        let filtered = inventarData;
+
+        if (currentFilter !== 'alle') {
+            filtered = inventarData.filter(a => a.kategorie === currentFilter);
+        }
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">&#x1F4E6;</div>
+                    <h3>${currentFilter === 'alle' ? 'Noch keine Artikel erfasst' : 'Keine Artikel in dieser Kategorie'}</h3>
+                    <p>Wechsle zu "Erfassen" um Artikel hinzuzufügen</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(artikel => `
+            <div class="artikel-card" data-id="${artikel.id}">
+                ${artikel.foto
+                    ? `<img class="artikel-foto" src="${artikel.foto}" alt="${artikel.name}">`
+                    : `<div class="artikel-foto-placeholder">${getKategorieIcon(artikel.kategorie)}</div>`
+                }
+                <div class="artikel-content">
+                    <div class="artikel-kategorie">${artikel.kategorie} ${artikel.lagerort ? '• ' + artikel.lagerort : ''}</div>
+                    <div class="artikel-name">${artikel.name}</div>
+                    <div class="artikel-details">
+                        <span class="artikel-menge">${artikel.menge} ${artikel.einheit}</span>
+                        <span class="artikel-preis">CHF ${artikel.preis?.toFixed(2) || '0.00'}/${artikel.einheit}</span>
+                    </div>
+                    <div class="artikel-details" style="margin-top: 0.3rem;">
+                        <span class="artikel-wert">Wert: CHF ${(artikel.wert || 0).toFixed(2)}</span>
+                        ${artikel.lieferant ? `<span style="color: #888; font-size: 0.8rem;">${artikel.lieferant}</span>` : ''}
+                    </div>
+                    <div class="artikel-actions">
+                        <button class="artikel-btn qr" onclick="showQRCode('${artikel.id}')">QR-Code</button>
+                        <button class="artikel-btn edit" onclick="editArtikel('${artikel.id}')">&#x270E;</button>
+                        <button class="artikel-btn delete" onclick="deleteArtikel('${artikel.id}')">&#x1F5D1;</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function getKategorieIcon(kategorie) {
+        const icons = {
+            'Fleisch': '&#x1F969;',
+            'Fisch': '&#x1F41F;',
+            'Gemüse': '&#x1F966;',
+            'Milchprodukte': '&#x1F9C0;',
+            'Früchte': '&#x1F34E;',
+            'Trockenware': '&#x1F35E;',
+            'Tiefkühl': '&#x2744;',
+            'Getränke': '&#x1F37A;',
+            'Gewürze': '&#x1F9C2;',
+            'Sonstiges': '&#x1F4E6;'
+        };
+        return icons[kategorie] || '&#x1F4E6;';
+    }
+
+    function filterByKategorie(kategorie) {
+        currentFilter = kategorie;
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.filter === kategorie);
+        });
+        renderArtikelGrid();
+    }
+
+    // ============ QR CODE ============
+    function showQRCode(artikelId) {
+        const artikel = inventarData.find(a => a.id === artikelId);
+        if (!artikel) return;
+
+        currentQRArtikel = artikel;
+
+        // Generate QR data
+        const qrData = JSON.stringify({
+            id: artikel.id,
+            name: artikel.name,
+            kategorie: artikel.kategorie,
+            einheit: artikel.einheit
+        });
+
+        // Generate QR code
+        const canvas = document.getElementById('qrCanvas');
+        QRCode.toCanvas(canvas, qrData, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#32373c',
+                light: '#ffffff'
+            }
+        });
+
+        document.getElementById('qrArtikelName').textContent = artikel.name;
+        document.getElementById('qrArtikelDetails').textContent =
+            `${artikel.kategorie} | ${artikel.menge} ${artikel.einheit} | CHF ${(artikel.wert || 0).toFixed(2)}`;
+
+        document.getElementById('qrModal').classList.add('active');
+    }
+
+    function closeQRModal() {
+        document.getElementById('qrModal').classList.remove('active');
+        currentQRArtikel = null;
+    }
+
+    function downloadQR() {
+        if (!currentQRArtikel) return;
+
+        const canvas = document.getElementById('qrCanvas');
+        const link = document.createElement('a');
+        link.download = `QR_${currentQRArtikel.name.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    // ============ QR SCANNER ============
+    async function startQRScanner() {
+        try {
+            const video = document.getElementById('qrVideo');
+            videoStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            video.srcObject = videoStream;
+            video.play();
+
+            // Simple QR scanning loop (in production, use a library like jsQR)
+            // For demo, we'll just show the camera
+            console.log('Camera started for QR scanning');
+        } catch (err) {
+            console.error('Camera error:', err);
+            showToast('Kamera-Zugriff nicht möglich', 'error');
+        }
+    }
+
+    function stopQRScanner() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+    }
+
+    // ============ DELETE / EDIT ============
+    async function deleteArtikel(artikelId) {
+        if (!confirm('Artikel wirklich löschen?')) return;
+
+        try {
+            await deleteFromFirebase(artikelId);
+        } catch (err) {
+            console.log('Firebase delete failed, using local');
+        }
+
+        inventarData = inventarData.filter(a => a.id !== artikelId);
+        saveToLocalStorage();
+        updateStats();
+        renderArtikelGrid();
+        showToast('Artikel gelöscht', 'success');
+    }
+
+    function editArtikel(artikelId) {
+        const artikel = inventarData.find(a => a.id === artikelId);
+        if (!artikel) return;
+
+        // Switch to edit mode
+        setMode('erfassen');
+
+        // Fill form
+        document.getElementById('artikelName').value = artikel.name;
+        document.getElementById('artikelMenge').value = artikel.menge;
+        document.getElementById('artikelEinheit').value = artikel.einheit;
+        document.getElementById('artikelPreis').value = artikel.preis || '';
+        document.getElementById('artikelLieferant').value = artikel.lieferant || '';
+        document.getElementById('artikelLagerort').value = artikel.lagerort || 'Kühlschrank';
+        document.getElementById('artikelMHD').value = artikel.mhd || '';
+        document.getElementById('artikelNotiz').value = artikel.notiz || '';
+
+        // Select kategorie
+        document.querySelectorAll('.kategorie-btn').forEach(btn => {
+            if (btn.dataset.kategorie === artikel.kategorie) {
+                btn.classList.add('active');
+                selectedKategorie = artikel.kategorie;
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Set foto
+        if (artikel.foto) {
+            currentFotoBase64 = artikel.foto;
+            document.getElementById('fotoPreview').src = artikel.foto;
+            document.getElementById('fotoUploadArea').classList.add('has-image');
+        }
+
+        // Delete old entry (will be replaced on save)
+        inventarData = inventarData.filter(a => a.id !== artikelId);
+        deleteFromFirebase(artikelId).catch(() => {});
+    }
+
+    function confirmClearAll() {
+        if (!confirm('ACHTUNG: Wirklich ALLE Artikel löschen? Diese Aktion kann nicht rückgängig gemacht werden!')) return;
+        if (!confirm('Bist du SICHER? Alle ' + inventarData.length + ' Artikel werden gelöscht!')) return;
+
+        inventarData.forEach(async (a) => {
+            try { await deleteFromFirebase(a.id); } catch (e) {}
+        });
+
+        inventarData = [];
+        localStorage.removeItem('dakota_inventar');
+        updateStats();
+        renderArtikelGrid();
+        showToast('Alle Artikel gelöscht', 'success');
+    }
+
+    // ============ EXPORT ============
+    function exportCSV() {
+        const headers = ['Name', 'Kategorie', 'Menge', 'Einheit', 'Preis', 'Wert', 'Lieferant', 'Lagerort', 'MHD', 'Notiz', 'Erfasst'];
+        const rows = inventarData.map(a => [
+            a.name,
+            a.kategorie,
+            a.menge,
+            a.einheit,
+            a.preis || 0,
+            a.wert || 0,
+            a.lieferant || '',
+            a.lagerort || '',
+            a.mhd || '',
+            a.notiz || '',
+            new Date(a.erfasstAm).toLocaleString('de-CH')
+        ]);
+
+        let csv = headers.join(';') + '\n';
+        rows.forEach(row => {
+            csv += row.map(cell => `"${cell}"`).join(';') + '\n';
+        });
+
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Dakota_Inventur_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+
+        showToast('CSV exportiert!', 'success');
+    }
+
+    function exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(20);
+        doc.text('Hotel Dakota - Inventur', 105, 20, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text(`Stand: ${new Date().toLocaleString('de-CH')}`, 105, 28, { align: 'center' });
+
+        // Summary
+        const totalWert = inventarData.reduce((sum, a) => sum + (a.wert || 0), 0);
+        doc.setFontSize(14);
+        doc.text(`Gesamt: ${inventarData.length} Artikel | Wert: CHF ${totalWert.toFixed(2)}`, 105, 40, { align: 'center' });
+
+        // Table
+        let y = 55;
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text('Artikel', 14, y);
+        doc.text('Kategorie', 70, y);
+        doc.text('Menge', 110, y);
+        doc.text('Preis', 140, y);
+        doc.text('Wert', 170, y);
+
+        doc.setFont(undefined, 'normal');
+        y += 8;
+
+        inventarData.forEach((a, i) => {
+            if (y > 280) {
+                doc.addPage();
+                y = 20;
+            }
+
+            doc.text(a.name.substring(0, 30), 14, y);
+            doc.text(a.kategorie, 70, y);
+            doc.text(`${a.menge} ${a.einheit}`, 110, y);
+            doc.text(`CHF ${(a.preis || 0).toFixed(2)}`, 140, y);
+            doc.text(`CHF ${(a.wert || 0).toFixed(2)}`, 170, y);
+            y += 6;
+        });
+
+        doc.save(`Dakota_Inventur_${new Date().toISOString().split('T')[0]}.pdf`);
+        showToast('PDF exportiert!', 'success');
+    }
+
+    function printQRCodes() {
+        // Generate all QR codes for printing
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Dakota QR-Codes</title>
+                <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"><\/script>
+                <style>
+                    body { font-family: sans-serif; }
+                    .qr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px; }
+                    .qr-item { text-align: center; border: 1px solid #ddd; padding: 15px; page-break-inside: avoid; }
+                    .qr-name { font-weight: bold; margin-top: 10px; font-size: 12px; }
+                    .qr-details { font-size: 10px; color: #666; }
+                    @media print { .qr-grid { gap: 10px; } }
+                </style>
+            </head>
+            <body>
+                <h1 style="text-align: center;">Dakota Inventar - QR-Codes</h1>
+                <div class="qr-grid" id="qrGrid"></div>
+                <script>
+                    const items = ${JSON.stringify(inventarData.map(a => ({ id: a.id, name: a.name, kategorie: a.kategorie, einheit: a.einheit })))};
+                    const grid = document.getElementById('qrGrid');
+                    items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'qr-item';
+                        const canvas = document.createElement('canvas');
+                        QRCode.toCanvas(canvas, JSON.stringify(item), { width: 120, margin: 1 });
+                        div.appendChild(canvas);
+                        div.innerHTML += '<div class="qr-name">' + item.name + '</div>';
+                        div.innerHTML += '<div class="qr-details">' + item.kategorie + ' | ' + item.einheit + '</div>';
+                        grid.appendChild(div);
+                    });
+                    setTimeout(() => window.print(), 500);
+                <\/script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+
+    // ============ TOAST ============
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show ' + type;
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ============ MODAL CLOSE ON OUTSIDE CLICK ============
+    document.getElementById('qrModal').addEventListener('click', function(e) {
+        if (e.target === this) closeQRModal();
+    });
+
+    // ============ KEYBOARD SHORTCUTS ============
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeQRModal();
+        }
+        if (e.key === 'Enter' && document.activeElement.id === 'artikelNotiz') {
+            saveArtikel();
+        }
+    });
+</script>
+
+</body>
+</html>
