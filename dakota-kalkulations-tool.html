@@ -6021,11 +6021,8 @@
             }
             // Inventar-Dropdowns initialisieren
             initInventarDropdowns();
-            // Inventar-Daten laden
-            await loadInventarData();
-            // Stats & Tabelle aktualisieren
-            updateInventarStats();
-            renderInventarTable();
+            // Inventar-Daten laden (loadInventar lädt auch Stats und rendert Tabelle)
+            await loadInventar();
         }
 
         // ===== LEBENSMITTEL FUNCTIONS =====
