@@ -4311,9 +4311,9 @@
                     </div>
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-footer" style="position: sticky; bottom: 0; background: white; padding: 1rem 0; margin-top: 1rem; border-top: 1px solid #eee;">
                     <button type="button" class="btn btn-secondary" onclick="closeInventarModal()">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                    <button type="button" class="btn btn-primary" onclick="saveInventarArtikel(event)">💾 Speichern</button>
                 </div>
             </form>
         </div>
@@ -11792,45 +11792,66 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
 
         async function saveInventarArtikel(event) {
             event.preventDefault();
+            console.log('saveInventarArtikel gestartet');
 
-            const id = document.getElementById('inv_id').value || 'INV-' + Date.now();
-            const isEdit = !!document.getElementById('inv_id').value;
+            try {
+                // Validierung
+                const name = document.getElementById('inv_name').value;
+                const kategorie = document.getElementById('inv_kategorie').value;
+                const menge = document.getElementById('inv_menge').value;
+                const lagerort = document.getElementById('inv_lagerort').value;
 
-            const artikel = {
-                id: id,
-                lebensmittel_id: document.getElementById('inv_lebensmittel_id').value || null,
-                name: document.getElementById('inv_name').value,
-                kategorie: document.getElementById('inv_kategorie').value,
-                lieferant: document.getElementById('inv_lieferant').value,
-                menge: parseFloat(document.getElementById('inv_menge').value),
-                einheit: document.getElementById('inv_einheit').value,
-                preis: parseFloat(document.getElementById('inv_preis').value) || 0,
-                mindestbestand: parseFloat(document.getElementById('inv_mindestbestand').value) || 0,
-                lagerort: document.getElementById('inv_lagerort').value,
-                mhd: document.getElementById('inv_mhd').value || null,
-                barcode: document.getElementById('inv_barcode').value,
-                notiz: document.getElementById('inv_notiz').value,
-                foto: currentInvFotoBase64,
-                erstellt: isEdit ? (inventarData.find(a => a.id === id)?.erstellt || new Date().toISOString()) : new Date().toISOString(),
-                aktualisiert: new Date().toISOString()
-            };
-
-            if (isEdit) {
-                const oldArtikel = inventarData.find(a => a.id === id);
-                if (oldArtikel && oldArtikel.menge !== artikel.menge) {
-                    await addArtikelHistorie(id, 'menge', oldArtikel.menge, artikel.menge);
+                if (!name || !kategorie || !menge || !lagerort) {
+                    showNotification('⚠️ Bitte alle Pflichtfelder ausfüllen!', 'error');
+                    console.log('Validierung fehlgeschlagen:', { name, kategorie, menge, lagerort });
+                    return;
                 }
-                inventarData = inventarData.map(a => a.id === id ? artikel : a);
-            } else {
-                inventarData.push(artikel);
+
+                const id = document.getElementById('inv_id').value || 'INV-' + Date.now();
+                const isEdit = !!document.getElementById('inv_id').value;
+
+                const artikel = {
+                    id: id,
+                    lebensmittel_id: document.getElementById('inv_lebensmittel_id').value || null,
+                    name: name,
+                    kategorie: kategorie,
+                    lieferant: document.getElementById('inv_lieferant').value || '',
+                    menge: parseFloat(menge) || 0,
+                    einheit: document.getElementById('inv_einheit').value || 'Stk',
+                    preis: parseFloat(document.getElementById('inv_preis').value) || 0,
+                    mindestbestand: parseFloat(document.getElementById('inv_mindestbestand').value) || 0,
+                    lagerort: lagerort,
+                    mhd: document.getElementById('inv_mhd').value || null,
+                    barcode: document.getElementById('inv_barcode').value || '',
+                    notiz: document.getElementById('inv_notiz').value || '',
+                    foto: currentInvFotoBase64,
+                    erstellt: isEdit ? (inventarData.find(a => a.id === id)?.erstellt || new Date().toISOString()) : new Date().toISOString(),
+                    aktualisiert: new Date().toISOString()
+                };
+
+                console.log('Artikel zu speichern:', artikel);
+
+                if (isEdit) {
+                    const oldArtikel = inventarData.find(a => a.id === id);
+                    if (oldArtikel && oldArtikel.menge !== artikel.menge) {
+                        await addArtikelHistorie(id, 'menge', oldArtikel.menge, artikel.menge);
+                    }
+                    inventarData = inventarData.map(a => a.id === id ? artikel : a);
+                } else {
+                    inventarData.push(artikel);
+                }
+
+                await saveInventarToFirebase(artikel);
+                console.log('In Firebase gespeichert');
+
+                closeInventarModal();
+                updateInventarStats();
+                renderInventarTable();
+                showNotification('✓ ' + name + ' gespeichert!');
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+                showNotification('❌ Fehler: ' + error.message, 'error');
             }
-
-            await saveInventarToFirebase(artikel);
-
-            closeInventarModal();
-            updateInventarStats();
-            renderInventarTable();
-            showNotification('✓ Artikel gespeichert!');
         }
 
         async function deleteInventarArtikel(artikelId) {
