@@ -10629,16 +10629,32 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
         // ===== INVENTAR MODUL - FUNKTIONEN =====
         // ============================================================
 
-        // Einfacher Click-Handler mit Debounce
-        let lastSaveClick = 0;
+        // Click-Handler mit Button-Deaktivierung
         function handleSaveClick() {
-            const now = Date.now();
-            if (now - lastSaveClick < 1000) {
-                console.log('Zu schneller Klick ignoriert');
+            const btn = document.getElementById('btnSaveInventar');
+
+            // Bereits am Speichern?
+            if (btn && btn.disabled) {
+                console.log('Speichern läuft bereits...');
                 return;
             }
-            lastSaveClick = now;
-            saveInventarArtikel();
+
+            // Button deaktivieren und Text ändern
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '⏳ Speichert...';
+                btn.style.opacity = '0.7';
+            }
+
+            // Speichern ausführen
+            saveInventarArtikel().finally(() => {
+                // Button wieder aktivieren (falls Modal noch offen)
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '💾 Speichern';
+                    btn.style.opacity = '1';
+                }
+            });
         }
 
         // ----- FIREBASE OPERATIONEN -----
@@ -11802,18 +11818,7 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             }
         }
 
-        let isSavingInventar = false; // Schutz gegen Doppelklicks
-
-        async function saveInventarArtikel(event) {
-            if (event) event.preventDefault();
-
-            // Schutz gegen Doppelklicks
-            if (isSavingInventar) {
-                console.log('Speichern läuft bereits...');
-                return;
-            }
-            isSavingInventar = true;
-
+        async function saveInventarArtikel() {
             console.log('saveInventarArtikel gestartet');
 
             try {
@@ -11826,7 +11831,6 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
                 if (!name || !kategorie || !menge || !lagerort) {
                     showNotification('⚠️ Bitte alle Pflichtfelder ausfüllen!', 'error');
                     console.log('Validierung fehlgeschlagen:', { name, kategorie, menge, lagerort });
-                    isSavingInventar = false;
                     return;
                 }
 
@@ -11926,8 +11930,6 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
                 showNotification('❌ Fehler: ' + error.message, 'error');
-            } finally {
-                isSavingInventar = false;
             }
         }
 
