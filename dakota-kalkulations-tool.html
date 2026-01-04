@@ -10865,7 +10865,8 @@ Preise in CHF, Komma als Dezimaltrennzeichen ersetzen durch Punkt.`
             } else {
                 dropdown.innerHTML = limited.map((a, idx) => `
                     <div class="schnell-artikel-item" data-id="${a.id}" data-index="${idx}"
-                         onclick="selectModalLebensmittel('${a.id}')">
+                         onmousedown="event.preventDefault(); selectModalLebensmittel('${a.id}')"
+                         ontouchend="event.preventDefault(); selectModalLebensmittel('${a.id}')">
                         <strong>${highlightMatch(a.name, filter)}</strong>
                         <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem;">
                             ${a.kategorie} ${a.lieferant ? '· ' + a.lieferant : ''} ${a.preis ? '· CHF ' + a.preis.toFixed(2) : ''}
