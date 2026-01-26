@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment-Checkliste | 30. Januar 2026 | "Bii de Grossmuetter"</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 10pt;
+            line-height: 1.35;
+            color: #2c2c2c;
+            background: #fff;
+            padding: 15px;
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B4513 0%, #5D3A1A 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 18pt;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 10pt;
+            color: #dba765;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 11pt;
+        }
+
+        .header-right .date {
+            color: #dba765;
+            font-weight: 700;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .action-btn {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #5D3A1A;
+        }
+
+        .action-btn.reset {
+            background: #dc3545;
+        }
+
+        .action-btn.reset:hover {
+            background: #c82333;
+        }
+
+        .action-btn.save {
+            background: #27ae60;
+        }
+
+        .action-btn.save:hover {
+            background: #219a52;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 9pt;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #8B4513;
+            border-radius: 3px;
+        }
+
+        .legend-box.complete {
+            background: #d4edda;
+            border-color: #27ae60;
+        }
+
+        .legend-box.missing {
+            background: #fff3cd;
+            border-color: #f39c12;
+        }
+
+        .legend-box.critical {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        /* Category Section */
+        .category {
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+        }
+
+        .category-title {
+            background: #8B4513;
+            color: white;
+            padding: 8px 12px;
+            font-size: 11pt;
+            font-weight: 600;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-title .gang-badge {
+            background: #dba765;
+            color: #5D3A1A;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: 700;
+        }
+
+        .category-title .category-status {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 8pt;
+            margin-left: 10px;
+        }
+
+        /* Equipment Table */
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .equipment-table th {
+            background: #f0e6d3;
+            color: #5D3A1A;
+            padding: 6px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 9pt;
+            border-bottom: 2px solid #dba765;
+        }
+
+        .equipment-table th.center {
+            text-align: center;
+        }
+
+        .equipment-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #e8e8e8;
+            vertical-align: middle;
+        }
+
+        .equipment-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .equipment-table tr:hover {
+            background: #f5f0e6;
+        }
+
+        .equipment-table .artikel {
+            font-weight: 500;
+        }
+
+        .equipment-table .menge {
+            text-align: center;
+            font-weight: 700;
+            color: #8B4513;
+            width: 60px;
+        }
+
+        .equipment-table .vorhanden {
+            width: 80px;
+            text-align: center;
+        }
+
+        .equipment-table .fehlt {
+            width: 60px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .equipment-table .notiz {
+            width: 150px;
+        }
+
+        /* Row Status Colors */
+        .equipment-table tr.complete {
+            background: #d4edda !important;
+        }
+
+        .equipment-table tr.missing {
+            background: #fff3cd !important;
+        }
+
+        .equipment-table tr.critical {
+            background: #f8d7da !important;
+        }
+
+        /* Input Fields */
+        .equipment-table input[type="number"] {
+            width: 60px;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: 600;
+        }
+
+        .equipment-table input[type="number"]:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+        }
+
+        .equipment-table input[type="text"] {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 9pt;
+        }
+
+        .equipment-table input[type="text"]:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+        }
+
+        .equipment-table input[type="text"]::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Material Categories Summary */
+        .material-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .material-box {
+            background: #f8f4ef;
+            border: 1px solid #dba765;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .material-box .label {
+            font-size: 8pt;
+            color: #8B4513;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .material-box .count {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #5D3A1A;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f4ef 0%, #f0e6d3 100%);
+            border-radius: 8px;
+            border: 2px solid #dba765;
+        }
+
+        .progress-box {
+            text-align: center;
+        }
+
+        .progress-box .number {
+            font-size: 24pt;
+            font-weight: 700;
+        }
+
+        .progress-box .label {
+            font-size: 8pt;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .progress-box.total .number { color: #5D3A1A; }
+        .progress-box.complete .number { color: #27ae60; }
+        .progress-box.missing .number { color: #f39c12; }
+        .progress-box.critical .number { color: #dc3545; }
+
+        /* Missing/Buy Section */
+        .buy-section {
+            background: #fff3cd;
+            border: 2px solid #f39c12;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 15px;
+            page-break-inside: avoid;
+        }
+
+        .buy-section h3 {
+            color: #856404;
+            font-size: 12pt;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .buy-section .count-badge {
+            background: #f39c12;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10pt;
+        }
+
+        .buy-section table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .buy-section th {
+            background: #f39c12;
+            color: white;
+            padding: 6px 10px;
+            text-align: left;
+            font-size: 9pt;
+        }
+
+        .buy-section td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #e0c67a;
+            font-size: 9pt;
+        }
+
+        .buy-section input[type="text"],
+        .buy-section input[type="number"] {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid #e0c67a;
+            border-radius: 4px;
+            font-size: 9pt;
+            background: white;
+        }
+
+        .buy-section input:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        .buy-section .preis {
+            text-align: right;
+            font-weight: 600;
+            width: 100px;
+        }
+
+        .buy-section .total-row {
+            background: #f39c12;
+            color: white;
+            font-weight: 700;
+        }
+
+        .buy-section .empty-message {
+            padding: 20px;
+            text-align: center;
+            color: #856404;
+            font-style: italic;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .notes-section h4 {
+            font-size: 10pt;
+            color: #8B4513;
+            margin-bottom: 8px;
+        }
+
+        .notes-section textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 10pt;
+            resize: vertical;
+        }
+
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #dba765;
+            text-align: center;
+            font-size: 8pt;
+            color: #888;
+        }
+
+        /* Save Indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        /* Print Styles */
+        @media print {
+            .action-buttons, .save-indicator {
+                display: none;
+            }
+            body {
+                padding: 0;
+            }
+            .header, .category-title, .buy-section th, .buy-section .total-row {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .category {
+                page-break-inside: avoid;
+            }
+            .equipment-table tr.complete,
+            .equipment-table tr.missing,
+            .equipment-table tr.critical {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            input[type="number"], input[type="text"], textarea {
+                border: none;
+                background: transparent;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .material-summary, .progress-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .action-buttons {
+                flex-direction: column;
+                top: 10px;
+                right: 10px;
+            }
+            .action-btn {
+                padding: 8px 15px;
+                font-size: 9pt;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="action-btn save" onclick="saveData()">Speichern</button>
+        <button class="action-btn" onclick="window.print()">Drucken</button>
+        <button class="action-btn reset" onclick="resetData()">Reset</button>
+    </div>
+
+    <!-- Save Indicator -->
+    <div class="save-indicator" id="saveIndicator">Gespeichert!</div>
+
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1>Equipment-Checkliste</h1>
+            <div class="subtitle">"Bii de Grossmuetter" - Family Style Dinner</div>
+        </div>
+        <div class="header-right">
+            <div class="date">30. Januar 2026</div>
+            <div>24 Gaeste | 4 Tische</div>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-box complete"></div>
+            <span>Komplett (Fehlt = 0)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box missing"></div>
+            <span>Teilweise (Fehlt 1-2)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box critical"></div>
+            <span>Kritisch (Fehlt 3+)</span>
+        </div>
+    </div>
+
+    <!-- Progress Summary -->
+    <div class="progress-summary">
+        <div class="progress-box total">
+            <div class="number" id="totalItems">0</div>
+            <div class="label">Total Artikel</div>
+        </div>
+        <div class="progress-box complete">
+            <div class="number" id="completeItems">0</div>
+            <div class="label">Komplett</div>
+        </div>
+        <div class="progress-box missing">
+            <div class="number" id="missingItems">0</div>
+            <div class="label">Teilweise</div>
+        </div>
+        <div class="progress-box critical">
+            <div class="number" id="criticalItems">0</div>
+            <div class="label">Kritisch</div>
+        </div>
+    </div>
+
+    <!-- Material Summary -->
+    <div class="material-summary">
+        <div class="material-box">
+            <div class="label">Gusseisen</div>
+            <div class="count">16 Stk</div>
+        </div>
+        <div class="material-box">
+            <div class="label">Holz</div>
+            <div class="count">20 Stk</div>
+        </div>
+        <div class="material-box">
+            <div class="label">Emaille</div>
+            <div class="count">16 Stk</div>
+        </div>
+        <div class="material-box">
+            <div class="label">Glas</div>
+            <div class="count">48 Stk</div>
+        </div>
+        <div class="material-box">
+            <div class="label">Keramik</div>
+            <div class="count">48 Stk</div>
+        </div>
+        <div class="material-box">
+            <div class="label">Geschirr</div>
+            <div class="count">96 Stk</div>
+        </div>
+    </div>
+
+    <!-- APERO -->
+    <div class="category">
+        <div class="category-title">
+            <span>Apero - "Braett vom Grossvater"</span>
+            <span class="gang-badge">Steht auf Tisch</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="holzbrett-gross" data-required="4">
+                    <td class="artikel">Holzbrett gross (ca. 40x25cm)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="einmachglaeser-500ml" data-required="4">
+                    <td class="artikel">Einmachglaeser 500ml</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="holzschalen-klein" data-required="4">
+                    <td class="artikel">Holzschalen klein</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="brotkoerbe-tuch" data-required="4">
+                    <td class="artikel">Brotkoerbe mit Tuch</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="tontoepfchen-butter" data-required="4">
+                    <td class="artikel">Tontoepfchen (Butter)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="buttermesser" data-required="4">
+                    <td class="artikel">Buttermesser</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 1. GANG -->
+    <div class="category">
+        <div class="category-title">
+            <span>1. Gang - Brotsuppe Dekonstruiert</span>
+            <span class="gang-badge">19:15</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="suppenterrine-1-5l" data-required="4">
+                    <td class="artikel">Suppenterrine/Kanne (1.5L)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schoepfkelle-klein" data-required="4">
+                    <td class="artikel">Schoepfkelle klein</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-croutons" data-required="4">
+                    <td class="artikel">Schaelchen fuer Croutons</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-zwiebelconfit" data-required="4">
+                    <td class="artikel">Schaelchen fuer Zwiebelconfit</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kaennchen-nussbutter" data-required="4">
+                    <td class="artikel">Kaennchen fuer Nussbutter</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="muskatreibe-nuss" data-required="4">
+                    <td class="artikel">Muskatreibe + Nuss</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-schnittlauch-1" data-required="4">
+                    <td class="artikel">Schaelchen Schnittlauch</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="suppenschalen-gast" data-required="24">
+                    <td class="artikel">Suppenschalen (Gast)</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 2. GANG -->
+    <div class="category">
+        <div class="category-title">
+            <span>2. Gang - Roeschti & Cidre-Apfel-Surchrut</span>
+            <span class="gang-badge">19:45</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="gusseisenpfanne-28cm" data-required="4">
+                    <td class="artikel">Gusseisenpfanne 28cm</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="untersetzer-holz-pfanne" data-required="4">
+                    <td class="artikel">Untersetzer Holz (fuer Pfanne)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="emaille-schuessel-surchrut" data-required="4">
+                    <td class="artikel">Emaille-Schuessel gross (Surchrut)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kleines-pfaennchen-speck" data-required="4">
+                    <td class="artikel">Kleines Pfaennchen (Speck)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-sauerrahm" data-required="4">
+                    <td class="artikel">Schaelchen Sauerrahm</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-schnittlauch-2" data-required="4">
+                    <td class="artikel">Schaelchen Schnittlauch</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="servierloeffel-1" data-required="8">
+                    <td class="artikel">Servierloeffel</td>
+                    <td class="menge">8</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">8</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. GANG -->
+    <div class="category">
+        <div class="category-title">
+            <span>3. Gang - Fleischvoegel, Spaetzli & Beilagen</span>
+            <span class="gang-badge">20:15</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="gussbraeter-oval-gross" data-required="4">
+                    <td class="artikel">Gussbraeter oval gross (12 Voegel)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kleiner-braeter-veg" data-required="4">
+                    <td class="artikel">Kleiner Braeter (Pilz-Rouladen veg.)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="grosse-schuessel-spaetzli" data-required="4">
+                    <td class="artikel">Grosse Schuessel (Spaetzli)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="emaille-schuessel-wurzelgemuese" data-required="4">
+                    <td class="artikel">Emaille-Schuessel (Wurzelgemuese)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-preiselbeeren" data-required="4">
+                    <td class="artikel">Schaelchen Preiselbeeren</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="sauciere-loeffel" data-required="4">
+                    <td class="artikel">Sauciere mit Loeffel</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-petersilie" data-required="4">
+                    <td class="artikel">Schaelchen Petersilie</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="fleischgabel" data-required="4">
+                    <td class="artikel">Fleischgabel</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="servierloeffel-gross" data-required="12">
+                    <td class="artikel">Servierloeffel gross</td>
+                    <td class="menge">12</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">12</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="teller-flach-gast" data-required="24">
+                    <td class="artikel">Teller flach (Gast)</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DESSERT -->
+    <div class="category">
+        <div class="category-title">
+            <span>4. Gang - Grosis Desserts</span>
+            <span class="gang-badge">21:00</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="schuessel-biremues" data-required="4">
+                    <td class="artikel">Schuessel Biremues</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="glaeschen-suessmoschtcreme" data-required="24">
+                    <td class="artikel">Glaeschen Suessmoschtcreme</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="einmachglaeser-winterkompott" data-required="10">
+                    <td class="artikel">Einmachglaeser Winterkompott</td>
+                    <td class="menge">10</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">10</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="etagere-meringues" data-required="4">
+                    <td class="artikel">Etagere/Platte (Meringues)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schaelchen-schlagrahm" data-required="4">
+                    <td class="artikel">Schaelchen Schlagrahm</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="schale-vanilleglace" data-required="4">
+                    <td class="artikel">Schale Vanilleglace</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="dessertloeffel-gast" data-required="24">
+                    <td class="artikel">Dessertloeffel (Gast)</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="dessertteller-gast" data-required="24">
+                    <td class="artikel">Dessertteller (Gast)</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- KAFFEE -->
+    <div class="category">
+        <div class="category-title">
+            <span>Kaffee & Digestif</span>
+            <span class="gang-badge">21:30</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="bialetti-kaffeekanne" data-required="4">
+                    <td class="artikel">Bialetti gross / Kaffeekanne</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="teekanne" data-required="4">
+                    <td class="artikel">Teekanne</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="platte-petit-fours" data-required="4">
+                    <td class="artikel">Platte Petit Fours</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kaffeetassen-untertassen" data-required="24">
+                    <td class="artikel">Kaffeetassen + Untertassen</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kaffeeloeffel" data-required="24">
+                    <td class="artikel">Kaffeeloeffel</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="zucker-rahm-set" data-required="4">
+                    <td class="artikel">Zucker & Rahm Set</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- TISCHDEKO -->
+    <div class="category">
+        <div class="category-title">
+            <span>Tischdeko & Atmosphaere</span>
+            <span class="gang-badge">Deko</span>
+        </div>
+        <table class="equipment-table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th class="center">Benötigt</th>
+                    <th class="center">Vorhanden</th>
+                    <th class="center">Fehlt</th>
+                    <th>Notiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="tischdecken-rot-weiss" data-required="4">
+                    <td class="artikel">Karierte Tischdecken (rot-weiss)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="stoffservietten" data-required="24">
+                    <td class="artikel">Stoffservietten (passend)</td>
+                    <td class="menge">24</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">24</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="stumpenkerzen" data-required="12">
+                    <td class="artikel">Stumpenkerzen (versch. Hoehen)</td>
+                    <td class="menge">12</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">12</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="kerzenhalter-messing-holz" data-required="4">
+                    <td class="artikel">Kerzenhalter Messing/Holz</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="teelichthalter" data-required="8">
+                    <td class="artikel">Teelichthalter</td>
+                    <td class="menge">8</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">8</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="trockenblumen-straeusschen" data-required="4">
+                    <td class="artikel">Trockenblumen-Straeusschen</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="menuekarten-kraftpapier" data-required="4">
+                    <td class="artikel">Menuekarten (Kraftpapier)</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+                <tr data-item="brottucher-koerbe" data-required="4">
+                    <td class="artikel">Brottucher fuer Koerbe</td>
+                    <td class="menge">4</td>
+                    <td class="vorhanden"><input type="number" min="0" max="99" value="0"></td>
+                    <td class="fehlt">4</td>
+                    <td class="notiz"><input type="text" placeholder="Notiz..."></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- NOCH BESORGEN - Dynamic -->
+    <div class="buy-section">
+        <h3>NOCH BESORGEN - Einkaufsliste <span class="count-badge" id="buyCount">0</span></h3>
+        <div id="buyListContainer">
+            <table id="buyListTable">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Artikel</th>
+                        <th style="width: 10%;">Fehlt</th>
+                        <th style="width: 25%;">Wo kaufen?</th>
+                        <th class="preis" style="width: 15%;">Gesch. Preis</th>
+                    </tr>
+                </thead>
+                <tbody id="buyListBody">
+                    <!-- Dynamically generated -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3"><strong>TOTAL EINKAUF</strong></td>
+                        <td class="preis">CHF <span id="totalPrice">0.00</span></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="empty-message" id="emptyMessage" style="display: none;">
+                Alle Artikel sind vorhanden! Nichts mehr zu besorgen.
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes-section">
+        <h4>Allgemeine Notizen</h4>
+        <textarea id="generalNotes" placeholder="Zusaetzliche Notizen hier eingeben..."></textarea>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <strong>Hotel Dakota - Dakota Air Lounge</strong> | Checkliste erstellt: Januar 2026 | Konzept: Marcel Gaertner
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'equipment-checkliste-30-januar-2026';
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initializeEventListeners();
+            updateAllCalculations();
+        });
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Number inputs - update on change
+            document.querySelectorAll('.vorhanden input[type="number"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    const row = this.closest('tr');
+                    updateRowStatus(row);
+                    updateSummary();
+                    updateBuyList();
+                    autoSave();
+                });
+            });
+
+            // Text inputs - save on change
+            document.querySelectorAll('.notiz input[type="text"]').forEach(input => {
+                input.addEventListener('input', autoSave);
+            });
+
+            // General notes
+            document.getElementById('generalNotes').addEventListener('input', autoSave);
+
+            // Buy list inputs
+            document.getElementById('buyListBody').addEventListener('input', function(e) {
+                if (e.target.matches('input')) {
+                    updateTotalPrice();
+                    autoSave();
+                }
+            });
+        }
+
+        // Update single row status
+        function updateRowStatus(row) {
+            const required = parseInt(row.dataset.required) || 0;
+            const vorhandenInput = row.querySelector('.vorhanden input');
+            const vorhanden = parseInt(vorhandenInput.value) || 0;
+            const fehlt = Math.max(0, required - vorhanden);
+
+            // Update fehlt display
+            row.querySelector('.fehlt').textContent = fehlt;
+
+            // Remove all status classes
+            row.classList.remove('complete', 'missing', 'critical');
+
+            // Add appropriate class
+            if (fehlt === 0) {
+                row.classList.add('complete');
+            } else if (fehlt <= 2) {
+                row.classList.add('missing');
+            } else {
+                row.classList.add('critical');
+            }
+        }
+
+        // Update all rows
+        function updateAllCalculations() {
+            document.querySelectorAll('tr[data-item]').forEach(row => {
+                updateRowStatus(row);
+            });
+            updateSummary();
+            updateBuyList();
+        }
+
+        // Update summary counts
+        function updateSummary() {
+            let total = 0, complete = 0, missing = 0, critical = 0;
+
+            document.querySelectorAll('tr[data-item]').forEach(row => {
+                total++;
+                if (row.classList.contains('complete')) complete++;
+                else if (row.classList.contains('missing')) missing++;
+                else if (row.classList.contains('critical')) critical++;
+            });
+
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('completeItems').textContent = complete;
+            document.getElementById('missingItems').textContent = missing;
+            document.getElementById('criticalItems').textContent = critical;
+        }
+
+        // Update buy list dynamically
+        function updateBuyList() {
+            const buyListBody = document.getElementById('buyListBody');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const buyListTable = document.getElementById('buyListTable');
+            const savedData = getSavedBuyListData();
+
+            let missingItems = [];
+
+            document.querySelectorAll('tr[data-item]').forEach(row => {
+                const required = parseInt(row.dataset.required) || 0;
+                const vorhanden = parseInt(row.querySelector('.vorhanden input').value) || 0;
+                const fehlt = Math.max(0, required - vorhanden);
+
+                if (fehlt > 0) {
+                    const itemId = row.dataset.item;
+                    const artikel = row.querySelector('.artikel').textContent;
+                    const savedItem = savedData[itemId] || {};
+
+                    missingItems.push({
+                        id: itemId,
+                        artikel: artikel,
+                        fehlt: fehlt,
+                        woKaufen: savedItem.woKaufen || '',
+                        preis: savedItem.preis || ''
+                    });
+                }
+            });
+
+            // Update count badge
+            document.getElementById('buyCount').textContent = missingItems.length;
+
+            // Show/hide based on items
+            if (missingItems.length === 0) {
+                buyListTable.style.display = 'none';
+                emptyMessage.style.display = 'block';
+            } else {
+                buyListTable.style.display = 'table';
+                emptyMessage.style.display = 'none';
+
+                // Generate rows
+                buyListBody.innerHTML = missingItems.map(item => `
+                    <tr data-buy-item="${item.id}">
+                        <td>${item.artikel}</td>
+                        <td style="text-align: center; font-weight: 700; color: #dc3545;">${item.fehlt}</td>
+                        <td><input type="text" value="${item.woKaufen}" placeholder="z.B. Migros, Ricardo..." data-field="woKaufen"></td>
+                        <td class="preis"><input type="number" value="${item.preis}" placeholder="0.00" min="0" step="0.05" data-field="preis" style="width: 80px; text-align: right;"></td>
+                    </tr>
+                `).join('');
+            }
+
+            updateTotalPrice();
+        }
+
+        // Get saved buy list data
+        function getSavedBuyListData() {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            return data.buyList || {};
+        }
+
+        // Update total price
+        function updateTotalPrice() {
+            let total = 0;
+            document.querySelectorAll('#buyListBody input[data-field="preis"]').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalPrice').textContent = total.toFixed(2);
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const data = {
+                items: {},
+                buyList: {},
+                generalNotes: document.getElementById('generalNotes').value,
+                lastSaved: new Date().toISOString()
+            };
+
+            // Save item data
+            document.querySelectorAll('tr[data-item]').forEach(row => {
+                const itemId = row.dataset.item;
+                data.items[itemId] = {
+                    vorhanden: row.querySelector('.vorhanden input').value,
+                    notiz: row.querySelector('.notiz input').value
+                };
+            });
+
+            // Save buy list data
+            document.querySelectorAll('#buyListBody tr[data-buy-item]').forEach(row => {
+                const itemId = row.dataset.buyItem;
+                data.buyList[itemId] = {
+                    woKaufen: row.querySelector('input[data-field="woKaufen"]').value,
+                    preis: row.querySelector('input[data-field="preis"]').value
+                };
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveIndicator();
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+            // Load item data
+            if (data.items) {
+                Object.keys(data.items).forEach(itemId => {
+                    const row = document.querySelector(`tr[data-item="${itemId}"]`);
+                    if (row) {
+                        const itemData = data.items[itemId];
+                        row.querySelector('.vorhanden input').value = itemData.vorhanden || 0;
+                        row.querySelector('.notiz input').value = itemData.notiz || '';
+                    }
+                });
+            }
+
+            // Load general notes
+            if (data.generalNotes) {
+                document.getElementById('generalNotes').value = data.generalNotes;
+            }
+        }
+
+        // Auto-save with debounce
+        let saveTimeout;
+        function autoSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveData, 500);
+        }
+
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        // Reset all data
+        function resetData() {
+            if (confirm('Alle Daten zuruecksetzen? Dies kann nicht rueckgaengig gemacht werden!')) {
+                localStorage.removeItem(STORAGE_KEY);
+
+                // Reset all inputs
+                document.querySelectorAll('.vorhanden input').forEach(input => input.value = 0);
+                document.querySelectorAll('.notiz input').forEach(input => input.value = '');
+                document.getElementById('generalNotes').value = '';
+
+                updateAllCalculations();
+                showSaveIndicator();
+            }
+        }
+    </script>
+</body>
+</html>
